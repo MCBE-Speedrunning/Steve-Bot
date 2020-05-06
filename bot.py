@@ -11,7 +11,7 @@ extensions = [
     "cogs.admin"
 ]
 
-class CelesteBot(commands.Bot):
+class BedrockBot(commands.Bot):
 
     def __init__(self):
         super().__init__(command_prefix='/')
@@ -46,9 +46,11 @@ class CelesteBot(commands.Bot):
 
         badWords = ["fair", "f a i r", "ⓕⓐⓘⓡ", "ⓕ ⓐ ⓘ ⓡ"]
         if message.channel.id == 589110766578434078:
+            count = 0
             for word in badWords:
                 if word in message.content.lower():
-                    await message.channel.send('Fair')
+                    count += 1;
+                    await message.channel.send('Fair '*count)
 
         await self.process_commands(message)
 

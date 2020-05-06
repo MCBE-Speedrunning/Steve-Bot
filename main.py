@@ -3,7 +3,7 @@ import logging
 
 from colorama import init as init_colorama
 
-from bot import CelesteBot
+from bot import BedrockBot
 
 
 def setup_logging():
@@ -25,7 +25,7 @@ def setup_logging():
 
 def run_bot():
 
-    bot = CelesteBot()
+    bot = BedrockBot()
     bot.run()
 
 if __name__ == "__main__":
