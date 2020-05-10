@@ -62,19 +62,13 @@ async def pendingRuns(self, ctx):
 		"Accept": "application/json",
 		"User-Agent":"mcbeDiscordBot/1.0"
 		}
-	# mgs = [] #Empty list to put all the messages in the log
-	# number = int(number) #Converting the amount of messages to delete to an integer
-	# async for x in Client.logs_from(ctx.message.channel, limit = number):
-	#	 mgs.append(x)
-	# await Client.delete_messages(mgs)
-
 	gameID = 'yd4ovvg1'  # ID of Minecraft bedrock
 	gameID2 = 'v1po7r76'  # ID of Category extension
 	runsRequest = requests.get(
-		f'https://www.speedrun.com/api/v1/runs?game={gameID}&status=new&max=200', headers=head)
+		f'https://www.speedrun.com/api/v1/runs?game={gameID}&status=new&max=200&embed=category,players', headers=head)
 	runs = json.loads(runsRequest.text)
 	runsRequest2 = requests.get(
-		f'https://www.speedrun.com/api/v1/runs?game={gameID2}&status=new&max=200', headers=head)
+		f'https://www.speedrun.com/api/v1/runs?game={gameID2}&status=new&max=200&embed=category,players', headers=head)
 	runs2 = json.loads(runsRequest2.text)
 	# Use https://www.speedrun.com/api/v1/games?abbreviation=mcbe for ID
 
@@ -85,22 +79,15 @@ async def pendingRuns(self, ctx):
 					if key == 'weblink':
 						link = value
 					if key == 'category':
-						categoryID = value
-						categoryRequest = requests.get(
-							f"https://www.speedrun.com/api/v1/categories/{categoryID}", headers=head)
-						categoryRequest = categoryRequest.json()
-						categoryName = categoryRequest['data']['name']
+						categoryName = value["data"]["name"]
 					if key == 'players':
-						if value[0]['rel'] == 'guest':
-							player = value[0]['name']
+						if value["data"][0]['rel'] == 'guest':
+							player = value["data"][0]['name']
 						else:
-							nameRequest = requests.get(value[0]['uri'])
-							nameRequest = nameRequest.json()
-							player = nameRequest['data']['names']['international']
+							player = value["data"][0]["names"]["international"]
 					if key == 'times':
 						rta = timedelta(seconds=value['realtime_t'])
 			except Exception as e:
-				#print(e.message + '\n' + e.args)
 				break
 			if game == 0:
 				leaderboard = "Minecraft bedrock"
@@ -127,6 +114,7 @@ class Utils(commands.Cog):
 		await ctx.send(ctx.message.channel)
 
 	@commands.command()
+	@commands.guild_only()
 	async def pending(self, ctx):
 		await clear(self)
 		await pendingRuns(self, ctx)
@@ -149,13 +137,11 @@ class Utils(commands.Cog):
 	
 	@commands.command()
 	async def verify(self, ctx, apiKey=None):
-		if apiKey is None:
-			await ctx.send("Please try this `/verify apiKey` again **in DMs**. If you need the api key you can get it from https://www.speedrun.com/api/auth")
-		if ctx.guild is None:
-			await verifyRole(self, ctx, apiKey)
-		else:
+		if apiKey == None:
+			await ctx.send("Please try again this command by getting an apiKey from https://www.speedrun.com/api/auth then do `/verify <apiKey>` in my DMs or anywhere in this server. \nBe careful who you share this key with. To learn more check out https://github.com/speedruncomorg/api/blob/master/authentication.md")
+		elif ctx.guild != None:
 			await ctx.message.delete()
-			print("Not DMs")
+		await verifyRole(self, ctx, apiKey)
 
 def setup(bot):
 	bot.add_cog(Utils(bot))
