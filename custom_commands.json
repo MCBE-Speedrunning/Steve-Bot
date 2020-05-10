@@ -1,8 +1,1 @@
-{
-    "/src": "https://www.speedrun.com/mcbe",
-    "/launcher": "https://github.com/MCMrARM/mc-w10-version-launcher/releases/tag/0.1.0",
-    "/locate": "head north",
-    "/boards": "https://www.speedrun.com/mcbe",
-    "/leaderboards": "https://www.speedrun.com/mcbe",
-    "/ban": "shut up"
-}
+{"/src": "https://www.speedrun.com/mcbe", "/launcher": "https://github.com/MCMrARM/mc-w10-version-launcher/releases/tag/0.1.0", "/locate": "head north", "/boards": "https://www.speedrun.com/mcbe", "/leaderboards": "https://www.speedrun.com/mcbe", "/ban": "shut up", "/ssg": "https://www.speedrun.com/mcbe#Any_Glitchless"}

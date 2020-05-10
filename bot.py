@@ -14,7 +14,7 @@ extensions = [
 class BedrockBot(commands.Bot):
 
 	def __init__(self):
-		super().__init__(command_prefix='/')
+		super().__init__(command_prefix=('/', '!'))
 		self.logger = logging.getLogger('discord')
 
 		with open('custom_commands.json', 'r') as f:
@@ -38,22 +38,25 @@ class BedrockBot(commands.Bot):
 		if message.author.bot:
 			return
 
+		badWords = ["fair", "f a i r", "ⓕⓐⓘⓡ", "ⓕ ⓐ ⓘ ⓡ"]
+		try:
+			if message.channel.id == 589110766578434078:
+				count = 0
+				for word in badWords:
+					if word in message.content.lower():
+						count += 1;
+						fair = 'Fair '*count
+				await message.channel.send(fair)
+
+			await self.process_commands(message)
+		except:
+			print("shrug")
+
 		command = message.content.split()[0] 
 
 		if command in self.custom_commands:
 			await message.channel.send(self.custom_commands[command])
 			return
-
-		badWords = ["fair", "f a i r", "ⓕⓐⓘⓡ", "ⓕ ⓐ ⓘ ⓡ"]
-		if message.channel.id == 589110766578434078:
-			count = 0
-			for word in badWords:
-				if word in message.content.lower():
-					count += 1;
-					fair = 'Fair '*count
-			await message.channel.send(fair)
-
-		await self.process_commands(message)
 
 	def run(self):
 		super().run(config.token, reconnect=True)

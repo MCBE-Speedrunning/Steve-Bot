@@ -8,6 +8,7 @@ import asyncio
 from datetime import timedelta
 from google.cloud import translate_v2 as translate
 translate_client = translate.Client()
+import random
 
 async def translateMsg(text, target="en"):
 	# Text can also be a sequence of strings, in which case this method
@@ -142,6 +143,17 @@ class Utils(commands.Cog):
 		elif ctx.guild != None:
 			await ctx.message.delete()
 		await verifyRole(self, ctx, apiKey)
+
+	@commands.command()
+	async def findseed(self, ctx):
+		totalEyes = 0
+		for i in range(12):
+			randomness = random.randint(1,10)
+			if randomness == 1:
+				totalEyes += randomness
+			else:
+				continue
+		await ctx.send(f"{ctx.message.author.name} -> your seed is a {totalEyes} eye")
 
 def setup(bot):
 	bot.add_cog(Utils(bot))
