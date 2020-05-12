@@ -10,9 +10,6 @@ class Admin(commands.Cog):
 	async def is_mod(ctx):
 		return ctx.author.guild_permissions.manage_channels
 
-	async def is_host(ctx):
-		return ctx.author.id == 99457716614885376
-
 	@commands.command(aliases=['addcommand', 'newcommand'])
 	@commands.check(is_mod)
 	async def setcommand(self, ctx, command, *, message):
@@ -42,7 +39,7 @@ class Admin(commands.Cog):
 		except commands.ExtensionNotFound:
 			await ctx.send(f'The extension {ext} doesn\'t exist.')
 		except commands.ExtensionNotLoaded:
-			await ctx.send(f'The extension {ext} is not loaded! (use /load)')
+			await ctx.send(f'The extension {ext} is not loaded! (use {ctx.prefix}load)')
 		except commands.NoEntryPointError:
 			await ctx.send(f'The extension {ext} doesn\'t have an entry point (try adding the setup function) ')
 		except commands.ExtensionFailed:
