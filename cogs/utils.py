@@ -60,7 +60,8 @@ class Utils(commands.Cog):
 	@findseed.error
 	async def findseed_handler(self,ctx,error):
 		if isinstance(error, commands.CommandOnCooldown):
-			await ctx.send(f"{ctx.message.author.display_name}, you have to wait {round(error.retry_after, 2)} seconds before using this again.")
+			return
+			#await ctx.send(f"{ctx.message.author.display_name}, you have to wait {round(error.retry_after, 7)} seconds before using this again.")
 
 	@commands.Cog.listener()
 	async def on_message(self, message):

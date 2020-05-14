@@ -13,7 +13,7 @@ class Admin(commands.Cog):
 	@commands.command(aliases=['addcommand', 'newcommand'])
 	@commands.check(is_mod)
 	async def setcommand(self, ctx, command, *, message):
-		self.bot.custom_commands["/" + command] = message
+		self.bot.custom_commands[ctx.prefix + command] = message
 		with open('custom_commands.json', 'w') as f:
 			json.dump(self.bot.custom_commands, f)
 
@@ -22,7 +22,7 @@ class Admin(commands.Cog):
 	@commands.command(aliases=['deletecommand'])
 	@commands.check(is_mod)
 	async def removecommand(self, ctx, command):
-		del self.bot.custom_commands["/" + command]
+		del self.bot.custom_commands[ctx.prefix + command]
 		with open('custom_commands.json', 'w') as f:
 			json.dump(self.bot.custom_commands, f)
 

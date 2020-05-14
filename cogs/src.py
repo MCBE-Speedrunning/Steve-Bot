@@ -7,6 +7,49 @@ import json
 import asyncio
 from datetime import timedelta
 
+async def rejectRun(self, apiKey, ctx, run, reason):
+	await ctx.message.delete()
+	run = run.split('/')[-1]
+	reject = {
+		"status": {
+		"status": "rejected",
+		"reason": reason
+		}
+	}
+	r = requests.put(f"https://www.speedrun.com/api/v1/runs/{run}/status", headers={"X-API-Key":apiKey,	"Accept": "application/json","User-Agent":"mcbeDiscordBot/1.0"}, data=json.dumps(reject))
+	if r.status_code == 200 or r.status_code == 204:
+		await ctx.send("Run rejected succesfully")
+	else:
+		await ctx.send("Something went wrong")
+		await ctx.message.author.send(f"```json\n{json.dumps(json.loads(r.text),indent=4)}```")
+
+async def approveRun(self, apiKey, ctx, run, reason=None):
+	await ctx.message.delete()
+	run = run.split('/')[-1]
+	approve = {
+		"status": {
+		"status": "verified",
+		"reason": reason
+		}
+	}
+	r = requests.put(f"https://www.speedrun.com/api/v1/runs/{run}/status", headers={"X-API-Key":apiKey,	"Accept": "application/json","User-Agent":"mcbeDiscordBot/1.0"}, data=json.dumps(approve))
+	if r.status_code == 200 or r.status_code == 204:
+		await ctx.send("Run approved succesfully")
+	else:
+		await ctx.send("Something went wrong")
+		await ctx.message.author.send(f"```json\n{json.dumps(json.loads(r.text),indent=4)}```")
+
+async def deleteRun(self, apiKey, ctx, run):
+	await ctx.message.delete()
+	run = run.split('/')[-1]
+	r = requests.delete(f"https://www.speedrun.com/api/v1/runs/{run}", headers={"X-API-Key":apiKey,"Accept": "application/json","User-Agent":"mcbeDiscordBot/1.0"})
+	if r.status_code == 200 or r.status_code == 204:
+		await ctx.send("Run deleted succesfully")
+	else:
+		await ctx.send("Something went wrong")
+		await ctx.message.author.send(f"```json\n{json.dumps(json.loads(r.text),indent=4)}```")
+
+
 async def verifyRole(self, ctx, apiKey):
 	server = self.bot.get_guild(574267523869179904)
 	RunneRole = server.get_role(574268937454223361)
@@ -51,20 +94,25 @@ async def pendingRuns(self, ctx):
 	gameID = 'yd4ovvg1'  # ID of Minecraft bedrock
 	gameID2 = 'v1po7r76'  # ID of Category extension
 	runsRequest = requests.get(
-		f'https://www.speedrun.com/api/v1/runs?game={gameID}&status=new&max=200&embed=category,players', headers=head)
+		f'https://www.speedrun.com/api/v1/runs?game={gameID}&status=new&max=200&embed=category,players,level', headers=head)
 	runs = json.loads(runsRequest.text)
 	runsRequest2 = requests.get(
-		f'https://www.speedrun.com/api/v1/runs?game={gameID2}&status=new&max=200&embed=category,players', headers=head)
+		f'https://www.speedrun.com/api/v1/runs?game={gameID2}&status=new&max=200&embed=category,players,level', headers=head)
 	runs2 = json.loads(runsRequest2.text)
 	# Use https://www.speedrun.com/api/v1/games?abbreviation=mcbe for ID
 
 	for game in range(2):
 		for i in range(200):
+			level = False
 			try:
 				for key, value in runs['data'][i].items():
 					if key == 'weblink':
 						link = value
-					if key == 'category':
+					if key == 'level':
+						if value["data"]:
+							level = True
+							categoryName = value["data"]["name"]
+					if key == 'category' and not level:
 						categoryName = value["data"]["name"]
 					if key == 'players':
 						if value["data"][0]['rel'] == 'guest':
@@ -74,6 +122,7 @@ async def pendingRuns(self, ctx):
 					if key == 'times':
 						rta = timedelta(seconds=value['realtime_t'])
 			except Exception as e:
+				print(e.args)
 				break
 			if game == 0:
 				leaderboard = "Minecraft bedrock"
@@ -90,11 +139,15 @@ class Src(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
+	async def is_mod(ctx):
+		return ctx.author.guild_permissions.manage_channels
+
 	@commands.command(description="Posts all pending runs to #pending-runs")
 	@commands.guild_only()
 	async def pending(self, ctx):
-		await clear(self)
-		await pendingRuns(self, ctx)
+		async with ctx.typing():
+			await clear(self)
+			await pendingRuns(self, ctx)
 
 	@commands.command()
 	async def verify(self, ctx, apiKey=None):
@@ -103,7 +156,26 @@ class Src(commands.Cog):
 			return
 		elif ctx.guild != None:
 			await ctx.message.delete()
-		await verifyRole(self, ctx, apiKey)
+		async with ctx.typing():
+			await verifyRole(self, ctx, apiKey)
+
+	@commands.command(description="Reject runs quickly")
+	@commands.check(is_mod)
+	@commands.guild_only()
+	async def reject(self, ctx, apiKey, run, *, reason):
+		await rejectRun(self, apiKey, ctx, run, reason)
+
+	@commands.command(description="Approve runs quickly")
+	@commands.check(is_mod)
+	@commands.guild_only()
+	async def approve(self, ctx, apiKey, run, *, reason=None):
+		await approveRun(self, apiKey, ctx, run, reason)
+
+	@commands.command(description="Delete runs quickly")
+	@commands.check(is_mod)
+	@commands.guild_only()
+	async def delete(self, ctx, apiKey, run):
+		await deleteRun(self, apiKey, ctx, run)
 
 def setup(bot):
 	bot.add_cog(Src(bot))
