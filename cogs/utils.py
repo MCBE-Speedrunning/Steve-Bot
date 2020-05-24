@@ -48,6 +48,9 @@ class Utils(commands.Cog):
 	@commands.cooldown(1, 25, commands.BucketType.guild)
 	@commands.command()
 	async def findseed(self, ctx):
+		if ctx.message.channel.id != 684787316489060422:
+			ctx.message.delete()
+			return
 		totalEyes = 0
 		for i in range(12):
 			randomness = random.randint(1,10)
@@ -60,6 +63,8 @@ class Utils(commands.Cog):
 	@findseed.error
 	async def findseed_handler(self,ctx,error):
 		if isinstance(error, commands.CommandOnCooldown):
+			if ctx.message.channel.id != 684787316489060422:
+				ctx.message.delete()
 			return
 			#await ctx.send(f"{ctx.message.author.display_name}, you have to wait {round(error.retry_after, 7)} seconds before using this again.")
 

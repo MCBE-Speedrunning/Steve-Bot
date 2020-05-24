@@ -69,9 +69,10 @@ async def verifyRole(self, ctx, apiKey):
 	for i in pbs["data"]:
 		if i["place"] == 1:
 			if i["run"]["game"] == "yd4ovvg1" or i["run"]["game"] == "v1po7r76":
-				await ctx.send("WR boi")
-				await server.get_member(ctx.message.author.id).add_roles(WrRole)
-				print("WR boi")
+				if not i["run"]["level"]:
+					await ctx.send("WR boi")
+					await server.get_member(ctx.message.author.id).add_roles(WrRole)
+					print("WR boi")
 		if i["run"]["game"] == "yd4ovvg1" or i["run"]["game"] == "v1po7r76":
 			#print(i)
 			await ctx.send("Runner")
@@ -94,10 +95,10 @@ async def pendingRuns(self, ctx):
 	gameID = 'yd4ovvg1'  # ID of Minecraft bedrock
 	gameID2 = 'v1po7r76'  # ID of Category extension
 	runsRequest = requests.get(
-		f'https://www.speedrun.com/api/v1/runs?game={gameID}&status=new&max=200&embed=category,players,level', headers=head)
+		f'https://www.speedrun.com/api/v1/runs?game={gameID}&status=new&max=200&embed=category,players,level&orderby=submitted', headers=head)
 	runs = json.loads(runsRequest.text)
 	runsRequest2 = requests.get(
-		f'https://www.speedrun.com/api/v1/runs?game={gameID2}&status=new&max=200&embed=category,players,level', headers=head)
+		f'https://www.speedrun.com/api/v1/runs?game={gameID2}&status=new&max=200&embed=category,players,level&orderby=submitted', headers=head)
 	runs2 = json.loads(runsRequest2.text)
 	# Use https://www.speedrun.com/api/v1/games?abbreviation=mcbe for ID
 
