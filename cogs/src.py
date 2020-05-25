@@ -117,8 +117,8 @@ async def pendingRuns(self, ctx):
 							level = True
 							categoryName = value["data"]["name"]
 							mcbeil_runs += 1
-                       				else:
-                            				mcbe_runs += 1
+						else:
+							mcbe_runs += 1
 					if key == 'category' and not level:
 						categoryName = value["data"]["name"]
 					if key == 'players':
