@@ -6,6 +6,7 @@ import requests
 import json
 import asyncio
 from datetime import timedelta
+import dateutil.parser
 
 async def rejectRun(self, apiKey, ctx, run, reason):
 	await ctx.message.delete()
@@ -49,7 +50,6 @@ async def deleteRun(self, apiKey, ctx, run):
 		await ctx.send("Something went wrong")
 		await ctx.message.author.send(f"```json\n{json.dumps(json.loads(r.text),indent=4)}```")
 
-
 async def verifyRole(self, ctx, apiKey):
 	server = self.bot.get_guild(574267523869179904)
 	RunneRole = server.get_role(574268937454223361)
@@ -86,7 +86,6 @@ async def clear(self):
 	async for msg in self.bot.get_channel(699713639866957905).history():
 		await msg.delete()
 
-
 async def pendingRuns(self, ctx):
 	head = {
 		"Accept": "application/json",
@@ -122,6 +121,8 @@ async def pendingRuns(self, ctx):
 							player = value["data"][0]["names"]["international"]
 					if key == 'times':
 						rta = timedelta(seconds=value['realtime_t'])
+					if key == 'submitted':
+						timestamp = dateutil.parser.isoparse(value)
 			except Exception as e:
 				print(e.args)
 				break
@@ -130,7 +131,7 @@ async def pendingRuns(self, ctx):
 			elif game == 1:
 				leaderboard = "Minecraft Bedrock category extensions"
 			embed = discord.Embed(
-				title=leaderboard, url=link, description=f"{categoryName} in `{str(rta).replace('000','')}` by **{player}**", color=16711680+i*60)
+				title=leaderboard, url=link, description=f"{categoryName} in `{str(rta).replace('000','')}` by **{player}**", color=16711680+i*60, timestamp=timestamp)
 			await self.bot.get_channel(699713639866957905).send(embed=embed)
 		runs = runs2
 		gameID = gameID2
