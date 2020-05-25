@@ -87,6 +87,9 @@ async def clear(self):
 		await msg.delete()
 
 async def pendingRuns(self, ctx):
+	mcbe_runs = 0
+	mcbeil_runs = 0
+	mcbece_runs = 0
 	head = {
 		"Accept": "application/json",
 		"User-Agent":"mcbeDiscordBot/1.0"
@@ -112,6 +115,9 @@ async def pendingRuns(self, ctx):
 						if value["data"]:
 							level = True
 							categoryName = value["data"]["name"]
+							mcbeil_runs += 1
+						else:
+							mcbe_runs += 1
 					if key == 'category' and not level:
 						categoryName = value["data"]["name"]
 					if key == 'players':
@@ -130,11 +136,14 @@ async def pendingRuns(self, ctx):
 				leaderboard = "Minecraft bedrock"
 			elif game == 1:
 				leaderboard = "Minecraft Bedrock category extensions"
+				mcbece_runs += 1
 			embed = discord.Embed(
 				title=leaderboard, url=link, description=f"{categoryName} in `{str(rta).replace('000','')}` by **{player}**", color=16711680+i*60, timestamp=timestamp)
 			await self.bot.get_channel(699713639866957905).send(embed=embed)
 		runs = runs2
 		gameID = gameID2
+	embed_stats = discord.Embed(title='Pendng Run Stats', description=f"Full Game Runs: {mcbe_runs}\nIndividual Level Runs: {mcbeil_runs}\nCategory Extention Runs: {mcbece_runs}", color=16711680 + i * 60)
+    	await self.bot.get_channel(699713639866957905).send(embed=embed_stats)
 
 class Src(commands.Cog):
 
