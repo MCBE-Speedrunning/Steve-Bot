@@ -106,6 +106,7 @@ async def pendingRuns(self, ctx):
 
 	for game in range(2):
 		for i in range(200):
+			leaderboard = '' # A little ugly but prevents name not defined error
 			level = False
 			try:
 				for key, value in runs['data'][i].items():
@@ -133,9 +134,9 @@ async def pendingRuns(self, ctx):
 			except Exception as e:
 				print(e.args)
 				break
-			if game == 0:
+			if game == 0 and leaderboard != 'Individual Level Run':
 				leaderboard = "Full Game Run"
-			elif game == 1:
+			elif game == 1 and leaderboard != 'Individual Level Run':
 				leaderboard = "Category Extension Run"
 				mcbece_runs += 1
 			embed = discord.Embed(
@@ -143,7 +144,7 @@ async def pendingRuns(self, ctx):
 			await self.bot.get_channel(699713639866957905).send(embed=embed)
 		runs = runs2
 		gameID = gameID2
-	embed_stats = discord.Embed(title='Pendng Run Stats', description=f"Full Game Runs: {mcbe_runs}\nIndividual Level Runs: {mcbeil_runs}\nCategory Extension Runs: {mcbece_runs}", color=16711680 + i * 60)
+	embed_stats = discord.Embed(title='Pending Run Stats', description=f"Full Game Runs: {mcbe_runs}\nIndividual Level Runs: {mcbeil_runs}\nCategory Extension Runs: {mcbece_runs}", color=16711680 + i * 60)
 	await self.bot.get_channel(699713639866957905).send(embed=embed_stats)
 
 class Src(commands.Cog):
