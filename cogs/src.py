@@ -114,6 +114,7 @@ async def pendingRuns(self, ctx):
 					if key == 'level':
 						if value["data"]:
 							level = True
+							leaderboard = 'Individual Level Run'
 							categoryName = value["data"]["name"]
 							mcbeil_runs += 1
 						else:
@@ -133,17 +134,17 @@ async def pendingRuns(self, ctx):
 				print(e.args)
 				break
 			if game == 0:
-				leaderboard = "Minecraft bedrock"
+				leaderboard = "Full Game Run"
 			elif game == 1:
-				leaderboard = "Minecraft Bedrock category extensions"
+				leaderboard = "Category Extension Run"
 				mcbece_runs += 1
 			embed = discord.Embed(
 				title=leaderboard, url=link, description=f"{categoryName} in `{str(rta).replace('000','')}` by **{player}**", color=16711680+i*60, timestamp=timestamp)
 			await self.bot.get_channel(699713639866957905).send(embed=embed)
 		runs = runs2
 		gameID = gameID2
-	embed_stats = discord.Embed(title='Pendng Run Stats', description=f"Full Game Runs: {mcbe_runs}\nIndividual Level Runs: {mcbeil_runs}\nCategory Extention Runs: {mcbece_runs}", color=16711680 + i * 60)
-    	await self.bot.get_channel(699713639866957905).send(embed=embed_stats)
+	embed_stats = discord.Embed(title='Pendng Run Stats', description=f"Full Game Runs: {mcbe_runs}\nIndividual Level Runs: {mcbeil_runs}\nCategory Extension Runs: {mcbece_runs}", color=16711680 + i * 60)
+	await self.bot.get_channel(699713639866957905).send(embed=embed_stats)
 
 class Src(commands.Cog):
 
