@@ -118,8 +118,7 @@ async def pendingRuns(self, ctx):
 							leaderboard = 'Individual Level Run'
 							categoryName = value["data"]["name"]
 							mcbeil_runs += 1
-						else:
-							mcbe_runs += 1
+							mcbe_runs -= 1 # Ugly fix pt.1
 					if key == 'category' and not level:
 						categoryName = value["data"]["name"]
 					if key == 'players':
@@ -135,6 +134,7 @@ async def pendingRuns(self, ctx):
 				print(e.args)
 				break
 			if game == 0 and leaderboard != 'Individual Level Run':
+				mcbe_runs += 1 # Ugly fix pt.2
 				leaderboard = "Full Game Run"
 			elif game == 1 and leaderboard != 'Individual Level Run':
 				leaderboard = "Category Extension Run"
