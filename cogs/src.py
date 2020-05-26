@@ -116,10 +116,7 @@ async def pendingRuns(self, ctx):
 					if key == 'level':
 						if value["data"]:
 							level = True
-							leaderboard = 'Individual Level Run'
 							categoryName = value["data"]["name"]
-							mcbeil_runs += 1
-							mcbe_runs -= 1 # Ugly fix pt.1
 					if key == 'category' and not level:
 						categoryName = value["data"]["name"]
 					if key == 'players':
@@ -132,10 +129,14 @@ async def pendingRuns(self, ctx):
 			except Exception as e:
 				print(e.args)
 				break
-			if game == 0 and leaderboard != 'Individual Level Run':
-				mcbe_runs += 1 # Ugly fix pt.2
-				leaderboard = "Full Game Run"
-			elif game == 1 and leaderboard != 'Individual Level Run':
+			if game == 0:
+				if level == True:
+					mcbeil_runs += 1
+					leaderboard = 'Individual Level Run'
+				else:
+					mcbe_runs += 1
+					leaderboard = "Full Game Run" # If this doesn't work I'm starting a genocide
+			elif game == 1:
 				leaderboard = "Category Extension Run"
 				mcbece_runs += 1
 			embed = discord.Embed(
