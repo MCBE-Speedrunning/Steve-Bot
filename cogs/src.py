@@ -156,12 +156,20 @@ class Src(commands.Cog):
 	async def is_mod(ctx):
 		return ctx.author.guild_permissions.manage_channels
 
+	@commands.cooldown(1, 30, commands.BucketType.guild)
 	@commands.command(description="Posts all pending runs to #pending-runs")
 	@commands.guild_only()
 	async def pending(self, ctx):
 		async with ctx.typing():
 			await clear(self)
 			await pendingRuns(self, ctx)
+
+	@pending.error
+	async def pending_handler(self,ctx,error):
+		if isinstance(error, commands.CommandOnCooldown):
+			await ctx.send('this annoys me more')
+		else:
+			await ctx.send('Something is fucked up please help AAAAAAAAAA')
 
 	@commands.command()
 	async def verify(self, ctx, apiKey=None):
