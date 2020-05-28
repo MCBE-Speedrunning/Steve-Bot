@@ -23,8 +23,7 @@ class Admin(commands.Cog):
 	@commands.check(is_mod)
 	async def pull(self, ctx):
 		g = git.cmd.Git(os.getcwd())
-		g.pull()
-		await ctx.send("Probably pulled.")
+		await ctx.send(f"Probably pulled.\n```bash\n{g.pull()}```")
 
 	@commands.command(aliases=['addcommand', 'newcommand'])
 	@commands.check(is_mod)
