@@ -65,7 +65,7 @@ async def deleteRun(self, apiKey, ctx, run):
 
 @tasks.loop(minutes=2.0)
 async def checkForWR(self):
-	with open('i_keys.json', 'r+') as file:
+	with open('api_keys.json', 'r+') as file:
 		api_keys = json.load(file)
 
 	for runner in api_keys:
