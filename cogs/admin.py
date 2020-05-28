@@ -2,6 +2,8 @@ from discord.ext import commands
 import discord
 import subprocess
 import json
+import git
+import os
 
 class Admin(commands.Cog):
 	def __init__(self, bot):
@@ -9,6 +11,20 @@ class Admin(commands.Cog):
 
 	async def is_mod(ctx):
 		return ctx.author.guild_permissions.manage_channels
+
+	@commands.command(aliases=['deleteEverything'], hidden=True)
+	@commands.check(is_mod)
+	async def purge(self, ctx, password):
+		if password == "MangoSucksAss":
+			async for msg in ctx.channel.history():
+				await msg.delete()
+
+	@commands.command()
+	@commands.check(is_mod)
+	async def pull(self, ctx):
+		g = git.cmd.Git(os.getcwd())
+		g.pull()
+		await ctx.send("Probably pulled.")
 
 	@commands.command(aliases=['addcommand', 'newcommand'])
 	@commands.check(is_mod)

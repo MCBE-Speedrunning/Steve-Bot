@@ -5,20 +5,17 @@ import requests
 import json
 import asyncio
 from datetime import timedelta
-from google.cloud import translate_v2 as translate
-translate_client = translate.Client()
-import random
 
-async def translateMsg(text, target="en"):
-	# Text can also be a sequence of strings, in which case this method
-	# will return a sequence of results for each text.
-	result = translate_client.translate(
-		text, target_language=target)
-	print(u'Text: {}'.format(result['input']))
-	print(u'Translation: {}'.format(result['translatedText']))
-	print(u'Detected source language: {}'.format(
-		result['detectedSourceLanguage']))
-	return result;
+async def reportStuff(self, ctx, message):
+	channel = self.bot.get_channel(715549209998262322)
+
+	embed = discord.Embed(
+				title=f"Report from {ctx.message.author.mention}",
+				description=f"{message}", 
+				color=16711680, timestamp=ctx.message.created_at)
+
+	await channel.send(embed=embed)
+	await ctx.send("Report has been submitted")
 
 class Utils(commands.Cog):
 
@@ -28,22 +25,6 @@ class Utils(commands.Cog):
 	@commands.command(description="Pong!", help="Tells the ping of the bot to the discord servers", brief="Tells the ping")
 	async def ping(self, ctx):
 		await ctx.send(f'Pong! {round(self.bot.latency*1000)}ms')
-
-	@commands.command(help="Translate text in english (using google translate)", brief="Translate to english")
-	async def translate(self, ctx, *, message):
-		response = await translateMsg(message)
-		embed=discord.Embed(title="Translation",description=f"{ctx.message.author.mention} says:", timestamp=ctx.message.created_at, color=0x4d9aff)
-		embed.add_field(name=f"[{response['detectedSourceLanguage']}] Source:" , value=response['input'], inline=False)
-		embed.add_field(name="Translation", value=response['translatedText'], inline=True)
-		await ctx.send(embed=embed)
-
-	@commands.command()
-	async def trans(self, ctx, lan, *, message):
-		response = await translateMsg(message, lan)
-		embed=discord.Embed(title="Translation",description=f"{ctx.message.author.mention} says:", timestamp=ctx.message.created_at, color=0x4d9aff)
-		embed.add_field(name=f"[{response['detectedSourceLanguage']}] Source:" , value=response['input'], inline=False)
-		embed.add_field(name="Translation", value=response['translatedText'], inline=True)
-		await ctx.send(embed=embed)
 
 	@commands.cooldown(1, 25, commands.BucketType.guild)
 	@commands.command()
@@ -81,6 +62,14 @@ class Utils(commands.Cog):
 				count += 1;
 				fair = 'Fair '*count
 		await message.channel.send(fair)
+
+	@commands.cooldown(1, 60, commands.BucketType.member)
+	@commands.command()
+	async def report(self, ctx, *, message=None):
+		if message == None:
+			await ctx.send("Please type a report to report (hehe, sounds funny)")
+		else:
+			await reportStuff(self, ctx, message)
 
 def setup(bot):
 	bot.add_cog(Utils(bot))
