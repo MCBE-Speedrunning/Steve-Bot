@@ -77,6 +77,10 @@ class Utils(commands.Cog):
 			['Thomas', self.bot.get_user(280428276810383370), datetime.date(2020, 9, 29)]
 		]
 		
+		
+		# Luca plz dont remove the bottom code (just incase the new code doesnt work,
+		# and also for me to laugh at how bad my code is)
+		
 		# brb while I write ugly and inefficient code in my
 		# conquest to make Steve the Bot bloated and unworkable
 		
