@@ -4,7 +4,9 @@ import discord
 import requests
 import json
 import asyncio
+import datetime
 from datetime import timedelta
+
 
 async def reportStuff(self, ctx, message):
 	channel = self.bot.get_channel(715549209998262322)
@@ -57,6 +59,18 @@ class Utils(commands.Cog):
 			return
 		badWords = ["fair", "f a i r", "ⓕⓐⓘⓡ", "ⓕ ⓐ ⓘ ⓡ"]
 		count = 0
+		
+		thomas = self.bot.get_user(280428276810383370)
+		scott = self.bot.get_user(223937483774230528)
+		# idk if she goes by her irl name but I'm sticking with it for the sake of uniformity
+		# also prakxo sounds weird
+		samantha = self.bot.get_user(226312219787264000)
+		if datetime.date.today() == datetime.date(2020, 6, 23):
+			await scott.send('Happy Birthday Scott. You\'re a boomer now! :mango:')
+		elif datetime.date.today() == datetime.date(2020, 6, 25):
+			await samantha.send('Happy Birthday Prakxo. You\'re a boomer now! :mango:')
+		elif datetime.date.today() == datetime.date(2020, 5, 28):
+			await thomas.send('Testy Test :mango:')
 		for word in badWords:
 			if word in message.content.lower():
 				count += 1;
