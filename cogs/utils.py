@@ -166,6 +166,11 @@ class Utils(commands.Cog):
 			img.save("leaderboard.png", "PNG")
 
 			await ctx.send(file=discord.File("leaderboard.png"))
+	
+	# Why? Because I can. lel
+	@commands.command()
+	async def someone(self):
+		await random.choice(server.members).mention
 
 def setup(bot):
 	bot.add_cog(Utils(bot))
