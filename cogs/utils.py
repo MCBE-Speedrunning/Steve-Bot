@@ -5,6 +5,9 @@ import requests
 import json
 import asyncio
 import datetime
+# forgot to import this and ended up looking mentally unstable
+# troll literally pointed out atleast 4 things I did wrong in 3 lines of code
+from random import choice
 from random import randint
 from datetime import timedelta
 from selenium import webdriver
@@ -169,8 +172,8 @@ class Utils(commands.Cog):
 	
 	# Why? Because I can. lel
 	@commands.command()
-	async def someone(self):
-		await random.choice(server.members).mention
+	async def someone(self, ctx):
+		await ctx.send(choice(ctx.guild.members).mention)
 
 def setup(bot):
 	bot.add_cog(Utils(bot))
