@@ -9,16 +9,18 @@ from random import randint
 from datetime import timedelta
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
-
+#from PIL.Image import core as Image
+#import image as Image
+from PIL import Image
+import numpy as np
 
 async def reportStuff(self, ctx, message):
 	channel = self.bot.get_channel(715549209998262322)
 
 	embed = discord.Embed(
-				title=f"Report from {ctx.message.author.mention}",
+				title=f"Report from {ctx.message.author.name}",
 				description=f"{message}", 
-				color=16711680, timestamp=ctx.message.created_at)
+				color=ctx.message.author.color, timestamp=ctx.message.created_at)
 
 	await channel.send(embed=embed)
 	await ctx.send("Report has been submitted")
@@ -27,6 +29,7 @@ class Utils(commands.Cog):
 
 	def __init__(self, bot):
 		self.bot = bot
+		self.tries = 1
 
 	@commands.command(description="Pong!", help="Tells the ping of the bot to the discord servers", brief="Tells the ping")
 	async def ping(self, ctx):
@@ -58,7 +61,7 @@ class Utils(commands.Cog):
 		if isinstance(error, commands.CommandOnCooldown):
 			if ctx.message.channel.id != 684787316489060422:
 				await ctx.message.delete()
-			return
+				return
 		else:
 			await ctx.send(error)
 			#await ctx.send(f"{ctx.message.author.display_name}, you have to wait {round(error.retry_after, 7)} seconds before using this again.")
@@ -112,7 +115,12 @@ class Utils(commands.Cog):
 		
 		for coolKid in coolKids:
 			if datetime.date.today() == coolKid[2]:
-				await coolKid[1].send(f'Happy Birthday {coolKid[0]}! You\'re a boomer now! :mango:')
+				try:
+					for i in range(self.tries):
+						await coolKid[1].send(f'Happy Birthday {coolKid[0]}! You\'re a boomer now! :mango:')
+					self.tries = 1
+				except:
+					self.tries +=1
 			
 		for word in badWords:
 			if word in message.content.lower():
@@ -130,18 +138,34 @@ class Utils(commands.Cog):
 
 	@commands.command()
 	async def leaderboard(self, ctx):
-		DRIVER = '/usr/lib/chromium-browser/chromedriver'
-		chrome_options = Options()
-		chrome_options.add_argument("--disable-dev-shm-usage")
-		chrome_options.add_argument("--headless")
-		chrome_options.add_argument("--no-sandbox")
-		chrome_options.add_argument("--disable-gpu")
-		#chrome_options.binary_location = ""
-		driver = webdriver.Chrome(DRIVER, chrome_options=chrome_options)
-		driver.get('https://aninternettroll.github.io/mcbeVerifierLeaderboard/')
-		screenshot = driver.find_element_by_id('table').screenshot('leaderboard.png')
-		driver.quit()
-		await ctx.send(file=discord.File("leaderboard.png"))
+		async with ctx.typing():
+			DRIVER = '/usr/lib/chromium-browser/chromedriver'
+			chrome_options = Options()
+			chrome_options.add_argument("--disable-dev-shm-usage")
+			chrome_options.add_argument("--headless")
+			chrome_options.add_argument("--no-sandbox")
+			chrome_options.add_argument("--disable-gpu")
+			#chrome_options.binary_location = ""
+			driver = webdriver.Chrome(DRIVER, chrome_options=chrome_options)
+			driver.get('https://aninternettroll.github.io/mcbeVerifierLeaderboard/')
+			screenshot = driver.find_element_by_id('table').screenshot('leaderboard.png')
+			driver.quit()
+			#transparency time
+			img = Image.open('leaderboard.png')
+			img = img.convert("RGBA")
+			datas = img.getdata()
+
+			newData = []
+			for item in datas:
+				if item[0] == 255 and item[1] == 255 and item[2] == 255:
+					newData.append((255, 255, 255, 0))
+				else:
+					newData.append(item)
+
+			img.putdata(newData)
+			img.save("leaderboard.png", "PNG")
+
+			await ctx.send(file=discord.File("leaderboard.png"))
 
 def setup(bot):
 	bot.add_cog(Utils(bot))
