@@ -75,6 +75,9 @@ class Utils(commands.Cog):
 		coolKids = [
 			['Cameron', self.bot.get_user(468262902969663488), datetime.date(2020, 10, 8)],
 			['Indy', self.bot.get_user(274923326890311691), datetime.date(2020, 9, 10)],
+			['Kai' self.bot.get_user(199070670221475842), datetime.date(2020, 11, 20)],
+			['Luca', self.bot.get_user(99457716614885376), datetime.date(2020, 11, 5)],
+			['Max', self.bot.get_user(543958509243596800), datetime.date(2020, 11, 10)],
 			['Murray', self.bot.get_user(400344183333847060), datetime.date(2020, 11, 10)],
 			# idk if she goes by her irl name but I'm sticking with it for the sake of uniformity
 			# also idk how to pronounce prakxo
