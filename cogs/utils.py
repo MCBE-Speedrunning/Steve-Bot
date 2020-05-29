@@ -5,6 +5,9 @@ import requests
 import json
 import asyncio
 import datetime
+# forgot to import this and ended up looking mentally unstable
+# troll literally pointed out atleast 4 things I did wrong in 3 lines of code
+from random import choice
 from random import randint
 from datetime import timedelta
 from selenium import webdriver
@@ -166,6 +169,57 @@ class Utils(commands.Cog):
 			img.save("leaderboard.png", "PNG")
 
 			await ctx.send(file=discord.File("leaderboard.png"))
+	
+	# Why? Because I can. lel
+	
+	# celeste guyToday at 6:13 PM
+	# @Mango Man that's not how it works
+	
+	# Mango ManToday at 6:13 PM
+	# it looks fine in lightmode
+	# wait whats not how what works
+	
+	# celeste guyToday at 6:13 PM
+	# the command
+	
+	# Mango ManToday at 6:13 PM
+	# o
+	# how does it work
+	
+	# celeste guyToday at 6:14 PM
+	# Like for a start, nothing is defined
+	# use ctx D:
+	
+	# Mango ManToday at 6:14 PM
+	# Do I need to though?
+	
+	# celeste guyToday at 6:14 PM
+	# ctx.guild.members() or something
+	# Yes, server is not a thing
+	# 2nd, mention is not used like that
+	# You still have to send a message
+	# And mention in the message
+	
+	# Mango ManToday at 6:14 PM
+	# o
+	
+	# celeste guyToday at 6:15 PM
+	# 3rd, don't forget to import choice from random
+	
+	# Mango ManToday at 6:15 PM
+	# this is why you dont steal code from github
+	# I actually feel embarrased over forgetting to import random
+	
+	# celeste guyToday at 6:15 PM
+	# 4th, add ctx in the arguments list, or you'll get an error like "function takes 1 argument but 2 were given"
+	# And you will use it to send the message and get the server
+	# Also forgetting the import is the least embarrassing thing
+	# Since I did remove it
+	# And replaced with import randint from random
+	
+	@commands.command()
+	async def someone(self, ctx):
+		await ctx.send(choice(ctx.guild.members).mention)
 
 def setup(bot):
 	bot.add_cog(Utils(bot))
