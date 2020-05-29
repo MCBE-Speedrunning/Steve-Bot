@@ -36,7 +36,7 @@ class Utils(commands.Cog):
 	@commands.command()
 	async def findseed(self, ctx):
 		if ctx.message.channel.id != 684787316489060422:
-			ctx.message.delete()
+			await ctx.message.delete()
 			return
 		totalEyes = 0
 		for i in range(12):
@@ -57,7 +57,7 @@ class Utils(commands.Cog):
 	async def findseed_handler(self,ctx,error):
 		if isinstance(error, commands.CommandOnCooldown):
 			if ctx.message.channel.id != 684787316489060422:
-				ctx.message.delete()
+				await ctx.message.delete()
 			return
 		else:
 			await ctx.send(error)
@@ -75,7 +75,7 @@ class Utils(commands.Cog):
 		coolKids = [
 			['Cameron', self.bot.get_user(468262902969663488), datetime.date(2020, 10, 8)],
 			['Indy', self.bot.get_user(274923326890311691), datetime.date(2020, 9, 10)],
-			['Kai' self.bot.get_user(199070670221475842), datetime.date(2020, 11, 20)],
+			['Kai', self.bot.get_user(199070670221475842), datetime.date(2020, 11, 20)],
 			['Luca', self.bot.get_user(99457716614885376), datetime.date(2020, 11, 5)],
 			['Max', self.bot.get_user(543958509243596800), datetime.date(2020, 11, 10)],
 			['Murray', self.bot.get_user(400344183333847060), datetime.date(2020, 11, 10)],
@@ -139,7 +139,7 @@ class Utils(commands.Cog):
 		#chrome_options.binary_location = ""
 		driver = webdriver.Chrome(DRIVER, chrome_options=chrome_options)
 		driver.get('https://aninternettroll.github.io/mcbeVerifierLeaderboard/')
-		screenshot = driver.save_screenshot('leaderboard.png')
+		screenshot = driver.find_element_by_id('table').screenshot('leaderboard.png')
 		driver.quit()
 		await ctx.send(file=discord.File("leaderboard.png"))
 
