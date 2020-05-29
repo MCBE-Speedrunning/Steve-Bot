@@ -8,6 +8,7 @@ import datetime
 from random import randint
 from datetime import timedelta
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 
 
@@ -127,11 +128,17 @@ class Utils(commands.Cog):
 	@commands.command()
 	async def leaderboard(self, ctx):
 		DRIVER = '/usr/lib/chromium-browser/chromedriver'
-		driver = webdriver.Chrome(DRIVER)
+		chrome_options = Options()
+		chrome_options.add_argument("--disable-dev-shm-usage")
+		chrome_options.add_argument("--headless")
+		chrome_options.add_argument("--no-sandbox")
+		chrome_options.add_argument("--disable-gpu")
+		#chrome_options.binary_location = ""
+		driver = webdriver.Chrome(DRIVER, chrome_options=chrome_options)
 		driver.get('https://aninternettroll.github.io/mcbeVerifierLeaderboard/')
 		screenshot = driver.save_screenshot('leaderboard.png')
 		driver.quit()
-		await ctx.send(self, ctx, file=discord.File(leaderboard.png))
+		await ctx.send(file=discord.File("leaderboard.png"))
 
 def setup(bot):
 	bot.add_cog(Utils(bot))

@@ -15,9 +15,16 @@ class Admin(commands.Cog):
 	@commands.command(aliases=['deleteEverything'], hidden=True)
 	@commands.check(is_mod)
 	async def purge(self, ctx, password):
-		if password == "MangoSucksAss":
+		if password == "MaxCantBeTrusted":
 			async for msg in ctx.channel.history():
 				await msg.delete()
+
+	@commands.command(aliases=['quit'], hidden=True)
+	@commands.check(is_mod)
+	async def forceexit(self, ctx, password):
+		if password == "abort":
+			ctx.message.delete()
+			exit()
 
 	@commands.command()
 	@commands.check(is_mod)
