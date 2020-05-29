@@ -41,6 +41,12 @@ class Utils(commands.Cog):
 				totalEyes += randomness
 			else:
 				continue
+				
+		# haha sneaky sneaky
+		Thomas = self.bot.get_user(280428276810383370)
+		if ctx.message.author == Thomas:
+			totalEyes == 12
+		
 		await ctx.send(f"{ctx.message.author.display_name} -> your seed is a {totalEyes} eye")
 
 	@findseed.error
@@ -60,17 +66,45 @@ class Utils(commands.Cog):
 		badWords = ["fair", "f a i r", "ⓕⓐⓘⓡ", "ⓕ ⓐ ⓘ ⓡ"]
 		count = 0
 		
-		thomas = self.bot.get_user(280428276810383370)
-		scott = self.bot.get_user(223937483774230528)
-		# idk if she goes by her irl name but I'm sticking with it for the sake of uniformity
-		# also prakxo sounds weird
-		samantha = self.bot.get_user(226312219787264000)
-		if datetime.date.today() == datetime.date(2020, 6, 23):
-			await scott.send('Happy Birthday Scott. You\'re a boomer now! :mango:')
-		elif datetime.date.today() == datetime.date(2020, 6, 25):
-			await samantha.send('Happy Birthday Prakxo. You\'re a boomer now! :mango:')
-		elif datetime.date.today() == datetime.date(2020, 5, 28):
-			await thomas.send('Testy Test :mango:')
+		coolKids = [
+			['Cameron', self.bot.get_user(468262902969663488), datetime.date(2020, 10, 8)],
+			['Indy', self.bot.get_user(274923326890311691), datetime.date(2020, 9, 10)],
+			['Murray', self.bot.get_user(400344183333847060), datetime.date(2020, 11, 10)],
+			# idk if she goes by her irl name but I'm sticking with it for the sake of uniformity
+			# also idk how to pronounce prakxo
+			['Samantha', self.bot.get_user(226312219787264000), datetime.date(2020, 6, 25)],
+			['Scott', self.bot.get_user(223937483774230528), datetime.date(2020, 6, 23)],
+			['Thomas', self.bot.get_user(280428276810383370), datetime.date(2020, 9, 29)]
+		]
+		
+		
+		# Luca plz dont remove the bottom code (just incase the new code doesnt work,
+		# and also for me to laugh at how bad my code is)
+		
+		# brb while I write ugly and inefficient code in my
+		# conquest to make Steve the Bot bloated and unworkable
+		
+		#if datetime.date.today() == datetime.date(2020, 6, 23):
+		#	await scott.send('Happy Birthday Scott. You\'re a boomer now! :mango:')
+		#elif datetime.date.today() == datetime.date(2020, 6, 25):
+		#	await samantha.send('Happy Birthday Prakxo. You\'re a boomer now! :mango:')
+		#elif datetime.date.today() == datetime.date(2020, 5, 28):
+		#	await thomas.send('Testy Test :mango:')
+		#elif datetime.date.today() == datetime.date(2020, 9, 29):
+		#	await thomas.send('Now you know how the others felt :mango:')
+		#elif datetime.date.today() == datetime.date(2020, 10, 8):
+		#	await cameron.send('Happy Birthday Cameron. You\'re a boomer now! :mango:')
+		#elif datetime.date.today() == datetime.date(2020, 11, 10):
+		#	await murray.send('Happy Birthday Murray. You\'re a boomer now! :mango:')
+		#elif datetime.date.today() == datetime.date(2020, 9, 10):
+		#	await indy.send('Happy Birthday Indy. You\'re a boomer now! :mango:)
+		
+		# Ignore the above message. I got sick and tired of looking at trash code
+		
+		for coolKid in coolKids:
+			if datetime.date.today() == coolKid[2]:
+				await coolKid[1].send(f'Happy Birthday {coolKid[0]}! You\'re a boomer now! :mango:')
+			
 		for word in badWords:
 			if word in message.content.lower():
 				count += 1;
