@@ -1,4 +1,5 @@
 __pycache__
 config.py
 discord.log
+api_keys.json
 .vscode/

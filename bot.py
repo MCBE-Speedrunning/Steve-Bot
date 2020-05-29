@@ -28,7 +28,7 @@ def get_prefix(bot, message):
 class BedrockBot(commands.Bot):
 
 	def __init__(self):
-		super().__init__(command_prefix=get_prefix)
+		super().__init__(command_prefix=get_prefix, case_insensitive=True)
 		self.logger = logging.getLogger('discord')
 
 		with open('custom_commands.json', 'r') as f:

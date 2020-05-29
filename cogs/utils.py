@@ -5,7 +5,10 @@ import requests
 import json
 import asyncio
 import datetime
+from random import randint
 from datetime import timedelta
+from selenium import webdriver
+
 
 
 async def reportStuff(self, ctx, message):
@@ -36,7 +39,7 @@ class Utils(commands.Cog):
 			return
 		totalEyes = 0
 		for i in range(12):
-			randomness = random.randint(1,10)
+			randomness = randint(1,10)
 			if randomness == 1:
 				totalEyes += randomness
 			else:
@@ -45,7 +48,7 @@ class Utils(commands.Cog):
 		# haha sneaky sneaky
 		Thomas = self.bot.get_user(280428276810383370)
 		if ctx.message.author == Thomas:
-			totalEyes == 12
+			totalEyes = 12
 		
 		await ctx.send(f"{ctx.message.author.display_name} -> your seed is a {totalEyes} eye")
 
@@ -55,6 +58,8 @@ class Utils(commands.Cog):
 			if ctx.message.channel.id != 684787316489060422:
 				ctx.message.delete()
 			return
+		else:
+			await ctx.send(error)
 			#await ctx.send(f"{ctx.message.author.display_name}, you have to wait {round(error.retry_after, 7)} seconds before using this again.")
 
 	@commands.Cog.listener()
@@ -118,6 +123,15 @@ class Utils(commands.Cog):
 			await ctx.send("Please type a report to report (hehe, sounds funny)")
 		else:
 			await reportStuff(self, ctx, message)
+
+	@commands.command()
+	async def leaderboard(self, ctx):
+		DRIVER = '/usr/lib/chromium-browser/chromedriver'
+		driver = webdriver.Chrome(DRIVER)
+		driver.get('https://aninternettroll.github.io/mcbeVerifierLeaderboard/')
+		screenshot = driver.save_screenshot('leaderboard.png')
+		driver.quit()
+		await ctx.send(self, ctx, file=discord.File(leaderboard.png))
 
 def setup(bot):
 	bot.add_cog(Utils(bot))
