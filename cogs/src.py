@@ -174,14 +174,26 @@ async def verifyNew(self, apiKey=None, userID=None):
 		pbs = requests.get(profile["data"]["links"][3]["uri"], headers=head)
 		pbs = json.loads(pbs.text)
 
+	wrCounter = False
+	runnerCounter = False
+	
 	for i in pbs["data"]:
 		if i["place"] == 1:
 			if i["run"]["game"] == "yd4ovvg1" or i["run"]["game"] == "v1po7r76":
 				if not i["run"]["level"]:
-					await server.get_member(user.id).add_roles(WrRole)
+					wrCounter = True
 		if i["run"]["game"] == "yd4ovvg1" or i["run"]["game"] == "v1po7r76":
 			# I have no shame
-			await server.get_member(user.id).add_roles(RunneRole)
+			runnerCounter = True
+
+	if wrCounter:
+		await server.get_member(user.id).add_roles(WrRole)
+	else:
+		await server.get_member(user.id).remove_roles(WrRole)
+	if runnerCounter:
+		await server.get_member(user.id).add_roles(RunneRole)
+	else:
+		await server.get_member(user.id).remove_roles(RunneRole)
 
 class Src(commands.Cog):
 
