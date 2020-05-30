@@ -85,5 +85,17 @@ class Admin(commands.Cog):
 			await ctx.send(f'Some unknown error happened while trying to reload extension {ext} (check logs)')
 			self.bot.logger.exception(f'Failed to reload extension {ext}:')
 
+	@commands.command()
+	@commands.check(is_mod)
+	async def connect(self, ctx):
+		await ctx.author.voice.channel.connect()
+		await ctx.send(f"Joined channel {ctx.author.voice.channel.name}")
+
+	@commands.command()
+	@commands.check(is_mod)
+	async def disconnect(self, ctx):
+		await ctx.voice_client.disconnect()
+		await ctx.send(f"Left channel {ctx.author.voice.channel.name}")
+
 def setup(bot):
 	bot.add_cog(Admin(bot))

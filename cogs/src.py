@@ -7,6 +7,7 @@ import requests
 import json
 import asyncio
 import dateutil.parser
+from pathlib import Path
 
 async def rejectRun(self, apiKey, ctx, run, reason):
 	await ctx.message.delete()
@@ -61,87 +62,6 @@ async def deleteRun(self, apiKey, ctx, run):
 	else:
 		await ctx.send("Something went wrong")
 		await ctx.message.author.send(f"```json\n{json.dumps(json.loads(r.text),indent=4)}```")
-
-
-@tasks.loop(minutes=2.0)
-async def checkForWR(self):
-	with open('api_keys.json', 'r+') as file:
-		api_keys = json.load(file)
-
-	for runner in api_keys:
-		verifyRole(api_keys[runner], False)
-
-
-def verifyRole(apiKey, isNewbie):
-	head = {
-		"X-API-Key": apiKey,
-		"Accept": "application/json",
-		"User-Agent": "mcbeDiscordBot/1.0"
-	}
-	r = requests.get(
-		'https://www.speedrun.com/api/v1/profile', headers=head)
-
-	# print(r.text)
-	try:
-		profile = json.loads(r.text)
-	except json.decoder.JSONDecodeError:
-		return
-	pbs = requests.get(profile["data"]["links"][3]["uri"])
-	pbs = json.loads(pbs.text)
-
-	if isNewbie == True:
-		with open('api_keys.json', 'r') as file:
-			api_keys = json.load(file)
-
-		api_keys[profile["data"]["names"]["international"]] = apiKey
-
-		with open('api_keys.json', 'w') as file:
-			json.dump(api_keys, file, indent=4)
-
-	print(r.status_code)
-
-	for i in pbs["data"]:
-		if i["place"] == 1:
-			if i["run"]["game"] == "yd4ovvg1" or i["run"]["game"] == "v1po7r76":
-				if not i["run"]["level"]:
-					return True
-		if i["run"]["game"] == "yd4ovvg1" or i["run"]["game"] == "v1po7r76":
-			# I have no shame
-			return 'No but plays the game'
-
-
-async def verifyRoleCommand(self, ctx, apiKey):
-	with open('api_keys.json', 'r+') as file:
-		api_keys = json.load(file)
-	alreadyHasRole = False
-	for runner in api_keys:
-		if api_keys[runner] == apiKey:
-			alreadyHasRole = True
-
-	if alreadyHasRole == True:
-		# Kindness is a gift and they show no respect to steve bot!
-		ctx.send("You already have a role dumbass")
-	else:
-		server = self.bot.get_guild(574267523869179904)
-		# Troll is mentally challenged I guess ¯\_(ツ)_/¯
-		RunneRole = server.get_role(574268937454223361)
-		WrRole = server.get_role(583622436378116107)
-
-		hasRecord = verifyRole(apiKey, True)
-
-		if hasRecord == True:
-			await ctx.send("WR boi")
-			await server.get_member(ctx.message.author.id).add_roles(WrRole)
-			print("WR boi")
-		elif hasRecord == 'No but plays the game':
-			# Yeah idk how useful these comments are but idc
-			# print(i)
-			await ctx.send("Runner")
-			await server.get_member(ctx.message.author.id).add_roles(RunneRole)
-			# print("minecraft")
-
-		#print(json.dumps(pbs,sort_keys=True, indent=4))
-
 
 async def clear(self):
 	async for msg in self.bot.get_channel(699713639866957905).history():
@@ -210,10 +130,64 @@ async def pendingRuns(self, ctx):
 	embed_stats = discord.Embed(title='Pending Run Stats', description=f"Full Game Runs: {mcbe_runs}\nIndividual Level Runs: {mcbeil_runs}\nCategory Extension Runs: {mcbece_runs}", color=16711680 + i * 60)
 	await self.bot.get_channel(699713639866957905).send(embed=embed_stats)
 
+
+async def verifyNew(self, apiKey=None, userID=None):
+	if apiKey==None:
+		head = {
+		"Accept": "application/json",
+		"User-Agent": "mcbeDiscordBot/1.0"
+		}
+	else:
+		head = {
+		"X-API-Key": apiKey,
+		"Accept": "application/json",
+		"User-Agent": "mcbeDiscordBot/1.0"
+		}
+	server = self.bot.get_guild(574267523869179904)
+	# Troll is mentally challenged I guess ¯\_(ツ)_/¯
+	RunneRole = server.get_role(574268937454223361)
+	WrRole = server.get_role(583622436378116107)
+	#if userID == None:
+	#	return
+	#else:
+	user = self.bot.get_user(int(userID))
+	data = json.loads(Path('./api_keys.json').read_text())
+
+	if str(user.id) in data:
+		pbs = requests.get(f"https://www.speedrun.com/api/v1/users/{data[str(user.id)]}/personal-bests", headers=head)
+		pbs = json.loads(pbs.text)
+	else:
+		r = requests.get(
+			'https://www.speedrun.com/api/v1/profile', headers=head)
+		# print(r.text)
+		if r.status_code >= 400:
+			await user.send(f"```json\n{r.text}```")
+			return
+		try:
+			profile = json.loads(r.text)
+		except json.decoder.JSONDecodeError:
+			return
+		srcUserID = profile["data"]["id"]
+		with open('api_keys.json', 'w') as file:
+			data[user.id] = srcUserID
+			json.dump(data, file, indent=4)
+		pbs = requests.get(profile["data"]["links"][3]["uri"], headers=head)
+		pbs = json.loads(pbs.text)
+
+	for i in pbs["data"]:
+		if i["place"] == 1:
+			if i["run"]["game"] == "yd4ovvg1" or i["run"]["game"] == "v1po7r76":
+				if not i["run"]["level"]:
+					await server.get_member(user.id).add_roles(WrRole)
+		if i["run"]["game"] == "yd4ovvg1" or i["run"]["game"] == "v1po7r76":
+			# I have no shame
+			await server.get_member(user.id).add_roles(RunneRole)
+
 class Src(commands.Cog):
 
 	def __init__(self, bot):
 		self.bot = bot
+		self.checker.start()
 
 	async def is_mod(ctx):
 		return ctx.author.guild_permissions.manage_channels
@@ -224,16 +198,6 @@ class Src(commands.Cog):
 		async with ctx.typing():
 			await clear(self)
 			await pendingRuns(self, ctx)
-
-	@commands.command()
-	async def verify(self, ctx, apiKey=None):
-		if apiKey == None:
-			await ctx.send(f"Please try again this command by getting an apiKey from https://www.speedrun.com/api/auth then do `{ctx.prefix}verify <apiKey>` in my DMs or anywhere in this server. \nBe careful who you share this key with. To learn more check out https://github.com/speedruncomorg/api/blob/master/authentication.md")
-			return
-		elif ctx.guild != None:
-			await ctx.message.delete()
-		async with ctx.typing():
-			await verifyRoleCommand(self, ctx, apiKey)
 
 	@commands.command(description="Reject runs quickly")
 	@commands.check(is_mod)
@@ -252,6 +216,24 @@ class Src(commands.Cog):
 	@commands.guild_only()
 	async def delete(self, ctx, apiKey, run):
 		await deleteRun(self, apiKey, ctx, run)
+
+	@commands.command()
+	async def verify(self, ctx, apiKey=None, userID=None):
+		#if apiKey == None:
+		#	await ctx.send(f"Please try again this command by getting an apiKey from https://www.speedrun.com/api/auth then do `{ctx.prefix}verify <apiKey>` in my DMs or anywhere in this server. \nBe careful who you share this key with. To learn more check out https://github.com/speedruncomorg/api/blob/master/authentication.md")
+		#	return
+		if ctx.guild != None:
+			await ctx.message.delete()
+		async with ctx.typing():
+			if userID == None:
+				userID = ctx.message.author.id
+			await verifyNew(self, apiKey, userID)
+
+	@tasks.loop(minutes=2.0)
+	async def checker(self):
+		data = json.loads(Path('./api_keys.json').read_text())
+		for key,value in data.items():
+			await verifyNew(self, None, key)
 
 
 def setup(bot):
