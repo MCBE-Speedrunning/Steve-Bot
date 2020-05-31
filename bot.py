@@ -11,7 +11,9 @@ extensions = [
 	"cogs.admin",
 	"cogs.src",
 	"cogs.help",
-	"cogs.trans"
+	"cogs.trans",
+	"cogs.player",
+	"cogs.general"
 ]
 def get_prefix(bot, message):
 	"""A callable Prefix for our bot. This could be edited to allow per server prefixes."""

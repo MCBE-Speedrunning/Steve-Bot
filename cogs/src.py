@@ -241,7 +241,7 @@ class Src(commands.Cog):
 				userID = ctx.message.author.id
 			await verifyNew(self, apiKey, userID)
 
-	@tasks.loop(minutes=2.0)
+	@tasks.loop(minutes=10.0)
 	async def checker(self):
 		data = json.loads(Path('./api_keys.json').read_text())
 		for key,value in data.items():

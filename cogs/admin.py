@@ -97,5 +97,11 @@ class Admin(commands.Cog):
 		await ctx.voice_client.disconnect()
 		await ctx.send(f"Left channel {ctx.author.voice.channel.name}")
 
+	@commands.command()
+	@commands.check(is_mod)
+	async def clear(self, ctx, number):
+		await ctx.message.channel.purge(limit=int(number), check=None, before=None, after=None, around=None, oldest_first=False, bulk=True)
+
+
 def setup(bot):
 	bot.add_cog(Admin(bot))
