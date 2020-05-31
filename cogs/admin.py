@@ -1,5 +1,6 @@
 from discord.ext import commands
 import discord
+import asyncio
 import subprocess
 import json
 import git
@@ -100,7 +101,42 @@ class Admin(commands.Cog):
 	@commands.command()
 	@commands.check(is_mod)
 	async def clear(self, ctx, number):
-		await ctx.message.channel.purge(limit=int(number), check=None, before=None, after=None, around=None, oldest_first=False, bulk=True)
+		await ctx.message.channel.purge(limit=int(number)+1, check=None, before=None, after=None, around=None, oldest_first=False, bulk=True)
+
+	@commands.check(is_mod)
+	@commands.command()
+	async def mute(self, ctx, members: commands.Greedy[discord.Member],
+					   mute_minutes: int = 0,
+					   *, reason: str = "absolutely no reason"):
+		"""Mass mute members with an optional mute_minutes parameter to time it"""
+
+		if not members:
+			await ctx.send("You need to name someone to mute")
+			return
+
+		#muted_role = discord.utils.find(ctx.guild.roles, name="Muted")
+		muted_role = ctx.guild.get_role(707707894694412371)
+		for member in members:
+			if self.bot.user == member: # what good is a muted bot?
+				embed = discord.Embed(title = "You can't mute me, I'm an almighty bot")
+				await ctx.send(embed = embed)
+				continue
+			await member.add_roles(muted_role, reason = reason)
+			await ctx.send("{0.mention} has been muted by {1.mention} for *{2}*".format(member, ctx.author, reason))
+
+		if mute_minutes > 0:
+			await asyncio.sleep(mute_minutes * 60)
+			for member in members:
+				await member.remove_roles(muted_role, reason = "time's up ")
+
+	@commands.check(is_mod)
+	@commands.command()
+	async def unmute(self, ctx, members: commands.Greedy[discord.Member]):
+		muted_role = ctx.guild.get_role(707707894694412371)
+		for i in members:
+			await i.remove_roles(muted_role)
+			await ctx.send("{0.mention} has been unmuted by {1.mention}".format(i, ctx.author))
+
 
 
 def setup(bot):

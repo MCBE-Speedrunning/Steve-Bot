@@ -75,8 +75,6 @@ class Player(commands.Cog):
 			return await ctx.voice_client.move_to(channel)
 
 		await channel.connect()
-
-	@commands.check(is_in_vc)
 	@commands.command()
 	async def play(self, ctx, *, query):
 		"""Plays a file from the local filesystem"""
@@ -85,8 +83,6 @@ class Player(commands.Cog):
 		ctx.voice_client.play(source, after=lambda e: print('Player error: %s' % e) if e else None)
 
 		await ctx.send('Now playing: {}'.format(query))
-
-	@commands.check(is_in_vc)
 	@commands.command()
 	async def yt(self, ctx, *, url):
 		"""Plays from a url (almost anything youtube_dl supports)"""
@@ -97,7 +93,6 @@ class Player(commands.Cog):
 
 		await ctx.send('Now playing: {}'.format(player.title))
 
-	@commands.check(is_in_vc)
 	@commands.command()
 	async def stream(self, ctx, *, url):
 		"""Streams from a url (same as yt, but doesn't predownload)"""

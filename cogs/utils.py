@@ -221,5 +221,9 @@ class Utils(commands.Cog):
 	async def someone(self, ctx):
 		await ctx.send(choice(ctx.guild.members).mention)
 
+	@commands.command()
+	async def roll(self, ctx, pool):
+		await ctx.send(f"You rolled a {randint(0, int(pool))}")
+
 def setup(bot):
 	bot.add_cog(Utils(bot))

@@ -2,7 +2,6 @@ from discord.ext import commands
 import discord
 import datetime
 
-
 def dump(obj):
 	output = ""
 	for attr in dir(obj):

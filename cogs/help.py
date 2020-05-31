@@ -1,5 +1,10 @@
 from discord.ext import commands
 from random import randint
+import os, sys, inspect
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir) 
+import bot
 
 class MyHelpCommand(commands.MinimalHelpCommand):
 	messages = [
@@ -374,6 +379,17 @@ class Help(commands.Cog):
 	def cog_unload(self):
 		self.bot.help_command = self._original_help_command
 
+	@commands.command()
+	async def prefix(self, ctx):
+		prefixes = bot.get_prefix(self.bot, ctx.message)
+		prefixes.pop(1)
+		prefixes.pop(1)
+		prefixes.pop(1)
+		output = ""
+		for i in prefixes:
+			output += i+", "
+
+		await ctx.send(f"My prefixes are {output}")
 
 def setup(bot):
 	bot.add_cog(Help(bot))
