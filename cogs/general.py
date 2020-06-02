@@ -53,5 +53,21 @@ class General(commands.Cog):
 		#os.remove("temp.webp")
 		#os.remove("temp.png")
 
+	@commands.command()
+	async def coop(self, ctx, user: discord.Member=None):
+		if not user:
+			user = ctx.message.author
+		elif type(user)=="str":
+			user = self.bot.get_user(int(user))
+
+		coop_role = ctx.guild.get_role(694261282861219952)
+
+		if coop_role in user.roles:
+			await user.remove_roles(coop_role)
+			await ctx.send('You have left coop gang')
+		else:
+			await user.add_roles(coop_role)
+			await ctx.send("You are now in the coop gang")
+
 def setup(bot):
 	bot.add_cog(General(bot))

@@ -21,12 +21,12 @@ async def reportStuff(self, ctx, message):
 	channel = self.bot.get_channel(715549209998262322)
 
 	embed = discord.Embed(
-				title=f"Report from {ctx.message.author.name}",
+				title=f"Report from {ctx.message.author}",
 				description=f"{message}", 
 				color=ctx.message.author.color, timestamp=ctx.message.created_at)
 
 	await channel.send(embed=embed)
-	await ctx.send("Report has been submitted")
+	await ctx.author.send("Report has been submitted")
 
 class Utils(commands.Cog):
 
@@ -134,8 +134,10 @@ class Utils(commands.Cog):
 	@commands.cooldown(1, 60, commands.BucketType.member)
 	@commands.command()
 	async def report(self, ctx, *, message=None):
+		if ctx.message.guild != None:
+			await ctx.message.delete()
 		if message == None:
-			await ctx.send("Please type a report to report (hehe, sounds funny)")
+			await ctx.message.author.send("Please type a report to report (hehe, sounds funny)")
 		else:
 			await reportStuff(self, ctx, message)
 

@@ -1,17 +1,26 @@
 from discord.ext import commands
 import discord
 from google.cloud import translate_v2 as translate
+import six
 translate_client = translate.Client()
 
 async def translateMsg(text, target="en"):
 	# Text can also be a sequence of strings, in which case this method
 	# will return a sequence of results for each text.
+	if isinstance(text, six.binary_type):
+		text = text.decode('utf-8')
 	result = translate_client.translate(
 		text, target_language=target)
 	print(u'Text: {}'.format(result['input']))
 	print(u'Translation: {}'.format(result['translatedText']))
 	print(u'Detected source language: {}'.format(
 		result['detectedSourceLanguage']))
+	result['translatedText'] = result['translatedText'].replace("&lt;", "<")
+	result['translatedText'] = result['translatedText'].replace("&gt;", ">")
+	result['translatedText'] = result['translatedText'].replace("&#39;", "'")
+	result['translatedText'] = result['translatedText'].replace("&quot;", '"')
+	result['translatedText'] = result['translatedText'].replace("<@! ", "<@!")
+	result['translatedText'] = result['translatedText'].replace("<# ", "<#")
 	return result;
 
 class Trans(commands.Cog):
