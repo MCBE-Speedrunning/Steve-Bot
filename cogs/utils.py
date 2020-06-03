@@ -68,6 +68,7 @@ class Utils(commands.Cog):
 			totalEyes = -1
 		
 		
+		# EDIT: It DID work!! Troll just forgot to reload utils Kappa
 		# idfk why this doesnt work but it doesnt ¯\_(ツ)_/¯
 		# haha kai time
 		# Kai = self.bot.get_user(199070670221475842)
