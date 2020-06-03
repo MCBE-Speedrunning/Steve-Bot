@@ -58,7 +58,7 @@ class Admin(commands.Cog):
 		"""Reloads an extension"""
 		try:
 			self.bot.reload_extension(f'cogs.{ext}')
-			await ctx.send(f'The extension {ext} was reloaded!')
+			await ctx.send(f'The extension {ext} was realoaded!') # Oceanlight told me too
 		except commands.ExtensionNotFound:
 			await ctx.send(f'The extension {ext} doesn\'t exist.')
 		except commands.ExtensionNotLoaded:
