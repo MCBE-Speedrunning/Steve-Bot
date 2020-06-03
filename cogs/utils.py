@@ -51,29 +51,20 @@ class Utils(commands.Cog):
 		if ctx.message.channel.id != 684787316489060422:
 			await ctx.message.delete()
 			return
-		totalEyes = 0
-		for i in range(12):
-			randomness = randint(1,10)
-			if randomness == 1:
-				totalEyes += randomness
-			else:
-				continue
-				
-		# haha sneaky sneaky
-		Thomas = self.bot.get_user(280428276810383370)
-		Kai = self.bot.get_user(199070670221475842)
-		if ctx.message.author == Thomas:
+		
+		# Don't ask
+		if ctx.author.id == 280428276810383370: # Thomas's User ID
 			totalEyes = 12
-		elif ctx.message.author == Kai:
+		elif ctx.author.id == 199070670221475842: # Kai's User ID
 			totalEyes = -1
-		
-		
-		# EDIT: It DID work!! Troll just forgot to reload utils Kappa
-		# idfk why this doesnt work but it doesnt ¯\_(ツ)_/¯
-		# haha kai time
-		# Kai = self.bot.get_user(199070670221475842)
-		# if ctx.message.author == Kai:
-		# 	totalEyes = "-1"
+		else:
+			totalEyes = 0
+			for i in range(12):
+				randomness = randint(1,10)
+				if randomness == 1:
+					totalEyes += randomness
+				else:
+					continue
 			
 		await ctx.send(f"{ctx.message.author.display_name} -> your seed is a {totalEyes} eye")
 
