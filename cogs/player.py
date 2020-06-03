@@ -14,7 +14,7 @@ youtube_dl.utils.bug_reports_message = lambda: ''
 
 ytdl_format_options = {
 	'format': 'bestaudio/best',
-	'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
+	'outtmpl': 'downloads/%(extractor)s-%(id)s-%(title)s.%(ext)s',
 	'restrictfilenames': True,
 	'noplaylist': True,
 	'nocheckcertificate': True,
@@ -136,7 +136,7 @@ class Player(commands.Cog):
 
 	@tasks.loop(hours=10.0)
 	async def cleanup(self):
-		for p in Path(".").glob("youtube*"):
+		for p in Path("./downloads/").glob("*"):
 			p.unlink()
 
 

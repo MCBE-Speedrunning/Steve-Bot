@@ -15,7 +15,14 @@ from selenium.webdriver.chrome.options import Options
 #from PIL.Image import core as Image
 #import image as Image
 from PIL import Image
-import numpy as np
+from PIL import ImageFilter
+
+def set_viewport_size(driver, width, height):
+    window_size = driver.execute_script("""
+        return [window.outerWidth - window.innerWidth + arguments[0],
+          window.outerHeight - window.innerHeight + arguments[1]];
+        """, width, height)
+    driver.set_window_size(*window_size)
 
 async def reportStuff(self, ctx, message):
 	channel = self.bot.get_channel(715549209998262322)
@@ -141,6 +148,7 @@ class Utils(commands.Cog):
 		else:
 			await reportStuff(self, ctx, message)
 
+	@commands.cooldown(1, 20, commands.BucketType.member)
 	@commands.command()
 	async def leaderboard(self, ctx):
 		async with ctx.typing():
@@ -152,11 +160,16 @@ class Utils(commands.Cog):
 			chrome_options.add_argument("--disable-gpu")
 			#chrome_options.binary_location = ""
 			driver = webdriver.Chrome(DRIVER, chrome_options=chrome_options)
+			set_viewport_size(driver, 1000, 1000)
 			driver.get('https://aninternettroll.github.io/mcbeVerifierLeaderboard/')
 			screenshot = driver.find_element_by_id('table').screenshot('leaderboard.png')
 			driver.quit()
 			#transparency time
 			img = Image.open('leaderboard.png')
+			img = img.convert("RGB")
+			pallette = Image.open("palette.png")
+			pallette = pallette.convert("P")
+			img = img.quantize(colors=256, method=3, kmeans=0, palette=pallette)
 			img = img.convert("RGBA")
 			datas = img.getdata()
 
@@ -168,9 +181,23 @@ class Utils(commands.Cog):
 					newData.append(item)
 
 			img.putdata(newData)
+			"""
+			img = img.filter(ImageFilter.SHARPEN)
+			img = img.filter(ImageFilter.SHARPEN)
+			img = img.filter(ImageFilter.SHARPEN)
+			"""
+			#height, width = img.size
+			#img = img.resize((height*10,width*10), resample=Image.BOX)
 			img.save("leaderboard.png", "PNG")
 
 			await ctx.send(file=discord.File("leaderboard.png"))
+
+
+	@leaderboard.error
+	async def leaderboard_handler(self,ctx,error):
+		if isinstance(error, commands.CommandOnCooldown):
+			#return
+			await ctx.send(f"{ctx.message.author.display_name}, you have to wait {round(error.retry_after, 2)} seconds before using this again.")
 	
 	# Why? Because I can. lel
 	

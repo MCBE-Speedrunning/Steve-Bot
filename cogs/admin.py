@@ -86,6 +86,21 @@ class Admin(commands.Cog):
 			await ctx.send(f'Some unknown error happened while trying to reload extension {ext} (check logs)')
 			self.bot.logger.exception(f'Failed to reload extension {ext}:')
 
+	@commands.check(is_mod)
+	@commands.command(name='unload', hidden=True, usage='<extension>')
+	async def _unload(self, ctx, ext):
+		"""Loads an extension"""
+		try:
+			self.bot.unload_extension(f'cogs.{ext}')
+			await ctx.send(f'The extension {ext} was unloaded!')
+		except commands.ExtensionNotFound:
+			await ctx.send(f'The extension {ext} doesn\'t exist!')
+		except commands.NoEntryPointError:
+			await ctx.send(f'The extension {ext} doesn\'t have an entry point (try adding the setup function)')
+		except commands.ExtensionFailed:
+			await ctx.send(f'Some unknown error happened while trying to reload extension {ext} (check logs)')
+			self.bot.logger.exception(f'Failed to reload extension {ext}:')
+
 	"""
 	@commands.command()
 	@commands.check(is_mod)
@@ -138,6 +153,14 @@ class Admin(commands.Cog):
 		for i in members:
 			await i.remove_roles(muted_role)
 			await ctx.send("{0.mention} has been unmuted by {1.mention}".format(i, ctx.author))
+
+	@commands.command()
+	@commands.check(is_mod)
+	async def logs(self, ctx, *, password):
+		if password == "beep boop":
+			await ctx.message.delete()
+			file = discord.File("discord.log")
+			await ctx.send(file=file)
 
 
 
