@@ -67,7 +67,7 @@ class Utils(commands.Cog):
 		# haha kai time
 		Kai = self.bot.get_user(199070670221475842)
 		if ctx.message.author == Kai:
-			totalEyes = -1
+			totalEyes = "-1"
 			
 		await ctx.send(f"{ctx.message.author.display_name} -> your seed is a {totalEyes} eye")
 
