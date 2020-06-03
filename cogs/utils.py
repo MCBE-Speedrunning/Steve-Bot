@@ -61,13 +61,18 @@ class Utils(commands.Cog):
 				
 		# haha sneaky sneaky
 		Thomas = self.bot.get_user(280428276810383370)
+		Kai = self.bot.get_user(199070670221475842)
 		if ctx.message.author == Thomas:
 			totalEyes = 12
+		elif ctx.message.author == Kai:
+			totalEyes = -1
 		
+		
+		# idfk why this doesnt work but it doesnt ¯\_(ツ)_/¯
 		# haha kai time
-		Kai = self.bot.get_user(199070670221475842)
-		if ctx.message.author == Kai:
-			totalEyes = "-1"
+		# Kai = self.bot.get_user(199070670221475842)
+		# if ctx.message.author == Kai:
+		# 	totalEyes = "-1"
 			
 		await ctx.send(f"{ctx.message.author.display_name} -> your seed is a {totalEyes} eye")
 
