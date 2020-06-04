@@ -62,9 +62,7 @@ class Utils(commands.Cog):
 			for i in range(12):
 				randomness = randint(1,10)
 				if randomness == 1:
-					totalEyes += randomness
-				else:
-					continue
+					totalEyes += 1
 			
 		await ctx.send(f"{ctx.message.author.display_name} -> your seed is a {totalEyes} eye")
 
