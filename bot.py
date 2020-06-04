@@ -66,6 +66,7 @@ class BedrockBot(commands.Bot):
 	async def on_message_delete(self, message):
 		channel = self.get_channel(718187032869994686)
 		embed = discord.Embed(
+			title=message.author,
 			description=message.content,
 			color=message.author.color,
 			timestamp=message.created_at
