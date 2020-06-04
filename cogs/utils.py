@@ -250,11 +250,12 @@ class Utils(commands.Cog):
 	
 	@commands.command()
 	async def someone(self, ctx):
-		await ctx.send(choice(ctx.guild.members).mention)
+		await ctx.send("grape fuck u")
+#await ctx.send(choice(ctx.guild.members).mention)
 
 	@commands.command()
 	async def roll(self, ctx, pool):
-		#await ctx.send(f"You rolled a {randint(0, int(pool))}")
+		await ctx.send(f"You rolled a {randint(0, int(pool))}")
 
 def setup(bot):
 	bot.add_cog(Utils(bot))
