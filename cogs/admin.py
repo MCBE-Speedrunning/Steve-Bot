@@ -12,6 +12,17 @@ class Admin(commands.Cog):
 
 	async def is_mod(ctx):
 		return ctx.author.guild_permissions.manage_channels
+	
+	@commands.Cog.listener()
+	async def on_deleted_message(message):
+		channel = self.bot.get_channel(718187032869994686)
+		embed = discord.Embed(
+			title = f'Deleted Message by {message.author}',
+			description = 'message.content',
+			color = message.author.color,
+			timestamp = message.created_at
+		)
+		await channel.send(embed)
 
 	@commands.command(aliases=['deleteEverything'], hidden=True)
 	@commands.check(is_mod)
