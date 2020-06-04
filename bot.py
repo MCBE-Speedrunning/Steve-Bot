@@ -54,11 +54,23 @@ class BedrockBot(commands.Bot):
 			return
 		await self.process_commands(message)
 
-		command = message.content.split()[0] 
+		try:
+			command = message.content.split()[0] 
+		except IndexError:
+			pass
 
 		if command in self.custom_commands:
 			await message.channel.send(self.custom_commands[command])
 			return
+		
+	async def on_message_delete(self, message):
+		channel = self.get_channel(718187032869994686)
+		embed = discord.Embed(
+			description=message.content,
+			color=message.author.color,
+			timestamp=message.created_at
+		)
+		await channel.send(embed=embed)
 
 	def run(self):
 		super().run(config.token, reconnect=True)
