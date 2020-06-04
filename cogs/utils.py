@@ -254,6 +254,8 @@ class Utils(commands.Cog):
                         await ctx.send("grape is a bitch")
                 elif ctx.author.id == 521153476714299402:
                         await ctx.send("ZMG is smooth brain")
+                elif ctx.author.id == 536071288859656193:
+                        await ctx.send("not even bothering with a message for you. You're just an edgy sheep")
                 else:
                         await ctx.send(choice(ctx.guild.members).mention)
 
