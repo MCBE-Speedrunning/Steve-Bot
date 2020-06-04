@@ -250,10 +250,12 @@ class Utils(commands.Cog):
 	
 	@commands.command()
 	async def someone(self, ctx):
-                if ctx.author.id != 395872198323077121:
-                        await ctx.send(choice(ctx.guild.members).mention)
-                else:
+                if ctx.author.id == 395872198323077121:
                         await ctx.send("grape is a bitch")
+                elif ctx.author.id == 521153476714299402:
+                        await ctx.send("ZMG is smooth brain")
+                else:
+                        await ctx.send(choice(ctx.guild.members).mention)
 
 	@commands.command()
 	async def roll(self, ctx, pool):
