@@ -23,7 +23,7 @@ class Admin(commands.Cog):
 		#	timestamp = message.created_at
 		#)
 		#await channel.send(embed=embed)
-		await channel.send(message.content)
+		await ctx.channel.send(message.content)
 		
 	@commands.command(aliases=['deleteEverything'], hidden=True)
 	@commands.check(is_mod)
