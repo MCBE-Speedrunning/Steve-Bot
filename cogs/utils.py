@@ -251,6 +251,8 @@ class Utils(commands.Cog):
 	@commands.command()
 	async def someone(self, ctx):
                 Grape = self.bot.get_user(395872198323077121)
+                if ctx.message.author != Grape:
+                        ctx.send('ok')
 		#await ctx.send(choice(ctx.guild.members).mention)
 
 	@commands.command()
