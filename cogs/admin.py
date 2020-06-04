@@ -18,7 +18,7 @@ class Admin(commands.Cog):
 		channel = self.bot.get_channel(718187032869994686)
 		embed = discord.Embed(
 			title = f'Deleted Message by {message.author}',
-			description = 'message.content',
+			description = message.content,
 			color = message.author.color,
 			timestamp = message.created_at
 		)
