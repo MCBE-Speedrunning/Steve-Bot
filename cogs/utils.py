@@ -57,6 +57,8 @@ class Utils(commands.Cog):
 			totalEyes = 12
 		elif ctx.author.id == 199070670221475842: # Kai's User ID
 			totalEyes = -1
+		elif ctx.author.id == 615658069132836865: # no one of consequence
+			totalEyes = -12
 		else:
 			totalEyes = 0
 			for i in range(12):
