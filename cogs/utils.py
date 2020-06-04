@@ -250,8 +250,10 @@ class Utils(commands.Cog):
 	
 	@commands.command()
 	async def someone(self, ctx):
-		await ctx.send("grape fuck u")
-#await ctx.send(choice(ctx.guild.members).mention)
+                if ctx.message.author = self.bot.get_user(395872198323077121):
+		        await ctx.send("grape fuck u")
+                else:
+                        await ctx.send(choice(ctx.guild.members).mention)
 
 	@commands.command()
 	async def roll(self, ctx, pool):
