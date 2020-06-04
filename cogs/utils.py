@@ -250,11 +250,12 @@ class Utils(commands.Cog):
 	
 	@commands.command()
 	async def someone(self, ctx):
+                blacklist = [536071288859656193]
                 if ctx.author.id == 395872198323077121:
                         await ctx.send("grape is a bitch")
                 elif ctx.author.id == 521153476714299402:
                         await ctx.send("ZMG is smooth brain")
-                elif ctx.author.id == 536071288859656193:
+                elif ctx.author.id in blacklist:
                         await ctx.send("not even bothering with a message for you. You're just an edgy sheep")
                 else:
                         await ctx.send(choice(ctx.guild.members).mention)
