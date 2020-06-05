@@ -18,11 +18,11 @@ from PIL import Image
 from PIL import ImageFilter
 
 def set_viewport_size(driver, width, height):
-    window_size = driver.execute_script("""
-        return [window.outerWidth - window.innerWidth + arguments[0],
-          window.outerHeight - window.innerHeight + arguments[1]];
-        """, width, height)
-    driver.set_window_size(*window_size)
+	window_size = driver.execute_script("""
+		return [window.outerWidth - window.innerWidth + arguments[0],
+		  window.outerHeight - window.innerHeight + arguments[1]];
+		""", width, height)
+	driver.set_window_size(*window_size)
 
 async def reportStuff(self, ctx, message):
 	channel = self.bot.get_channel(715549209998262322)
@@ -54,9 +54,9 @@ class Utils(commands.Cog):
 		
 		# Don't ask
 		rigged_findseed = {
-			280428276810383370: 12,     # Thomas's User ID
-			199070670221475842: -1,     # Kai's User ID
-			615658069132836865: -12     # They didn't use a real name. Sad!
+			280428276810383370: 12,	 # Thomas's User ID
+			199070670221475842: -1,	 # Kai's User ID
+			615658069132836865: -12	 # They didn't use a real name. Sad!
 		}
 
 		if ctx.author.id in rigged_findseed:
@@ -252,18 +252,18 @@ class Utils(commands.Cog):
 	
 	@commands.command()
 	async def someone(self, ctx):
-                blacklist = [536071288859656193]
-                if ctx.channel.id != 589110766578434078:
-                        if ctx.author.id == 395872198323077121:
-                                await ctx.send("grape is a bitch")
-                        elif ctx.author.id == 521153476714299402:
-                                await ctx.send("ZMG is smooth brain")
-			elif ctx.author.id == 199070670221475842:
-                                await ctx.send("fuck you @kaii#0408")
-                        elif ctx.author.id in blacklist:
-                                await ctx.send("not even bothering with a message for you. You're just an edgy sheep")
-                        else:
-                                await ctx.send(choice(ctx.guild.members).mention)
+				blacklist = [536071288859656193]
+				if ctx.channel.id != 589110766578434078:
+						if ctx.author.id == 395872198323077121:
+								await ctx.send("grape is a bitch")
+						elif ctx.author.id == 521153476714299402:
+								await ctx.send("ZMG is smooth brain")
+						elif ctx.author.id == 199070670221475842:
+								await ctx.send(f"fuck you {ctx.message.author.mention}")
+						elif ctx.author.id in blacklist:
+								await ctx.send("not even bothering with a message for you. You're just an edgy sheep")
+						else:
+								await ctx.send(choice(ctx.guild.members).mention)
 
 	@commands.command()
 	async def roll(self, ctx, pool):

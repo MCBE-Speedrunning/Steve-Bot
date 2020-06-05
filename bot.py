@@ -49,11 +49,19 @@ class BedrockBot(commands.Bot):
 		game = discord.Game("Mining away")
 		await self.change_presence(activity=game)
 
+		with open('blacklist.json', 'r') as f:
+			try:
+				self.blacklist = json.load(f)
+			except json.decoder.JSONDecodeError:
+				self.blacklist = []
+
 		self.logger.warning(f'Online: {self.user} (ID: {self.user.id})')
 
 	async def on_message(self, message):
 
 		if message.author.bot:
+			return
+		if message.author.id in self.blacklist:
 			return
 		await self.process_commands(message)
 
@@ -61,9 +69,11 @@ class BedrockBot(commands.Bot):
 			command = message.content.split()[0]
 		except IndexError:
 			pass
-
-		if command in self.custom_commands:
-			await message.channel.send(self.custom_commands[command])
+		try:
+			if command in self.custom_commands:
+				await message.channel.send(self.custom_commands[command])
+				return
+		except:
 			return
 
 	def run(self):

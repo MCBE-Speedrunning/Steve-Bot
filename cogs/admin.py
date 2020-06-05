@@ -38,7 +38,7 @@ class Admin(commands.Cog):
 	async def setcommand(self, ctx, command, *, message):
 		self.bot.custom_commands[ctx.prefix + command] = message
 		with open('custom_commands.json', 'w') as f:
-			json.dump(self.bot.custom_commands, f)
+			json.dump(self.bot.custom_commands, f, indent=4)
 
 		await ctx.send(f"Set message for command {command}")
 
@@ -47,7 +47,7 @@ class Admin(commands.Cog):
 	async def removecommand(self, ctx, command):
 		del self.bot.custom_commands[ctx.prefix + command]
 		with open('custom_commands.json', 'w') as f:
-			json.dump(self.bot.custom_commands, f)
+			json.dump(self.bot.custom_commands, f, indent=4)
 
 		await ctx.send(f"Removed command {command}")
 			
@@ -99,7 +99,7 @@ class Admin(commands.Cog):
 			await ctx.send(f'The extension {ext} doesn\'t have an entry point (try adding the setup function)')
 		except commands.ExtensionFailed:
 			await ctx.send(f'Some unknown error happened while trying to reload extension {ext} (check logs)')
-			self.bot.logger.exception(f'Failed to reload extension {ext}:')
+			self.bot.logger.exception(f'Failed to unload extension {ext}:')
 
 	"""
 	@commands.command()
@@ -122,7 +122,7 @@ class Admin(commands.Cog):
 
 	@commands.check(is_mod)
 	@commands.command()
-	async def mute(self, ctx, members: commands.Greedy[discord.Member],
+	async def mute(self, ctx, members: commands.Greedy[discord.Member]=False,
 					   mute_minutes: int = 0,
 					   *, reason: str = "absolutely no reason"):
 		"""Mass mute members with an optional mute_minutes parameter to time it"""
@@ -130,6 +130,8 @@ class Admin(commands.Cog):
 		if not members:
 			await ctx.send("You need to name someone to mute")
 			return
+		elif type(members)=="str":
+			members = self.bot.get_user(int(user))
 
 		#muted_role = discord.utils.find(ctx.guild.roles, name="Muted")
 		muted_role = ctx.guild.get_role(707707894694412371)
@@ -149,6 +151,12 @@ class Admin(commands.Cog):
 	@commands.check(is_mod)
 	@commands.command()
 	async def unmute(self, ctx, members: commands.Greedy[discord.Member]):
+		if not members:
+			await ctx.send("You need to name someone to unmute")
+			return
+		elif type(members)=="str":
+			members = self.bot.get_user(int(user))
+
 		muted_role = ctx.guild.get_role(707707894694412371)
 		for i in members:
 			await i.remove_roles(muted_role)
@@ -162,6 +170,25 @@ class Admin(commands.Cog):
 			file = discord.File("discord.log")
 			await ctx.send(file=file)
 
+	@commands.command(aliases=['ban'], hidden=True)
+	@commands.check(is_mod)
+	async def blacklist(self, ctx, members: commands.Greedy[discord.Member]=None):
+		if not members:
+			await ctx.send("You need to name someone to blacklist")
+			return
+		elif type(members)=="str":
+			members = self.bot.get_user(int(user))
+
+		with open('blacklist.json', 'w') as f:
+			for i in members:
+				if i.id in self.bot.blacklist:
+					self.bot.blacklist.remove(i.id)
+					json.dump(self.bot.blacklist, f, indent=4)
+					await ctx.send(f"{i} has been un-blacklisted.")
+				else:
+					self.bot.blacklist.append(i.id)
+					json.dump(self.bot.blacklist, f, indent=4)
+					await ctx.send(f"{i} has been blacklisted.")
 
 
 def setup(bot):
