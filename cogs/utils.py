@@ -258,6 +258,8 @@ class Utils(commands.Cog):
                                 await ctx.send("grape is a bitch")
                         elif ctx.author.id == 521153476714299402:
                                 await ctx.send("ZMG is smooth brain")
+			elif ctx.author.id == 199070670221475842:
+                                await ctx.send("fuck you @kaii#0408")
                         elif ctx.author.id in blacklist:
                                 await ctx.send("not even bothering with a message for you. You're just an edgy sheep")
                         else:
