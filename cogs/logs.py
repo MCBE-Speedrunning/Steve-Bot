@@ -17,7 +17,7 @@ class Logs(commands.Cog):
 		embed.add_field(
 			name='User', value=message.author.mention, inline=True)
 		embed.add_field(
-			name='Channel', value=message.channel.name, inline=True)
+			name='Channel', value=message.channel.mention, inline=True)
 		embed.add_field(name='Message', value=message.content, inline=False)
 		await channel.send(embed=embed)
 
@@ -32,7 +32,7 @@ class Logs(commands.Cog):
 		embed.add_field(
 			name='User', value=before.author.mention, inline=True)
 		embed.add_field(
-			name='Channel', value=before.channel.name, inline=True)
+			name='Channel', value=before.channel.mention, inline=True)
 		embed.add_field(name='Original Message',
 						value=before.content, inline=False)
 		embed.add_field(name='New Message', value=after.content, inline=False)
