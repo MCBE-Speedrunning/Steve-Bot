@@ -53,16 +53,18 @@ class Utils(commands.Cog):
 			return
 		
 		# Don't ask
-		if ctx.author.id == 280428276810383370: # Thomas's User ID
-			totalEyes = 12
-		elif ctx.author.id == 199070670221475842: # Kai's User ID
-			totalEyes = -1
-		elif ctx.author.id == 615658069132836865: # no one of consequence
-			totalEyes = -12
+		rigged_findseed = {
+			280428276810383370: 12,     # Thomas's User ID
+			199070670221475842: -1,     # Kai's User ID
+			615658069132836865: -12     # They didn't use a real name. Sad!
+		}
+
+		if ctx.author.id in rigged_findseed:
+			totalEyes = rigged_findseed[ctx.author.id]
 		else:
 			totalEyes = 0
 			for i in range(12):
-				randomness = randint(1,10)
+				randomness = randint(1, 10)
 				if randomness == 1:
 					totalEyes += 1
 			
