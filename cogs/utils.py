@@ -56,7 +56,7 @@ class Utils(commands.Cog):
 		rigged_findseed = {
 			280428276810383370: 12,	 # Thomas's User ID
 			199070670221475842: -1,	 # Kai's User ID
-			615658069132836865: -12	 # They didn't use a real name. Sad!
+			615658069132836865: -12	 # What a fraud! They didn't use their real name.
 		}
 
 		if ctx.author.id in rigged_findseed:
@@ -65,7 +65,7 @@ class Utils(commands.Cog):
 			totalEyes = 0
 			for i in range(12):
 				randomness = randint(1, 10)
-				if randomness == 1:
+				if randomness <= 1:
 					totalEyes += 1
 			
 		await ctx.send(f"{ctx.message.author.display_name} -> your seed is a {totalEyes} eye")
@@ -79,6 +79,49 @@ class Utils(commands.Cog):
 		else:
 			await ctx.send(error)
 			#await ctx.send(f"{ctx.message.author.display_name}, you have to wait {round(error.retry_after, 7)} seconds before using this again.")
+
+	@commands.command()
+	async def findsleep(self, ctx):
+		if ctx.message.channel.id != 684787316489060422:
+			await ctx.message.delete()
+			return
+
+		# DON'T ASK!
+		lessSleepMsg = [
+			"gn, insomniac!",
+			"counting sheep didn't work? try counting chloroform vials!",
+			"try a glass of water",
+			"some decaf coffee might do the trick!"
+		]
+
+		moreSleepMsg = [
+			"waaakeee uuuppp!",
+			"are they dead or asleep? I can't tell.",
+			"wake up, muffin head",
+			"psst... coffeeee \:D"
+		]
+	
+		# Set up initial message
+		msg = f"{ctx.message.author.display_name} -> "
+
+		# Optional TODO: Create non-normal distribution
+		sleepHrs = randint(0, 24)
+
+		# Add sleepHrs with bonus grammar check :D
+		if sleepHrs == 1:
+			msg += f"your sleep is {sleepHrs} hour long "
+		else:
+			msg += f"your sleep is {sleepHrs} hours long "
+
+		# Add extra comment based on number of sleepHrs
+		if sleepHrs == 0:
+			msg += "- nice try \:D"
+		elif sleepHrs <= 5:
+			msg += f"- {lessSleepMsg[randint(0, len(lessSleepMsg) - 1)]}"
+		elif sleepHrs >= 10:
+			msg += f"- {moreSleepMsg[randint(0, len(moreSleepMsg) - 1)]}"
+			
+		await ctx.send(msg)
 
 	@commands.Cog.listener()
 	async def on_message(self, message):
