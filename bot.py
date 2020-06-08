@@ -11,6 +11,7 @@ extensions = [
 	"cogs.admin",
 	"cogs.src",
 	"cogs.help",
+	"cogs.trans",
 	"cogs.player",
 	"cogs.general",
 	"cogs.logs"
