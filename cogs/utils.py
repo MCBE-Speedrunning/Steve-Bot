@@ -65,7 +65,7 @@ class Utils(commands.Cog):
 			totalEyes = 0
 			for i in range(12):
 				randomness = randint(1, 10)
-				if randomness <= 2:
+				if randomness <= 1:
 					totalEyes += 1
 			
 		await ctx.send(f"{ctx.message.author.display_name} -> your seed is a {totalEyes} eye")
@@ -82,6 +82,9 @@ class Utils(commands.Cog):
 
 	@commands.command()
 	async def findsleep(self, ctx):
+		if ctx.message.channel.id != 684787316489060422:
+			await ctx.message.delete()
+			return
 
 		# DON'T ASK!
 		lessSleepMsg = [
