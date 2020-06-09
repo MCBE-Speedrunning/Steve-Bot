@@ -312,5 +312,15 @@ class Utils(commands.Cog):
 	async def roll(self, ctx, pool):
 		await ctx.send(f"You rolled a {randint(0, int(pool))}")
 
+	@commands.command(aliases=['commands', 'allcommands'])
+	async def listcommands(self, ctx):
+		with open('custom_commands.json', 'r') as f:
+			commands = json.load(f)
+			output = '```List of custom commands:\n'
+			for key in commands:
+				output += f'{key}, '
+			output += '```'
+			await ctx.send(output)
+
 def setup(bot):
 	bot.add_cog(Utils(bot))
