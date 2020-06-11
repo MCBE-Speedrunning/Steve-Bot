@@ -20,8 +20,6 @@ class General(commands.Cog):
 
 		if not user:
 			user = ctx.message.author
-		elif type(user)=="str":
-			user = self.bot.get_user(int(user))
 
 		# Very very shit 
 		"""
@@ -38,8 +36,12 @@ class General(commands.Cog):
 		for i in user.roles:
 			output += i.mention
 
+		if user.color.value == 0:
+			color = 16777210
+		else:
+			color = user.color
 
-		embed=discord.Embed(title=user.name, description=user.mention, color=user.color, timestamp=ctx.message.created_at)
+		embed=discord.Embed(title=user.name, description=user.mention, color=color, timestamp=ctx.message.created_at)
 		#embed.set_thumbnail(url="attachment://temp.webp")
 		embed.set_thumbnail(url=user.avatar_url)
 		embed.set_image(url="attachment://temp.png")
@@ -54,7 +56,7 @@ class General(commands.Cog):
 		#os.remove("temp.png")
 
 	@commands.command()
-	async def coop(self, ctx, user: discord.Member=None):
+	async def coop(self, ctx, *, user: discord.Member=None):
 		if not user:
 			user = ctx.message.author
 		elif type(user)=="str":
@@ -68,6 +70,34 @@ class General(commands.Cog):
 		else:
 			await user.add_roles(coop_role)
 			await ctx.send("You are now in the coop gang")
+
+	@commands.command()
+	async def serverinfo(self, ctx, guild=None):
+		if not guild:
+			guild = ctx.message.guild
+		else:
+			print(type(guild))
+			guild = self.bot.get_guild(int(guild))
+
+		if guild.owner.color.value == 0:
+			color = 16777210
+		else:
+			color = guild.owner.color
+
+		emojiList = " "
+		for i in guild.emojis:
+			emojiList += str(i) + " "
+
+		embed=discord.Embed(title=guild.name, description=guild.description, color=color, timestamp=ctx.message.created_at)
+		#embed.set_thumbnail(url="attachment://temp.webp")
+		embed.set_thumbnail(url=guild.icon_url)
+		embed.set_image(url=guild.splash_url)
+		embed.add_field(name="Created on", value=guild.created_at.date(), inline=True)
+		embed.add_field(name="Members", value=guild.member_count, inline=True)
+		embed.add_field(name="Emojis", value=emojiList, inline=True)
+		embed.add_field(name="Owner", value=guild.owner.mention, inline=True)
+		embed.set_footer(text=f"ID: {guild.id}")
+		await ctx.send(embed=embed)
 
 def setup(bot):
 	bot.add_cog(General(bot))

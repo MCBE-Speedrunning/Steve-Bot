@@ -67,8 +67,8 @@ class Utils(commands.Cog):
 				randomness = randint(1, 10)
 				if randomness <= 1:
 					totalEyes += 1
-			
-		await ctx.send(f"{ctx.message.author.display_name} -> your seed is a {totalEyes} eye")
+		discname = ctx.message.author.name.replace("@", "@ ")
+		await ctx.send(f"{discname} -> your seed is a {totalEyes} eye")
 
 	@findseed.error
 	async def findseed_handler(self,ctx,error):
@@ -98,11 +98,11 @@ class Utils(commands.Cog):
 			"waaakeee uuuppp!",
 			"are they dead or asleep? I can't tell.",
 			"wake up, muffin head",
-			"psst... coffeeee \:D"
+			"psst... coffeeee \\:D"
 		]
 	
 		# Set up initial message
-		msg = f"{ctx.message.author.display_name} -> "
+		msg = f"{ctx.message.author.name} -> "
 
 		# Optional TODO: Create non-normal distribution
 		sleepHrs = randint(0, 24)
@@ -115,7 +115,7 @@ class Utils(commands.Cog):
 
 		# Add extra comment based on number of sleepHrs
 		if sleepHrs == 0:
-			msg += "- nice try \:D"
+			msg += "- nice try \\:D"
 		elif sleepHrs <= 5:
 			msg += f"- {lessSleepMsg[randint(0, len(lessSleepMsg) - 1)]}"
 		elif sleepHrs >= 10:

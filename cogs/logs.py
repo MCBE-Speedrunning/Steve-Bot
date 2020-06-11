@@ -10,10 +10,14 @@ class Logs(commands.Cog):
 	async def on_message_delete(self, message):
 		if message.guild.id != 574267523869179904:
 			return 
+		if message.author.color.value == 0:
+			color = 16777210
+		else:
+			color = message.author.color
 		channel = self.bot.get_channel(718187032869994686)
 		embed = discord.Embed(
 			title='Deleted Message',
-			color=message.author.color,
+			color=message,
 			timestamp=message.created_at
 		)
 		embed.add_field(
