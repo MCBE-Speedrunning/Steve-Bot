@@ -21,20 +21,9 @@ class General(commands.Cog):
 		if not user:
 			user = ctx.message.author
 
-		# Very very shit 
-		"""
-		await ctx.send(str(user.avatar_url))
-		request.urlretrieve(str(user.avatar_url), "temp.webp")
-		#filename = wget.download(user.avatar_url, out="temp.webp")
-		image = Image.open("temp.webp").convert("RGB")
-		image.save("temp.png", "PNG")
-		
-		f = discord.File("temp.png", filename="temp.png")
-		#await messagable.send(file=f, embed=e)
-		"""
 		output = ""
 		for i in user.roles:
-			output += i.mention
+			output += i.mention + " "
 
 		if user.color.value == 0:
 			color = 16777210
@@ -43,8 +32,7 @@ class General(commands.Cog):
 
 		embed=discord.Embed(title=user.name, description=user.mention, color=color, timestamp=ctx.message.created_at)
 		#embed.set_thumbnail(url="attachment://temp.webp")
-		embed.set_thumbnail(url=user.avatar_url)
-		embed.set_image(url="attachment://temp.png")
+		embed.set_thumbnail(url=user.avatar_url_as(format="png"))
 		embed.add_field(name="Nickname", value=user.display_name, inline=False)
 		embed.add_field(name="Joined on", value=user.joined_at.date(), inline=True)
 		embed.add_field(name="Status", value=user.status, inline=True)
@@ -59,7 +47,7 @@ class General(commands.Cog):
 	async def coop(self, ctx, *, user: discord.Member=None):
 		if not user:
 			user = ctx.message.author
-		elif type(user)=="str":
+		else:
 			user = self.bot.get_user(int(user))
 
 		coop_role = ctx.guild.get_role(694261282861219952)
@@ -89,9 +77,8 @@ class General(commands.Cog):
 			emojiList += str(i) + " "
 
 		embed=discord.Embed(title=guild.name, description=guild.description, color=color, timestamp=ctx.message.created_at)
-		#embed.set_thumbnail(url="attachment://temp.webp")
-		embed.set_thumbnail(url=guild.icon_url)
-		embed.set_image(url=guild.splash_url)
+		embed.set_thumbnail(url=guild.icon_url_as(format="png"))
+		embed.set_image(url=guild.splash_url_as(format="png"))
 		embed.add_field(name="Created on", value=guild.created_at.date(), inline=True)
 		embed.add_field(name="Members", value=guild.member_count, inline=True)
 		embed.add_field(name="Emojis", value=emojiList, inline=True)

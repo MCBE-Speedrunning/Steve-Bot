@@ -36,6 +36,7 @@ class BedrockBot(commands.Bot):
 	def __init__(self):
 		super().__init__(command_prefix=get_prefix, case_insensitive=True)
 		self.logger = logging.getLogger('discord')
+		self.messageBlacklist = []
 
 		with open('custom_commands.json', 'r') as f:
 			self.custom_commands = json.load(f)

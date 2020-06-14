@@ -208,7 +208,7 @@ class Src(commands.Cog):
 	@commands.guild_only()
 	async def pending(self, ctx):
 		async with ctx.typing():
-			await clear(self)
+			await self.bot.get_channel(699713639866957905).purge()
 			await pendingRuns(self, ctx)
 
 	@commands.command(description="Reject runs quickly")
@@ -231,6 +231,7 @@ class Src(commands.Cog):
 
 	@commands.command()
 	async def verify(self, ctx, apiKey=None, userID=None):
+		self.bot.messageBlacklist.append(ctx.message.id)
 		#if apiKey == None:
 		#	await ctx.send(f"Please try again this command by getting an apiKey from https://www.speedrun.com/api/auth then do `{ctx.prefix}verify <apiKey>` in my DMs or anywhere in this server. \nBe careful who you share this key with. To learn more check out https://github.com/speedruncomorg/api/blob/master/authentication.md")
 		#	return

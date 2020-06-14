@@ -24,7 +24,7 @@ class Admin(commands.Cog):
 	@commands.check(is_mod)
 	async def forceexit(self, ctx, password):
 		if password == "abort":
-			ctx.message.delete()
+			await ctx.message.delete()
 			exit()
 
 	@commands.command()
