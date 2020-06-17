@@ -3,7 +3,6 @@ import discord
 import logging
 
 import datetime
-import config
 import json
 
 extensions = [
@@ -44,6 +43,10 @@ class BedrockBot(commands.Bot):
 		for extension in extensions:
 			self.load_extension(extension)
 
+		with open('config.json', 'r') as f:
+			self.config = json.load(f)
+			config = self.config
+
 	async def on_ready(self):
 		self.uptime = datetime.datetime.utcnow()
 
@@ -78,4 +81,4 @@ class BedrockBot(commands.Bot):
 			return
 
 	def run(self):
-		super().run(config.token, reconnect=True)
+		super().run(self.config["token"], reconnect=True)

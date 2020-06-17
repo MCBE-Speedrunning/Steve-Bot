@@ -134,7 +134,7 @@ class Admin(commands.Cog):
 			members = self.bot.get_user(int(user))
 
 		#muted_role = discord.utils.find(ctx.guild.roles, name="Muted")
-		muted_role = ctx.guild.get_role(707707894694412371)
+		muted_role = ctx.guild.get_role(self.bot.config[str(ctx.message.guild.id)]["mute_role"])
 		for member in members:
 			if self.bot.user == member: # what good is a muted bot?
 				embed = discord.Embed(title = "You can't mute me, I'm an almighty bot")
@@ -157,7 +157,7 @@ class Admin(commands.Cog):
 		elif type(members)=="str":
 			members = self.bot.get_user(int(user))
 
-		muted_role = ctx.guild.get_role(707707894694412371)
+		muted_role = ctx.guild.get_role(self.bot.config[str(ctx.message.guild.id)]["mute_role"])
 		for i in members:
 			await i.remove_roles(muted_role)
 			await ctx.send("{0.mention} has been unmuted by {1.mention}".format(i, ctx.author))
@@ -189,6 +189,29 @@ class Admin(commands.Cog):
 					self.bot.blacklist.append(i.id)
 					json.dump(self.bot.blacklist, f, indent=4)
 					await ctx.send(f"{i} has been blacklisted.")
+
+	@commands.check(is_mod)
+	@commands.command()
+	async def activity(self, ctx,*, activity=None):
+		if activity:
+			game = discord.Game(activity)
+		else:
+			activity = "Mining away"
+			game = discord.Game(activity)
+		await self.bot.change_presence(activity=game)
+		await ctx.send(f"Activity changed to {activity}")
+
+	@commands.check(is_mod)
+	@commands.command()
+	async def setvar(self, ctx, key, *, value):
+		with open('config.json', 'w') as f:
+			self.bot.config[str(ctx.message.guild.id)][key] = value
+			json.dump(self.bot.config, f, indent=4)
+
+	@commands.check(is_mod)
+	@commands.command()
+	async def printvar(self, ctx, key):
+		await ctx.send(self.bot.config[str(ctx.message.guild.id)][key])
 
 
 def setup(bot):

@@ -17,7 +17,7 @@ class Logs(commands.Cog):
 			color = 16777210
 		else:
 			color = message.author.color
-		channel = self.bot.get_channel(718187032869994686)
+		channel = self.bot.get_channel(int(self.bot.config[str(message.guild.id)]["logs_channel"]))
 		embed = discord.Embed(
 			title='Deleted Message',
 			color=color,
@@ -34,7 +34,7 @@ class Logs(commands.Cog):
 	async def on_message_edit(self, before, after):
 		if after.guild.id != 574267523869179904:
 			return 
-		channel = self.bot.get_channel(718187032869994686)
+		channel = self.bot.get_channel(int(self.bot.config[str(before.guild.id)]["logs_channel"]))
 		if before.author.color.value == 0:
 			color = 16777210
 		else:

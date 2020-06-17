@@ -25,7 +25,7 @@ def set_viewport_size(driver, width, height):
 	driver.set_window_size(*window_size)
 
 async def reportStuff(self, ctx, message):
-	channel = self.bot.get_channel(715549209998262322)
+	channel = self.bot.get_channel(self.bot.config[str(ctx.message.guild.id)]["report_channel"])
 
 	embed = discord.Embed(
 				title=f"Report from {ctx.message.author}",
@@ -48,7 +48,7 @@ class Utils(commands.Cog):
 	@commands.cooldown(1, 25, commands.BucketType.guild)
 	@commands.command()
 	async def findseed(self, ctx):
-		if ctx.message.channel.id != 684787316489060422:
+		if ctx.message.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["bot_channel"]):
 			await ctx.message.delete()
 			return
 		
@@ -67,13 +67,12 @@ class Utils(commands.Cog):
 				randomness = randint(1, 10)
 				if randomness <= 1:
 					totalEyes += 1
-		discname = ctx.message.author.name.replace("@", "@ ")
-		await ctx.send(f"{discname} -> your seed is a {totalEyes} eye")
+		await ctx.send(f"{discord.utils.escape_mentions(ctx.message.author.display_name)} -> your seed is a {totalEyes} eye")
 
 	@findseed.error
 	async def findseed_handler(self,ctx,error):
 		if isinstance(error, commands.CommandOnCooldown):
-			if ctx.message.channel.id != 684787316489060422:
+			if ctx.message.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["bot_channel"]):
 				await ctx.message.delete()
 				return
 		else:
@@ -82,7 +81,7 @@ class Utils(commands.Cog):
 
 	@commands.command()
 	async def findsleep(self, ctx):
-		if ctx.message.channel.id != 684787316489060422:
+		if ctx.message.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["bot_channel"]):
 			await ctx.message.delete()
 			return
 
@@ -102,7 +101,7 @@ class Utils(commands.Cog):
 		]
 	
 		# Set up initial message
-		msg = f"{ctx.message.author.name} -> "
+		msg = f"{discord.utils.escape_mentions(ctx.message.author.display_name)} -> "
 
 		# Optional TODO: Create non-normal distribution
 		sleepHrs = randint(0, 24)
@@ -125,7 +124,7 @@ class Utils(commands.Cog):
 
 	@commands.Cog.listener()
 	async def on_message(self, message):
-		if message.channel.id != 589110766578434078:
+		if message.channel.id != int(self.bot.config[str(message.guild.id)]["fair_channel"]):
 			return
 		if message.author.bot:
 			return
@@ -296,7 +295,7 @@ class Utils(commands.Cog):
 	@commands.command()
 	async def someone(self, ctx):
 				blacklist = [536071288859656193]
-				if ctx.channel.id != 589110766578434078:
+				if ctx.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["fair_channel"]):
 						if ctx.author.id == 395872198323077121:
 								await ctx.send("grape is a bitch")
 						elif ctx.author.id == 521153476714299402:

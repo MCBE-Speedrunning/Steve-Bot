@@ -50,7 +50,7 @@ class General(commands.Cog):
 		else:
 			user = self.bot.get_user(int(user))
 
-		coop_role = ctx.guild.get_role(694261282861219952)
+		coop_role = ctx.guild.get_role(int(self.bot.config[str(ctx.message.guild.id)]["coop_roleID"]))
 
 		if coop_role in user.roles:
 			await user.remove_roles(coop_role)
