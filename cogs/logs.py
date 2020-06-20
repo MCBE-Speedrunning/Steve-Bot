@@ -32,6 +32,9 @@ class Logs(commands.Cog):
 
 	@commands.Cog.listener()
 	async def on_message_edit(self, before, after):
+		if before.content == after.content:
+			return
+		
 		if after.guild.id != 574267523869179904:
 			return 
 		channel = self.bot.get_channel(int(self.bot.config[str(before.guild.id)]["logs_channel"]))
