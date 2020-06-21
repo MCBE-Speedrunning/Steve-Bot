@@ -29,7 +29,7 @@ async def reportStuff(self, ctx, message):
 
 	embed = discord.Embed(
 				title=f"Report from {ctx.message.author}",
-				description=f"{message}", 
+				description=f"{message}",
 				color=ctx.message.author.color, timestamp=ctx.message.created_at)
 
 	await channel.send(embed=embed)
@@ -51,7 +51,7 @@ class Utils(commands.Cog):
 		if ctx.message.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["bot_channel"]):
 			await ctx.message.delete()
 			return
-		
+
 		# Don't ask
 		rigged_findseed = {
 			280428276810383370: 12,	 # Thomas's User ID
@@ -99,28 +99,21 @@ class Utils(commands.Cog):
 			"wake up, muffin head",
 			"psst... coffeeee \\:D"
 		]
-	
-		# Set up initial message
-		msg = f"{discord.utils.escape_mentions(ctx.message.author.display_name)} -> "
 
 		# Optional TODO: Create non-normal distribution
 		sleepHrs = randint(0, 24)
 
-		# Add sleepHrs with bonus grammar check :D
-		if sleepHrs == 1:
-			msg += f"your sleep is {sleepHrs} hour long "
-		else:
-			msg += f"your sleep is {sleepHrs} hours long "
-
 		# Add extra comment based on number of sleepHrs
-		if sleepHrs == 0:
-			msg += "- nice try \\:D"
-		elif sleepHrs <= 5:
-			msg += f"- {lessSleepMsg[randint(0, len(lessSleepMsg) - 1)]}"
-		elif sleepHrs >= 10:
-			msg += f"- {moreSleepMsg[randint(0, len(moreSleepMsg) - 1)]}"
-			
-		await ctx.send(msg)
+                if sleepHrs == 0:
+                        await ctx.send(f"{ctx.message.author.display_name} -> your sleep is 0 hours long - nice try \:D")
+                elif sleepHrs <= 5:
+                        if sleepHrs == 1:
+                            s = 's'
+                        else:
+                            s = ''
+                            await ctx.send(f"{ctx.message.author.display_name} -> your sleep is {sleepHrs} hour{s} long - {lessSleepMsg[randint(0, len(lessSleepMsg) - 1)]}")
+                else sleepHrs >= 10:
+                        await ctx.send(f"{ctx.message.author.display_name} -> your sleep is {sleepHrs} hours long - {moreSleepMsg[randint(0, len(moreSleepMsg) - 1)]}")
 
 	@commands.Cog.listener()
 	async def on_message(self, message):
@@ -130,13 +123,14 @@ class Utils(commands.Cog):
 			return
 		badWords = ["fair", "f a i r", "ⓕⓐⓘⓡ", "ⓕ ⓐ ⓘ ⓡ"]
 		count = 0
-		
+
 		coolKids = [
 			['Cameron', self.bot.get_user(468262902969663488), datetime.date(2020, 10, 8)],
 			['Indy', self.bot.get_user(274923326890311691), datetime.date(2020, 9, 10)],
 			['Kai', self.bot.get_user(199070670221475842), datetime.date(2020, 11, 20)],
 			['Luca', self.bot.get_user(99457716614885376), datetime.date(2020, 11, 5)],
 			['Max', self.bot.get_user(543958509243596800), datetime.date(2020, 11, 10)],
+                        ['Mistaken', self.bot.get_user(264121998173536256), datetime.date(2020, 7, 6)],
 			['Murray', self.bot.get_user(400344183333847060), datetime.date(2020, 11, 10)],
 			# idk if she goes by her irl name but I'm sticking with it for the sake of uniformity
 			# also idk how to pronounce prakxo
@@ -144,14 +138,14 @@ class Utils(commands.Cog):
 			['Scott', self.bot.get_user(223937483774230528), datetime.date(2020, 6, 23)],
 			['Thomas', self.bot.get_user(280428276810383370), datetime.date(2020, 9, 29)]
 		]
-		
-		
+
+
 		# Luca plz dont remove the bottom code (just incase the new code doesnt work,
 		# and also for me to laugh at how bad my code is)
-		
+
 		# brb while I write ugly and inefficient code in my
 		# conquest to make Steve the Bot bloated and unworkable
-		
+
 		#if datetime.date.today() == datetime.date(2020, 6, 23):
 		#	await scott.send('Happy Birthday Scott. You\'re a boomer now! :mango:')
 		#elif datetime.date.today() == datetime.date(2020, 6, 25):
@@ -166,9 +160,9 @@ class Utils(commands.Cog):
 		#	await murray.send('Happy Birthday Murray. You\'re a boomer now! :mango:')
 		#elif datetime.date.today() == datetime.date(2020, 9, 10):
 		#	await indy.send('Happy Birthday Indy. You\'re a boomer now! :mango:)
-		
+
 		# Ignore the above message. I got sick and tired of looking at trash code
-		
+
 		for coolKid in coolKids:
 			if datetime.date.today() == coolKid[2]:
 				try:
@@ -177,7 +171,7 @@ class Utils(commands.Cog):
 					self.tries = 1
 				except:
 					self.tries +=1
-			
+
 		for word in badWords:
 			if word in message.content.lower():
 				count += 1;
@@ -244,54 +238,54 @@ class Utils(commands.Cog):
 		if isinstance(error, commands.CommandOnCooldown):
 			#return
 			await ctx.send(f"{ctx.message.author.display_name}, you have to wait {round(error.retry_after, 2)} seconds before using this again.")
-	
+
 	# Why? Because I can. lel
-	
+
 	# celeste guyToday at 6:13 PM
 	# @Mango Man that's not how it works
-	
+
 	# Mango ManToday at 6:13 PM
 	# it looks fine in lightmode
 	# wait whats not how what works
-	
+
 	# celeste guyToday at 6:13 PM
 	# the command
-	
+
 	# Mango ManToday at 6:13 PM
 	# o
 	# how does it work
-	
+
 	# celeste guyToday at 6:14 PM
 	# Like for a start, nothing is defined
 	# use ctx D:
-	
+
 	# Mango ManToday at 6:14 PM
 	# Do I need to though?
-	
+
 	# celeste guyToday at 6:14 PM
 	# ctx.guild.members() or something
 	# Yes, server is not a thing
 	# 2nd, mention is not used like that
 	# You still have to send a message
 	# And mention in the message
-	
+
 	# Mango ManToday at 6:14 PM
 	# o
-	
+
 	# celeste guyToday at 6:15 PM
 	# 3rd, don't forget to import choice from random
-	
+
 	# Mango ManToday at 6:15 PM
 	# this is why you dont steal code from github
 	# I actually feel embarrased over forgetting to import random
-	
+
 	# celeste guyToday at 6:15 PM
 	# 4th, add ctx in the arguments list, or you'll get an error like "function takes 1 argument but 2 were given"
 	# And you will use it to send the message and get the server
 	# Also forgetting the import is the least embarrassing thing
 	# Since I did remove it
 	# And replaced with import randint from random
-	
+
 	@commands.command()
 	async def someone(self, ctx):
 				blacklist = [536071288859656193]
