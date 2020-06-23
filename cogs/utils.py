@@ -141,29 +141,6 @@ class Utils(commands.Cog):
 		]
 
 
-		# Luca plz dont remove the bottom code (just incase the new code doesnt work,
-		# and also for me to laugh at how bad my code is)
-
-		# brb while I write ugly and inefficient code in my
-		# conquest to make Steve the Bot bloated and unworkable
-
-		#if datetime.date.today() == datetime.date(2020, 6, 23):
-		#	await scott.send('Happy Birthday Scott. You\'re a boomer now! :mango:')
-		#elif datetime.date.today() == datetime.date(2020, 6, 25):
-		#	await samantha.send('Happy Birthday Prakxo. You\'re a boomer now! :mango:')
-		#elif datetime.date.today() == datetime.date(2020, 5, 28):
-		#	await thomas.send('Testy Test :mango:')
-		#elif datetime.date.today() == datetime.date(2020, 9, 29):
-		#	await thomas.send('Now you know how the others felt :mango:')
-		#elif datetime.date.today() == datetime.date(2020, 10, 8):
-		#	await cameron.send('Happy Birthday Cameron. You\'re a boomer now! :mango:')
-		#elif datetime.date.today() == datetime.date(2020, 11, 10):
-		#	await murray.send('Happy Birthday Murray. You\'re a boomer now! :mango:')
-		#elif datetime.date.today() == datetime.date(2020, 9, 10):
-		#	await indy.send('Happy Birthday Indy. You\'re a boomer now! :mango:)
-
-		# Ignore the above message. I got sick and tired of looking at trash code
-
 		for coolKid in coolKids:
 			if datetime.date.today() == coolKid[2]:
 				try:
