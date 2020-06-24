@@ -134,6 +134,7 @@ class Utils(commands.Cog):
 			['Max', self.bot.get_user(543958509243596800), datetime.date(2020, 11, 10)],
 			['Mistaken', self.bot.get_user(264121998173536256), datetime.date(2020, 7, 6)],
 			['Murray', self.bot.get_user(400344183333847060), datetime.date(2020, 11, 10)],
+                        ['RKREE', self.bot.get_user(395872198323077121), datetime.date(2020, 11, 5)],
 			# idk if she goes by her irl name but I'm sticking with it for the sake of uniformity
 			# also idk how to pronounce prakxo
 			['Samantha', self.bot.get_user(226312219787264000), datetime.date(2020, 6, 24)],
