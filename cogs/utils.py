@@ -50,6 +50,7 @@ class Utils(commands.Cog):
 	async def findseed(self, ctx):
 		if ctx.message.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["bot_channel"]):
 			await ctx.message.delete()
+			ctx.command.reset_cooldown(ctx)
 			return
 
 		# Don't ask
@@ -73,6 +74,7 @@ class Utils(commands.Cog):
 	async def findseed_handler(self,ctx,error):
 		if isinstance(error, commands.CommandOnCooldown):
 			if ctx.message.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["bot_channel"]):
+				ctx.command.reset_cooldown(ctx)
 				await ctx.message.delete()
 				return
 		else:
