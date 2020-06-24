@@ -143,12 +143,7 @@ class Utils(commands.Cog):
 
 		for coolKid in coolKids:
 			if datetime.date.today() == coolKid[2]:
-				try:
-					for i in range(self.tries):
-						await coolKid[1].send(f'Happy Birthday {coolKid[0]}! You\'re a boomer now! :mango:')
-					self.tries = 1
-				except:
-					self.tries +=1
+				await coolKid[1].send(f'Happy Birthday {coolKid[0]}! You\'re a boomer now! :mango:')
 
 		for word in badWords:
 			if word in message.content.lower():
