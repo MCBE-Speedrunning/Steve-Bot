@@ -25,7 +25,7 @@ def set_viewport_size(driver, width, height):
 	driver.set_window_size(*window_size)
 
 async def reportStuff(self, ctx, message):
-	channel = self.bot.get_channel(self.bot.config[str(ctx.message.guild.id)]["report_channel"])
+	channel = self.bot.get_channel(int(self.bot.config[str(ctx.message.guild.id)]["report_channel"]))
 
 	embed = discord.Embed(
 				title=f"Report from {ctx.message.author}",
