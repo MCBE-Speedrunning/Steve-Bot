@@ -132,38 +132,16 @@ class Utils(commands.Cog):
 			['Kai', self.bot.get_user(199070670221475842), datetime.date(2020, 11, 20)],
 			['Luca', self.bot.get_user(99457716614885376), datetime.date(2020, 11, 5)],
 			['Max', self.bot.get_user(543958509243596800), datetime.date(2020, 11, 10)],
-						['Mistaken', self.bot.get_user(264121998173536256), datetime.date(2020, 7, 6)],
+			['Mistaken', self.bot.get_user(264121998173536256), datetime.date(2020, 7, 6)],
 			['Murray', self.bot.get_user(400344183333847060), datetime.date(2020, 11, 10)],
 			# idk if she goes by her irl name but I'm sticking with it for the sake of uniformity
 			# also idk how to pronounce prakxo
-			['Samantha', self.bot.get_user(226312219787264000), datetime.date(2020, 6, 25)],
+			['Samantha', self.bot.get_user(226312219787264000), datetime.date(2020, 6, 24)],
 			['Scott', self.bot.get_user(223937483774230528), datetime.date(2020, 6, 23)],
+                        ['Sky', self.bot.get_user(329538915805691905), datetime.date(2020, 6, 24)],
 			['Thomas', self.bot.get_user(280428276810383370), datetime.date(2020, 9, 29)]
 		]
 
-
-		# Luca plz dont remove the bottom code (just incase the new code doesnt work,
-		# and also for me to laugh at how bad my code is)
-
-		# brb while I write ugly and inefficient code in my
-		# conquest to make Steve the Bot bloated and unworkable
-
-		#if datetime.date.today() == datetime.date(2020, 6, 23):
-		#	await scott.send('Happy Birthday Scott. You\'re a boomer now! :mango:')
-		#elif datetime.date.today() == datetime.date(2020, 6, 25):
-		#	await samantha.send('Happy Birthday Prakxo. You\'re a boomer now! :mango:')
-		#elif datetime.date.today() == datetime.date(2020, 5, 28):
-		#	await thomas.send('Testy Test :mango:')
-		#elif datetime.date.today() == datetime.date(2020, 9, 29):
-		#	await thomas.send('Now you know how the others felt :mango:')
-		#elif datetime.date.today() == datetime.date(2020, 10, 8):
-		#	await cameron.send('Happy Birthday Cameron. You\'re a boomer now! :mango:')
-		#elif datetime.date.today() == datetime.date(2020, 11, 10):
-		#	await murray.send('Happy Birthday Murray. You\'re a boomer now! :mango:')
-		#elif datetime.date.today() == datetime.date(2020, 9, 10):
-		#	await indy.send('Happy Birthday Indy. You\'re a boomer now! :mango:)
-
-		# Ignore the above message. I got sick and tired of looking at trash code
 
 		for coolKid in coolKids:
 			if datetime.date.today() == coolKid[2]:
