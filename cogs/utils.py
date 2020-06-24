@@ -110,9 +110,9 @@ class Utils(commands.Cog):
                         await ctx.send(f"{ctx.message.author.display_name} -> your sleep is 0 hours long - nice try \:D")
 		elif sleepHrs <= 5:
 			if sleepHrs == 1:
-				s = 's'
-			else:
 				s = ''
+			else:
+				s = 's'
 				await ctx.send(f"{ctx.message.author.display_name} -> your sleep is {sleepHrs} hour{s} long - {lessSleepMsg[randint(0, len(lessSleepMsg) - 1)]}")
 		else:
 			await ctx.send(f"{ctx.message.author.display_name} -> your sleep is {sleepHrs} hours long - {moreSleepMsg[randint(0, len(moreSleepMsg) - 1)]}")
@@ -219,53 +219,6 @@ class Utils(commands.Cog):
 		if isinstance(error, commands.CommandOnCooldown):
 			#return
 			await ctx.send(f"{ctx.message.author.display_name}, you have to wait {round(error.retry_after, 2)} seconds before using this again.")
-
-	# Why? Because I can. lel
-
-	# celeste guyToday at 6:13 PM
-	# @Mango Man that's not how it works
-
-	# Mango ManToday at 6:13 PM
-	# it looks fine in lightmode
-	# wait whats not how what works
-
-	# celeste guyToday at 6:13 PM
-	# the command
-
-	# Mango ManToday at 6:13 PM
-	# o
-	# how does it work
-
-	# celeste guyToday at 6:14 PM
-	# Like for a start, nothing is defined
-	# use ctx D:
-
-	# Mango ManToday at 6:14 PM
-	# Do I need to though?
-
-	# celeste guyToday at 6:14 PM
-	# ctx.guild.members() or something
-	# Yes, server is not a thing
-	# 2nd, mention is not used like that
-	# You still have to send a message
-	# And mention in the message
-
-	# Mango ManToday at 6:14 PM
-	# o
-
-	# celeste guyToday at 6:15 PM
-	# 3rd, don't forget to import choice from random
-
-	# Mango ManToday at 6:15 PM
-	# this is why you dont steal code from github
-	# I actually feel embarrased over forgetting to import random
-
-	# celeste guyToday at 6:15 PM
-	# 4th, add ctx in the arguments list, or you'll get an error like "function takes 1 argument but 2 were given"
-	# And you will use it to send the message and get the server
-	# Also forgetting the import is the least embarrassing thing
-	# Since I did remove it
-	# And replaced with import randint from random
 
         @commands.command()
         async def someone(self, ctx):
