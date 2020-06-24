@@ -112,8 +112,8 @@ class Utils(commands.Cog):
 			if sleepHrs == 1:
 				s = ''
 			else:
-				s = 's'
-				await ctx.send(f"{ctx.message.author.display_name} -> your sleep is {sleepHrs} hour{s} long - {lessSleepMsg[randint(0, len(lessSleepMsg) - 1)]}")
+                                s = 's'
+                        await ctx.send(f"{ctx.message.author.display_name} -> your sleep is {sleepHrs} hour{s} long - {lessSleepMsg[randint(0, len(lessSleepMsg) - 1)]}")
 		else:
 			await ctx.send(f"{ctx.message.author.display_name} -> your sleep is {sleepHrs} hours long - {moreSleepMsg[randint(0, len(moreSleepMsg) - 1)]}")
 
