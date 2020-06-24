@@ -267,20 +267,10 @@ class Utils(commands.Cog):
 	# Since I did remove it
 	# And replaced with import randint from random
 
-	@commands.command()
-	async def someone(self, ctx):
-				blacklist = [536071288859656193]
-				if ctx.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["fair_channel"]):
-						if ctx.author.id == 395872198323077121:
-								await ctx.send("grape is a bitch")
-						elif ctx.author.id == 521153476714299402:
-								await ctx.send("ZMG is smooth brain")
-						elif ctx.author.id == 199070670221475842:
-								await ctx.send(f"fuck you {ctx.message.author.mention}")
-						elif ctx.author.id in blacklist:
-								await ctx.send("not even bothering with a message for you. You're just an edgy sheep")
-						else:
-								await ctx.send(choice(ctx.guild.members).mention)
+        @commands.command()
+        async def someone(self, ctx):
+                if ctx.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["fair_channel"]):
+                        await ctx.send(choice(ctx.guild.members).mention)
 
 	@commands.command()
 	async def roll(self, ctx, pool):
