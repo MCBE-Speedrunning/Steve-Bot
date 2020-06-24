@@ -107,13 +107,13 @@ class Utils(commands.Cog):
 
 		# Add extra comment based on number of sleepHrs
 		if sleepHrs == 0:
-                        await ctx.send(f"{ctx.message.author.display_name} -> your sleep is 0 hours long - nice try \:D")
+						await ctx.send(f"{ctx.message.author.display_name} -> your sleep is 0 hours long - nice try \:D")
 		elif sleepHrs <= 5:
 			if sleepHrs == 1:
 				s = ''
 			else:
-                                s = 's'
-                        await ctx.send(f"{ctx.message.author.display_name} -> your sleep is {sleepHrs} hour{s} long - {lessSleepMsg[randint(0, len(lessSleepMsg) - 1)]}")
+				s = 's'
+			await ctx.send(f"{ctx.message.author.display_name} -> your sleep is {sleepHrs} hour{s} long - {lessSleepMsg[randint(0, len(lessSleepMsg) - 1)]}")
 		else:
 			await ctx.send(f"{ctx.message.author.display_name} -> your sleep is {sleepHrs} hours long - {moreSleepMsg[randint(0, len(moreSleepMsg) - 1)]}")
 
@@ -134,12 +134,12 @@ class Utils(commands.Cog):
 			['Max', self.bot.get_user(543958509243596800), datetime.date(2020, 11, 10)],
 			['Mistaken', self.bot.get_user(264121998173536256), datetime.date(2020, 7, 6)],
 			['Murray', self.bot.get_user(400344183333847060), datetime.date(2020, 11, 10)],
-                        ['RKREE', self.bot.get_user(395872198323077121), datetime.date(2020, 11, 5)],
+						['RKREE', self.bot.get_user(395872198323077121), datetime.date(2020, 11, 5)],
 			# idk if she goes by her irl name but I'm sticking with it for the sake of uniformity
 			# also idk how to pronounce prakxo
 			['Samantha', self.bot.get_user(226312219787264000), datetime.date(2020, 6, 24)],
 			['Scott', self.bot.get_user(223937483774230528), datetime.date(2020, 6, 23)],
-                        ['Sky', self.bot.get_user(329538915805691905), datetime.date(2020, 6, 24)],
+						['Sky', self.bot.get_user(329538915805691905), datetime.date(2020, 6, 24)],
 			['Thomas', self.bot.get_user(280428276810383370), datetime.date(2020, 9, 29)]
 		]
 
@@ -220,10 +220,10 @@ class Utils(commands.Cog):
 			#return
 			await ctx.send(f"{ctx.message.author.display_name}, you have to wait {round(error.retry_after, 2)} seconds before using this again.")
 
-        @commands.command()
-        async def someone(self, ctx):
-                if ctx.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["fair_channel"]):
-                        await ctx.send(choice(ctx.guild.members).mention)
+		@commands.command()
+		async def someone(self, ctx):
+				if ctx.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["fair_channel"]):
+						await ctx.send(choice(ctx.guild.members).mention)
 
 	@commands.command()
 	async def roll(self, ctx, pool):
