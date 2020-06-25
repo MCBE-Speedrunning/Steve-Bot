@@ -57,7 +57,7 @@ class Admin(commands.Cog):
 		"""Reloads an extension"""
 		try:
 			self.bot.reload_extension(f'cogs.{ext}')
-			await ctx.send(f'The extension {ext} was realoaded!') # Oceanlight told me too
+			await ctx.send(f'The extension {ext} was reloaded!')
 		except commands.ExtensionNotFound:
 			await ctx.send(f'The extension {ext} doesn\'t exist.')
 		except commands.ExtensionNotLoaded:
@@ -203,11 +203,12 @@ class Admin(commands.Cog):
 	@commands.check(is_mod)
 	@commands.command()
 	async def setvar(self, ctx, key, *, value):
-		with open('config.json', 'w') as f:
-			if value[0] == '[' and value[len(value)-1] == ']':
-				value = list(map(int, value[1:-1].split(',')))
-			self.bot.config[str(ctx.message.guild.id)][key] = value
-			json.dump(self.bot.config, f, indent=4)
+		if ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]:
+			with open('config.json', 'w') as f:
+				if value[0] == '[' and value[len(value)-1] == ']':
+					value = list(map(int, value[1:-1].split(',')))
+				self.bot.config[str(ctx.message.guild.id)][key] = value
+				json.dump(self.bot.config, f, indent=4)
 
 	@commands.check(is_mod)
 	@commands.command()
