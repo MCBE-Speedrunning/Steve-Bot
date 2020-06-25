@@ -63,9 +63,7 @@ class BedrockBot(commands.Bot):
 
 	async def on_message(self, message):
 
-		if message.author.bot:
-			return
-		if message.author.id in self.blacklist:
+		if message.author.bot or message.author.id in self.blacklist:
 			return
 		await self.process_commands(message)
 
