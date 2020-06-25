@@ -16,12 +16,12 @@ A few "dangerous" commands such as `!purge` are restriced to `bot_masters`, to a
 ```json
 {
 	"token": "your_bot_token",
-	"bot_masters": 280428276810383370
+	"bot_masters": <users_discord_id>
 }
 ```
 You can also use lists, for example: `"bot_masters": [280428276810383370, 99457716614885376]`
 
-Once you add yourself as a botmaster, you will be able to edit the config via discord with the command `!setvar <var_name> <var_value>`  
+A user added as a botmaster will be able to edit the config via discord with the command `!setvar <var_name> <var_value>`  
 `!setvar` also supports lists which can be added like so: `!setvar <var_name> [<index 0>, <index 1>]`
 
 This bot was built as a fork of [celesteBot](https://github.com/CelesteClassic/celestebot), so a lot of code is recycled.  
