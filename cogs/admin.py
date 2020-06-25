@@ -51,7 +51,6 @@ class Admin(commands.Cog):
 
 		await ctx.send(f"Removed command {command}")
 
-
 	@commands.check(is_mod)
 	@commands.command(name='reload', hidden=True, usage='<extension>')
 	async def _reload(self, ctx, ext):
@@ -205,6 +204,8 @@ class Admin(commands.Cog):
 	@commands.command()
 	async def setvar(self, ctx, key, *, value):
 		with open('config.json', 'w') as f:
+			if value[0] == '[' and value[len(value)-1] == ']':
+				value = list(map(int, value[1:-1].split(',')))
 			self.bot.config[str(ctx.message.guild.id)][key] = value
 			json.dump(self.bot.config, f, indent=4)
 
