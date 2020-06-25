@@ -12,7 +12,7 @@ class Admin(commands.Cog):
 
 	async def is_mod(ctx):
 		return ctx.author.guild_permissions.manage_channels
-		
+
 	@commands.command(aliases=['deleteEverything'], hidden=True)
 	@commands.check(is_mod)
 	async def purge(self, ctx, password):
