@@ -220,10 +220,10 @@ class Utils(commands.Cog):
 			#return
 			await ctx.send(f"{ctx.message.author.display_name}, you have to wait {round(error.retry_after, 2)} seconds before using this again.")
 
-		@commands.command()
-		async def someone(self, ctx):
-				if ctx.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["fair_channel"]):
-						await ctx.send(choice(ctx.guild.members).mention)
+	@commands.command()
+	async def someone(self, ctx):
+		if ctx.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["fair_channel"]):
+			await ctx.send(choice(ctx.guild.members).mention)
 
 	@commands.command()
 	async def roll(self, ctx, pool):
