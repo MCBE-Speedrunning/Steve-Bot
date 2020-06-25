@@ -12,18 +12,18 @@ class Admin(commands.Cog):
 
 	async def is_mod(ctx):
 		return ctx.author.guild_permissions.manage_channels
-		
+
 	@commands.command(aliases=['deleteEverything'], hidden=True)
 	@commands.check(is_mod)
-	async def purge(self, ctx, password):
-		if password == "MaxCantBeTrusted":
+	async def purge(self, ctx):
+                if ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]:
 			async for msg in ctx.channel.history():
 				await msg.delete()
 
 	@commands.command(aliases=['quit'], hidden=True)
 	@commands.check(is_mod)
-	async def forceexit(self, ctx, password):
-		if password == "abort":
+	async def forceexit(self, ctx):
+		if ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]:
 			await ctx.message.delete()
 			exit()
 
@@ -50,8 +50,8 @@ class Admin(commands.Cog):
 			json.dump(self.bot.custom_commands, f, indent=4)
 
 		await ctx.send(f"Removed command {command}")
-			
-	
+
+
 	@commands.check(is_mod)
 	@commands.command(name='reload', hidden=True, usage='<extension>')
 	async def _reload(self, ctx, ext):
@@ -68,7 +68,7 @@ class Admin(commands.Cog):
 		except commands.ExtensionFailed:
 			await ctx.send(f'Some unknown error happened while trying to reload extension {ext} (check logs)')
 			self.bot.logger.exception(f'Failed to reload extension {ext}:')
-			
+
 	@commands.check(is_mod)
 	@commands.command(name='load', hidden=True, usage='<extension>')
 	async def _load(self, ctx, ext):
