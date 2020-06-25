@@ -13,19 +13,20 @@ class Admin(commands.Cog):
 	async def is_mod(ctx):
 		return ctx.author.guild_permissions.manage_channels
 
+	async def is_botmaster(ctx):
+		return ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]
+
 	@commands.command(aliases=['deleteEverything'], hidden=True)
-	@commands.check(is_mod)
+	@commands.check(is_botmaster)
 	async def purge(self, ctx):
-		if ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]:
-			async for msg in ctx.channel.history():
-				await msg.delete()
+		async for msg in ctx.channel.history():
+			await msg.delete()
 
 	@commands.command(aliases=['quit'], hidden=True)
-	@commands.check(is_mod)
+	@commands.check(is_botmaster)
 	async def forceexit(self, ctx):
-		if ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]:
-			await ctx.message.delete()
-			exit()
+		await ctx.message.delete()
+		exit()
 
 	@commands.command()
 	@commands.check(is_mod)
@@ -189,8 +190,8 @@ class Admin(commands.Cog):
 					json.dump(self.bot.blacklist, f, indent=4)
 					await ctx.send(f"{i} has been blacklisted.")
 
-	@commands.check(is_mod)
 	@commands.command()
+	@commands.check(is_mod)
 	async def activity(self, ctx,*, activity=None):
 		if activity:
 			game = discord.Game(activity)
@@ -200,18 +201,17 @@ class Admin(commands.Cog):
 		await self.bot.change_presence(activity=game)
 		await ctx.send(f"Activity changed to {activity}")
 
-	@commands.check(is_mod)
 	@commands.command()
+	@commands.check(is_botmaster)
 	async def setvar(self, ctx, key, *, value):
-		if ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]:
-			with open('config.json', 'w') as f:
-				if value[0] == '[' and value[len(value)-1] == ']':
-					value = list(map(int, value[1:-1].split(',')))
-				self.bot.config[str(ctx.message.guild.id)][key] = value
-				json.dump(self.bot.config, f, indent=4)
+		with open('config.json', 'w') as f:
+			if value[0] == '[' and value[len(value)-1] == ']':
+				value = list(map(int, value[1:-1].split(',')))
+			self.bot.config[str(ctx.message.guild.id)][key] = value
+			json.dump(self.bot.config, f, indent=4)
 
-	@commands.check(is_mod)
 	@commands.command()
+	@commands.check(is_mod)
 	async def printvar(self, ctx, key):
 		await ctx.send(self.bot.config[str(ctx.message.guild.id)][key])
 
