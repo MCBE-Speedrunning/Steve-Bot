@@ -17,16 +17,16 @@ class Admin(commands.Cog):
 		return ctx.author.id in ctx.bot.config[str(ctx.message.guild.id)]["bot_masters"]
 
 	@commands.command(aliases=['deleteEverything'], hidden=True)
+	@commands.check(is_botmaster)
 	async def purge(self, ctx):
-		if ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]:
-			async for msg in ctx.channel.history():
-				await msg.delete()
+		async for msg in ctx.channel.history():
+			await msg.delete()
 
 	@commands.command(aliases=['quit'], hidden=True)
+	@commands.check(is_botmaster)
 	async def forceexit(self, ctx):
-		if ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]:
-			await ctx.send('Self Destructing')
-			exit()
+		await ctx.send('Self Destructing')
+		exit()
 
 	@commands.command()
 	@commands.check(is_mod)
@@ -52,8 +52,8 @@ class Admin(commands.Cog):
 
 		await ctx.send(f"Removed command {command}")
 
-	@commands.check(is_mod)
 	@commands.command(name='reload', hidden=True, usage='<extension>')
+	@commands.check(is_mod)
 	async def _reload(self, ctx, ext):
 		"""Reloads an extension"""
 		try:
@@ -69,8 +69,8 @@ class Admin(commands.Cog):
 			await ctx.send(f'Some unknown error happened while trying to reload extension {ext} (check logs)')
 			self.bot.logger.exception(f'Failed to reload extension {ext}:')
 
-	@commands.check(is_mod)
 	@commands.command(name='load', hidden=True, usage='<extension>')
+	@commands.check(is_mod)
 	async def _load(self, ctx, ext):
 		"""Loads an extension"""
 		try:
@@ -86,8 +86,8 @@ class Admin(commands.Cog):
 			await ctx.send(f'Some unknown error happened while trying to reload extension {ext} (check logs)')
 			self.bot.logger.exception(f'Failed to reload extension {ext}:')
 
-	@commands.check(is_mod)
 	@commands.command(name='unload', hidden=True, usage='<extension>')
+	@commands.check(is_mod)
 	async def _unload(self, ctx, ext):
 		"""Loads an extension"""
 		try:
@@ -120,8 +120,8 @@ class Admin(commands.Cog):
 	async def clear(self, ctx, number):
 		await ctx.message.channel.purge(limit=int(number)+1, check=None, before=None, after=None, around=None, oldest_first=False, bulk=True)
 
-	@commands.check(is_mod)
 	@commands.command()
+	@commands.check(is_mod)
 	async def mute(self, ctx, members: commands.Greedy[discord.Member]=False,
 					   mute_minutes: int = 0,
 					   *, reason: str = "absolutely no reason"):
@@ -148,8 +148,8 @@ class Admin(commands.Cog):
 			for member in members:
 				await member.remove_roles(muted_role, reason = "time's up ")
 
-	@commands.check(is_mod)
 	@commands.command()
+	@commands.check(is_mod)
 	async def unmute(self, ctx, members: commands.Greedy[discord.Member]):
 		if not members:
 			await ctx.send("You need to name someone to unmute")
@@ -164,7 +164,7 @@ class Admin(commands.Cog):
 
 	@commands.command()
 	@commands.check(is_botmaster)
-	async def logs(self, ctx, *):
+	async def logs(self, ctx):
 		await ctx.message.delete()
 		file = discord.File("discord.log")
 		await ctx.send(file=file)
@@ -201,13 +201,13 @@ class Admin(commands.Cog):
 		await ctx.send(f"Activity changed to {activity}")
 
 	@commands.command()
+	@commands.check(is_botmaster)
 	async def setvar(self, ctx, key, *, value):
-		if ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]:
-			with open('config.json', 'w') as f:
-				if value[0] == '[' and value[len(value)-1] == ']':
-					value = list(map(int, value[1:-1].split(',')))
-				self.bot.config[str(ctx.message.guild.id)][key] = value
-				json.dump(self.bot.config, f, indent=4)
+		with open('config.json', 'w') as f:
+			if value[0] == '[' and value[len(value)-1] == ']':
+				value = list(map(int, value[1:-1].split(',')))
+			self.bot.config[str(ctx.message.guild.id)][key] = value
+			json.dump(self.bot.config, f, indent=4)
 
 	@commands.command()
 	@commands.check(is_mod)
