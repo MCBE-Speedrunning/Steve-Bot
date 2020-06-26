@@ -13,20 +13,20 @@ class Admin(commands.Cog):
 	async def is_mod(ctx):
 		return ctx.author.guild_permissions.manage_channels
 
-	async def is_botmaster(self, ctx):
-		return ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]
+	async def is_botmaster(ctx):
+		return ctx.author.id in ctx.bot.config[str(ctx.message.guild.id)]["bot_masters"]
 
 	@commands.command(aliases=['deleteEverything'], hidden=True)
-	@commands.check(is_botmaster)
 	async def purge(self, ctx):
-		async for msg in ctx.channel.history():
-			await msg.delete()
+		if ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]:
+			async for msg in ctx.channel.history():
+				await msg.delete()
 
 	@commands.command(aliases=['quit'], hidden=True)
-	@commands.check(is_botmaster)
 	async def forceexit(self, ctx):
-		await ctx.message.delete()
-		exit()
+		if ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]:
+			await ctx.send('Self Destructing')
+			exit()
 
 	@commands.command()
 	@commands.check(is_mod)
@@ -163,12 +163,11 @@ class Admin(commands.Cog):
 			await ctx.send("{0.mention} has been unmuted by {1.mention}".format(i, ctx.author))
 
 	@commands.command()
-	@commands.check(is_mod)
-	async def logs(self, ctx, *, password):
-		if password == "beep boop":
-			await ctx.message.delete()
-			file = discord.File("discord.log")
-			await ctx.send(file=file)
+	@commands.check(is_botmaster)
+	async def logs(self, ctx, *):
+		await ctx.message.delete()
+		file = discord.File("discord.log")
+		await ctx.send(file=file)
 
 	@commands.command(aliases=['ban'], hidden=True)
 	@commands.check(is_mod)
@@ -192,7 +191,7 @@ class Admin(commands.Cog):
 
 	@commands.command()
 	@commands.check(is_mod)
-	async def activity(self, ctx,*, activity=None):
+	async def activity(self, ctx, *, activity=None):
 		if activity:
 			game = discord.Game(activity)
 		else:
@@ -202,13 +201,13 @@ class Admin(commands.Cog):
 		await ctx.send(f"Activity changed to {activity}")
 
 	@commands.command()
-	@commands.check(is_botmaster)
 	async def setvar(self, ctx, key, *, value):
-		with open('config.json', 'w') as f:
-			if value[0] == '[' and value[len(value)-1] == ']':
-				value = list(map(int, value[1:-1].split(',')))
-			self.bot.config[str(ctx.message.guild.id)][key] = value
-			json.dump(self.bot.config, f, indent=4)
+		if ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]:
+			with open('config.json', 'w') as f:
+				if value[0] == '[' and value[len(value)-1] == ']':
+					value = list(map(int, value[1:-1].split(',')))
+				self.bot.config[str(ctx.message.guild.id)][key] = value
+				json.dump(self.bot.config, f, indent=4)
 
 	@commands.command()
 	@commands.check(is_mod)
