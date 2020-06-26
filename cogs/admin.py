@@ -13,6 +13,9 @@ class Admin(commands.Cog):
 	async def is_mod(ctx):
 		return ctx.author.guild_permissions.manage_channels
 
+	async def is_botmaster(ctx):
+		return ctx.author.id in ctx.bot.config[str(ctx.message.guild.id)]["bot_masters"]
+
 	@commands.command(aliases=['deleteEverything'], hidden=True)
 	async def purge(self, ctx):
 		if ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]:
@@ -160,11 +163,11 @@ class Admin(commands.Cog):
 			await ctx.send("{0.mention} has been unmuted by {1.mention}".format(i, ctx.author))
 
 	@commands.command()
+	@commands.check(is_botmaster)
 	async def logs(self, ctx, *):
-		if ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_master"]:
-			await ctx.message.delete()
-			file = discord.File("discord.log")
-			await ctx.send(file=file)
+		await ctx.message.delete()
+		file = discord.File("discord.log")
+		await ctx.send(file=file)
 
 	@commands.command(aliases=['ban'], hidden=True)
 	@commands.check(is_mod)
