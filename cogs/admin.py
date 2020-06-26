@@ -13,7 +13,7 @@ class Admin(commands.Cog):
 	async def is_mod(ctx):
 		return ctx.author.guild_permissions.manage_channels
 
-	async def is_botmaster(ctx):
+	async def is_botmaster(self, ctx):
 		return ctx.author.id in self.bot.config[str(ctx.message.guild.id)]["bot_masters"]
 
 	@commands.command(aliases=['deleteEverything'], hidden=True)
