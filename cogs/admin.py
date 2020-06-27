@@ -19,7 +19,7 @@ class Admin(commands.Cog):
 	@commands.command(aliases=['deleteEverything'], hidden=True)
 	@commands.check(is_botmaster)
 	async def purge(self, ctx):
-		await ctx.message.channel.purge()
+		await ctx.message.channel.purge(limit=500)
 
 	@commands.command(aliases=['quit'], hidden=True)
 	@commands.check(is_botmaster)
