@@ -24,6 +24,7 @@ class Compiler(commands.Cog):
 			"c#":"dotnetcore-head",
 			"coffeescript": "coffeescript-head",
 			"cpp": "gcc-head",
+			"elixir": "elixir-head",
 			"go": "go-head",
 			"java": "openjdk-head",
 			"javascript":"nodejs-head",
@@ -44,7 +45,7 @@ class Compiler(commands.Cog):
 			await ctx.send("No code found")
 			return
 		try:
-			compiler = compilers[language]
+			compiler = compilers[language.lower()]
 		except KeyError:
 			await ctx.send("Language not found")
 			return
