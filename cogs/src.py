@@ -119,11 +119,11 @@ async def pendingRuns(self, ctx):
 				mcbece_runs += 1
 			embed = discord.Embed(
 				title=leaderboard, url=link, description=f"{categoryName} in `{str(rta).replace('000','')}` by **{player}**", color=16711680+i*60, timestamp=timestamp)
-			await self.bot.get_channel(self.bot.config[str(ctx.message.guild.id)]["pending_channel"]).send(embed=embed)
+			await self.bot.get_channel(int(self.bot.config[str(ctx.message.guild.id)]["pending_channel"])).send(embed=embed)
 		runs = runs2
 		gameID = gameID2
 	embed_stats = discord.Embed(title='Pending Run Stats', description=f"Full Game Runs: {mcbe_runs}\nIndividual Level Runs: {mcbeil_runs}\nCategory Extension Runs: {mcbece_runs}", color=16711680 + i * 60)
-	await self.bot.get_channel(self.bot.config[str(ctx.message.guild.id)]["pending_channel"]).send(embed=embed_stats)
+	await self.bot.get_channel(int(self.bot.config[str(ctx.message.guild.id)]["pending_channel"])).send(embed=embed_stats)
 
 
 async def verifyNew(self, apiKey=None, userID=None):
@@ -203,7 +203,7 @@ class Src(commands.Cog):
 	@commands.guild_only()
 	async def pending(self, ctx):
 		async with ctx.typing():
-			await self.bot.get_channel(self.bot.config[str(ctx.message.guild.id)]["pending_channel"]).purge(limit=500)
+			await self.bot.get_channel(int(self.bot.config[str(ctx.message.guild.id)]["pending_channel"])).purge(limit=500)
 			await pendingRuns(self, ctx)
 
 	@commands.command(description="Reject runs quickly")
