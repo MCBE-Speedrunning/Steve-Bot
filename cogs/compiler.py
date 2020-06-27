@@ -28,7 +28,7 @@ class Compiler(commands.Cog):
 			"go": "go-head",
 			"java": "openjdk-head",
 			"javascript":"nodejs-head",
-			"lua": "lua-5.3.4"
+			"lua": "lua-5.3.4",
 			"perl": "perl-head",
 			"php": "php-head",
 			"python":"cpython-3.8.0",
@@ -37,7 +37,7 @@ class Compiler(commands.Cog):
 			"sql": "sqlite-head",
 			"swift": "swift-5.0.1",
 			"typescript":"typescript-3.5.1",
-			"vim-script": "vim-head",
+			"vim-script": "vim-head"
 			}
 		if not language:
 			await ctx.send(f"```json\n{json.dumps(compilers, indent=4)}```")
