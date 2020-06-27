@@ -36,6 +36,7 @@ class Compiler(commands.Cog):
 			"rust": "rust-head",
 			"sql": "sqlite-head",
 			"perl": "perl-head",
+			"elixir": "elixir-head",
 			"lua": "lua-5.3.4"
 			}
 		if not language:
@@ -44,7 +45,7 @@ class Compiler(commands.Cog):
 			await ctx.send("No code found")
 			return
 		try:
-			compiler = compilers[language]
+			compiler = compilers[language.lower()]
 		except KeyError:
 			await ctx.send("Language not found")
 			return
