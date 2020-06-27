@@ -12,32 +12,32 @@ class Compiler(commands.Cog):
 		"""
 		listRequest = requests.get("https://wandbox.org/api/list.json")
 		compilerList = json.loads(listRequest.text)
-		
+
 		for i in compilerList:
 			if i["language"] == language:
 				compiler = i["name"]
 				print(compiler)
 		"""
 		compilers = {
-			"python":"cpython-3.8.0",
-			"c":"gcc-head-c",
-			"javascript":"nodejs-head",
-			"typescript":"typescript-3.5.1",
-			"c#":"dotnetcore-head",
 			"bash": "bash",
-			"vim-script": "vim-head",
-			"cpp": "gcc-head",
-			"swift": "swift-5.0.1",
-			"php": "php-head",
+			"c":"gcc-head-c",
+			"c#":"dotnetcore-head",
 			"coffeescript": "coffeescript-head",
+			"cpp": "gcc-head",
+			"elixir": "elixir-head",
 			"go": "go-head",
 			"java": "openjdk-head",
+			"javascript":"nodejs-head",
+			"lua": "lua-5.3.4",
+			"perl": "perl-head",
+			"php": "php-head",
+			"python":"cpython-3.8.0",
 			"ruby": "ruby-head",
 			"rust": "rust-head",
 			"sql": "sqlite-head",
-			"perl": "perl-head",
-			"elixir": "elixir-head",
-			"lua": "lua-5.3.4"
+			"swift": "swift-5.0.1",
+			"typescript":"typescript-3.5.1",
+			"vim-script": "vim-head"
 			}
 		if not language:
 			await ctx.send(f"```json\n{json.dumps(compilers, indent=4)}```")
