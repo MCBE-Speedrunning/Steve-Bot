@@ -3,6 +3,7 @@ import discord
 import datetime
 import requests
 import json
+import dateutil.parser
 
 def dump(obj):
 	output = ""
@@ -149,6 +150,42 @@ class General(commands.Cog):
 		embed.add_field(name="Account Tier", value=accountTier, inline=True)
 		embed.add_field(name="Reputation", value=reputation, inline=True)
 		await ctx.send(embed=embed)
+
+	@commands.command()
+	async def xboxpresence(self, ctx, *, gamertag=None):
+		if not gamertag:
+			await ctx.send("You need to specify a gamer, gamer")
+			return
+
+		r = requests.get(f"https://xbl-api.prouser123.me/presence/gamertag/{gamertag}")
+		gamer = json.loads(r.text)
+
+		try:
+			await ctx.send(f"{gamer['error']}: {gamer['message']}")
+			return
+		except KeyError:
+			pass
+
+		state = gamer["state"]
+
+		try:
+			game = json.loads(requests.get(f"https://xbl-api.prouser123.me/titleinfo/{gamer['lastSeen']['titleId']}").text)
+			gameName = game["titles"][0]["name"]
+			gamePic = game["titles"][0]["images"][4]["url"]
+			timestamp = dateutil.parser.isoparse(gamer["lastSeen"]["timestamp"])
+			lastSeen = True
+		except Exception as e:
+			print(e)
+			lastSeen = False
+
+		if lastSeen:
+			embed=discord.Embed(title=gamer["gamertag"], description=state, timestamp=timestamp)
+			embed.set_thumbnail(url=gamePic)
+			embed.add_field(name="Game", value=gameName, inline=True)
+			await ctx.send(embed=embed)
+		else:
+			embed=discord.Embed(title=gamer["gamertag"], description=state, timestamp=ctx.message.created_at)
+			await ctx.send(embed=embed)
 
 def setup(bot):
 	bot.add_cog(General(bot))
