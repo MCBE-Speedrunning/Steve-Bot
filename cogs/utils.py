@@ -48,6 +48,7 @@ class Utils(commands.Cog):
 	@commands.cooldown(1, 25, commands.BucketType.guild)
 	@commands.command()
 	async def findseed(self, ctx):
+		"""Test yout luck"""
 		if ctx.message.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["bot_channel"]):
 			await ctx.message.delete()
 			ctx.command.reset_cooldown(ctx)
@@ -83,6 +84,7 @@ class Utils(commands.Cog):
 
 	@commands.command()
 	async def findsleep(self, ctx):
+		"""Test your sleep"""
 		if ctx.message.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["bot_channel"]):
 			await ctx.message.delete()
 			return
@@ -162,6 +164,7 @@ class Utils(commands.Cog):
 	@commands.cooldown(1, 60, commands.BucketType.member)
 	@commands.command()
 	async def report(self, ctx, *, message=None):
+		"""Send a message to the super mods about anything"""
 		if ctx.message.guild != None:
 			await ctx.message.delete()
 		if message == None:
@@ -172,6 +175,7 @@ class Utils(commands.Cog):
 	@commands.cooldown(1, 20, commands.BucketType.member)
 	@commands.command()
 	async def leaderboard(self, ctx):
+		"""Leaderboard of the people that matter"""
 		async with ctx.typing():
 			DRIVER = '/usr/lib/chromium-browser/chromedriver'
 			chrome_options = Options()
@@ -223,15 +227,18 @@ class Utils(commands.Cog):
 	@commands.cooldown(1, 60, commands.BucketType.guild)
 	@commands.command()
 	async def someone(self, ctx):
+		"""Discord's mistake"""
 		if ctx.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["fair_channel"]):
 			await ctx.send(choice(ctx.guild.members).mention)
 
 	@commands.command()
 	async def roll(self, ctx, pool):
+		"""Toll the dice"""
 		await ctx.send(f"You rolled a {randint(0, int(pool))}")
 
 	@commands.command(aliases=['commands', 'allcommands'])
 	async def listcommands(self, ctx):
+		"""List all custom commands"""
 		with open('custom_commands.json', 'r') as f:
 			commands = json.load(f)
 			output = '```List of custom commands:\n'

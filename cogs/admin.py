@@ -25,11 +25,12 @@ class Admin(commands.Cog):
 	@commands.check(is_botmaster)
 	async def forceexit(self, ctx):
 		await ctx.send('Self Destructing')
-		exit()
+		await ctx.bot.close()
 
 	@commands.command()
 	@commands.check(is_mod)
 	async def pull(self, ctx):
+		"""Update the bot from github"""
 		g = git.cmd.Git(os.getcwd())
 		try:
 			await ctx.send(f"Probably pulled.\n```bash\n{g.pull()}```")
@@ -39,6 +40,7 @@ class Admin(commands.Cog):
 	@commands.command(aliases=['addcommand', 'newcommand'])
 	@commands.check(is_mod)
 	async def setcommand(self, ctx, command, *, message):
+		"""Add a new simple command"""
 		self.bot.custom_commands[ctx.prefix + command] = message
 		with open('custom_commands.json', 'w') as f:
 			json.dump(self.bot.custom_commands, f, indent=4)
@@ -48,6 +50,7 @@ class Admin(commands.Cog):
 	@commands.command(aliases=['deletecommand'])
 	@commands.check(is_mod)
 	async def removecommand(self, ctx, command):
+		"""Remove a simple command"""
 		del self.bot.custom_commands[ctx.prefix + command]
 		with open('custom_commands.json', 'w') as f:
 			json.dump(self.bot.custom_commands, f, indent=4)
@@ -103,23 +106,10 @@ class Admin(commands.Cog):
 			await ctx.send(f'Some unknown error happened while trying to reload extension {ext} (check logs)')
 			self.bot.logger.exception(f'Failed to unload extension {ext}:')
 
-	"""
-	@commands.command()
-	@commands.check(is_mod)
-	async def connect(self, ctx):
-		await ctx.author.voice.channel.connect()
-		await ctx.send(f"Joined channel {ctx.author.voice.channel.name}")
-
-	@commands.command()
-	@commands.check(is_mod)
-	async def disconnect(self, ctx):
-		await ctx.voice_client.disconnect()
-		await ctx.send(f"Left channel {ctx.author.voice.channel.name}")
-	"""
-
 	@commands.command()
 	@commands.check(is_mod)
 	async def clear(self, ctx, number):
+		"""Mass delete messages"""
 		await ctx.message.channel.purge(limit=int(number)+1, check=None, before=None, after=None, around=None, oldest_first=False, bulk=True)
 
 	@commands.command()
@@ -153,6 +143,7 @@ class Admin(commands.Cog):
 	@commands.command()
 	@commands.check(is_mod)
 	async def unmute(self, ctx, members: commands.Greedy[discord.Member]):
+		"""Remove the muted role"""
 		if not members:
 			await ctx.send("You need to name someone to unmute")
 			return
@@ -167,6 +158,7 @@ class Admin(commands.Cog):
 	@commands.command()
 	@commands.check(is_botmaster)
 	async def logs(self, ctx):
+		"""Send the discord.log file"""
 		await ctx.message.delete()
 		file = discord.File("discord.log")
 		await ctx.send(file=file)
@@ -174,6 +166,7 @@ class Admin(commands.Cog):
 	@commands.command(aliases=['ban'], hidden=True)
 	@commands.check(is_mod)
 	async def blacklist(self, ctx, members: commands.Greedy[discord.Member]=None):
+		"""Ban someone from using the bot"""
 		if not members:
 			await ctx.send("You need to name someone to blacklist")
 			return
@@ -194,6 +187,7 @@ class Admin(commands.Cog):
 	@commands.command()
 	@commands.check(is_mod)
 	async def activity(self, ctx, *, activity=None):
+		"""Change the bot's activity"""
 		if activity:
 			game = discord.Game(activity)
 		else:
@@ -205,6 +199,7 @@ class Admin(commands.Cog):
 	@commands.command()
 	@commands.check(is_botmaster)
 	async def setvar(self, ctx, key, *, value):
+		"""Set a config variable, ***use with caution**"""
 		with open('config.json', 'w') as f:
 			if value[0] == '[' and value[len(value)-1] == ']':
 				value = list(map(int, value[1:-1].split(',')))
@@ -214,6 +209,7 @@ class Admin(commands.Cog):
 	@commands.command()
 	@commands.check(is_mod)
 	async def printvar(self, ctx, key):
+		"""Print a config variable, use for testing"""
 		await ctx.send(self.bot.config[str(ctx.message.guild.id)][key])
 
 

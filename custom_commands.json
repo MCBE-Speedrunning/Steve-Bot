@@ -35,5 +35,7 @@
     "!learntoread": "When two players are tied on the leaderboards **ONLY ONE FUCKER WILL BE VISIBLE**",
     "!mobiledupe": "1) place item to dupe in the crafting grid\n2) keep pressed until the green bar thing appears\nclick any \"Impossible\" craft (red ones)\n3)press the item to dupe (that is in your hotbar now -> it should have moved there since you pressed the impossible craft)\n4)your item should be duped",
     "!source": "https://github.com/AnInternetTroll/mcbeDiscordBot",
-    "!sr.c": "https://www.speedrun.com/mcbe"
+    "!sr.c": "https://www.speedrun.com/mcbe",
+    "!lbsite": "https://aninternettroll.github.io/mcbeVerifierLeaderboard/index.html",
+    "!leaderboardsite": "https://aninternettroll.github.io/mcbeVerifierLeaderboard/index.html"
 }

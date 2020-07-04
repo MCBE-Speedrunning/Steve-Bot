@@ -9,12 +9,10 @@ extensions = [
 	"cogs.utils",
 	"cogs.admin",
 	"cogs.src",
-	"cogs.help",
 	"cogs.trans",
 	"cogs.player",
 	"cogs.general",
-	"cogs.logs",
-	"cogs.compiler"
+	"cogs.logs"
 ]
 
 
