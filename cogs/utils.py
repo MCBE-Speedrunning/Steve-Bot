@@ -16,6 +16,7 @@ from selenium.webdriver.chrome.options import Options
 #import image as Image
 from PIL import Image
 from PIL import ImageFilter
+import functools
 
 def set_viewport_size(driver, width, height):
 	window_size = driver.execute_script("""
@@ -34,6 +35,45 @@ async def reportStuff(self, ctx, message):
 
 	await channel.send(embed=embed)
 	await ctx.author.send("Report has been submitted")
+
+def save_leaderboard():
+	DRIVER = '/usr/lib/chromium-browser/chromedriver'
+	chrome_options = Options()
+	chrome_options.add_argument("--disable-dev-shm-usage")
+	chrome_options.add_argument("--headless")
+	chrome_options.add_argument("--no-sandbox")
+	chrome_options.add_argument("--disable-gpu")
+	#chrome_options.binary_location = ""
+	driver = webdriver.Chrome(DRIVER, chrome_options=chrome_options)
+	set_viewport_size(driver, 1000, 1000)
+	driver.get('https://aninternettroll.github.io/mcbeVerifierLeaderboard/')
+	screenshot = driver.find_element_by_id('table').screenshot('leaderboard.png')
+	driver.quit()
+	#transparency time
+	img = Image.open('leaderboard.png')
+	img = img.convert("RGB")
+	pallette = Image.open("palette.png")
+	pallette = pallette.convert("P")
+	img = img.quantize(colors=256, method=3, kmeans=0, palette=pallette)
+	img = img.convert("RGBA")
+	datas = img.getdata()
+
+	newData = []
+	for item in datas:
+		if item[0] == 255 and item[1] == 255 and item[2] == 255:
+			newData.append((255, 255, 255, 0))
+		else:
+			newData.append(item)
+
+	img.putdata(newData)
+	"""
+	img = img.filter(ImageFilter.SHARPEN)
+	img = img.filter(ImageFilter.SHARPEN)
+	img = img.filter(ImageFilter.SHARPEN)
+	"""
+	#height, width = img.size
+	#img = img.resize((height*10,width*10), resample=Image.BOX)
+	img.save("leaderboard.png", "PNG")
 
 class Utils(commands.Cog):
 
@@ -177,44 +217,8 @@ class Utils(commands.Cog):
 	async def leaderboard(self, ctx):
 		"""Leaderboard of the people that matter"""
 		async with ctx.typing():
-			DRIVER = '/usr/lib/chromium-browser/chromedriver'
-			chrome_options = Options()
-			chrome_options.add_argument("--disable-dev-shm-usage")
-			chrome_options.add_argument("--headless")
-			chrome_options.add_argument("--no-sandbox")
-			chrome_options.add_argument("--disable-gpu")
-			#chrome_options.binary_location = ""
-			driver = webdriver.Chrome(DRIVER, chrome_options=chrome_options)
-			set_viewport_size(driver, 1000, 1000)
-			driver.get('https://aninternettroll.github.io/mcbeVerifierLeaderboard/')
-			screenshot = driver.find_element_by_id('table').screenshot('leaderboard.png')
-			driver.quit()
-			#transparency time
-			img = Image.open('leaderboard.png')
-			img = img.convert("RGB")
-			pallette = Image.open("palette.png")
-			pallette = pallette.convert("P")
-			img = img.quantize(colors=256, method=3, kmeans=0, palette=pallette)
-			img = img.convert("RGBA")
-			datas = img.getdata()
-
-			newData = []
-			for item in datas:
-				if item[0] == 255 and item[1] == 255 and item[2] == 255:
-					newData.append((255, 255, 255, 0))
-				else:
-					newData.append(item)
-
-			img.putdata(newData)
-			"""
-			img = img.filter(ImageFilter.SHARPEN)
-			img = img.filter(ImageFilter.SHARPEN)
-			img = img.filter(ImageFilter.SHARPEN)
-			"""
-			#height, width = img.size
-			#img = img.resize((height*10,width*10), resample=Image.BOX)
-			img.save("leaderboard.png", "PNG")
-
+			lbFunc = functools.partial(save_leaderboard)
+			await self.bot.loop.run_in_executor(None, lbFunc)
 			await ctx.send(file=discord.File("leaderboard.png"))
 
 
