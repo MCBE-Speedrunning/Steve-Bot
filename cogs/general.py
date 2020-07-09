@@ -423,9 +423,16 @@ class General(commands.Cog):
 		else:
 			color = user.color
 
+		if user.is_avatar_animated():
+			profilePic = user.avatar_url_as(format="gif")
+		else:
+			profilePic = user.avatar_url_as(format="png")
+
 		embed=discord.Embed(title=user.name, description=user.mention, color=color, timestamp=ctx.message.created_at)
+		if user.premium_since:
+			embed.add_field(name="Boosting since", value=user.premium_since.date())
 		#embed.set_thumbnail(url="attachment://temp.webp")
-		embed.set_thumbnail(url=user.avatar_url_as(format="png"))
+		embed.set_thumbnail(url=profilePic)
 		embed.add_field(name="Nickname", value=user.display_name, inline=False)
 		embed.add_field(name="Joined on", value=user.joined_at.date(), inline=True)
 		embed.add_field(name="Status", value=user.status, inline=True)
@@ -471,13 +478,33 @@ class General(commands.Cog):
 		for i in guild.emojis:
 			emojiList += str(i) + " "
 
+		if guild.is_icon_animated():
+			serverIcon = guild.icon_url_as(format="gif")
+		else:
+			serverIcon = guild.icon_url_as(format="png")
+
+		inactiveMembers = await guild.estimate_pruned_members(days=7)
+
 		embed=discord.Embed(title=guild.name, description=guild.description, color=color, timestamp=ctx.message.created_at)
-		embed.set_thumbnail(url=guild.icon_url_as(format="png"))
-		embed.set_image(url=guild.splash_url_as(format="png"))
+		if guild.premium_subscription_count == 0:
+			pass
+		else:
+			if guild.premium_subscription_count == 1:
+				embed.add_field(name="Boosted by:", value=f"{guild.premium_subscription_count} member", inline=True)
+			else:
+				embed.add_field(name="Boosted by:", value=f"{guild.premium_subscription_count} members", inline=True)
+		if guild.premium_subscribers:
+			boosters = ""
+			for i in guild.premium_subscribers:
+				boosters += i.mention+" "
+			embed.add_field(name="Boosted by:", value=boosters, inline=True)
+		embed.set_thumbnail(url=serverIcon)
+		embed.set_image(url=guild.banner_url_as(format="png"))
 		embed.add_field(name="Created on", value=guild.created_at.date(), inline=True)
 		embed.add_field(name="Members", value=guild.member_count, inline=True)
 		embed.add_field(name="Emojis", value=emojiList, inline=True)
 		embed.add_field(name="Owner", value=guild.owner.mention, inline=True)
+		embed.add_field(name="Members who haven't spoken in 7 days:", value=inactiveMembers, inline=True)
 		embed.set_footer(text=f"ID: {guild.id}")
 		await ctx.send(embed=embed)
 
