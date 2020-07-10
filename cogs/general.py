@@ -499,7 +499,7 @@ class General(commands.Cog):
 				boosters += i.mention+" "
 			embed.add_field(name="Boosted by:", value=boosters, inline=True)
 		embed.set_thumbnail(url=serverIcon)
-		embed.set_image(url=guild.banner_url_as(format="png"))
+		embed.set_image(url=guild.splash_url_as(format="png"))
 		embed.add_field(name="Created on", value=guild.created_at.date(), inline=True)
 		embed.add_field(name="Members", value=guild.member_count, inline=True)
 		embed.add_field(name="Emojis", value=emojiList, inline=True)
