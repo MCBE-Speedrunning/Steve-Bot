@@ -172,13 +172,13 @@ class Admin(commands.Cog):
 				embed = discord.Embed(title = "You can't ban me, I'm an almighty bot")
 				await ctx.send(embed = embed)
 				continue
-			await guild.ban(member, reason="A reason idk")
+			await ctx.guild.ban(member, reason=reason)
 			await ctx.send("{0.mention} has been banned by {1.mention} for *{2}*".format(member, ctx.author, reason))
 
 		if mute_minutes > 0:
 			await asyncio.sleep(mute_minutes * 60)
 			for member in members:
-				await guild.unban(member, reason="Time is up")
+				await ctx.guild.unban(member, reason="Time is up")
 
 	@commands.command()
 	@commands.check(is_botmaster)
