@@ -160,7 +160,7 @@ class Admin(commands.Cog):
 	async def ban(self, ctx, members: commands.Greedy[discord.Member]=False,
 					   mute_minutes: int = 0,
 					   *, reason: str = "absolutely no reason"):
-		"""Mass mute members with an optional mute_minutes parameter to time it"""
+		"""Mass ban members with an optional mute_minutes parameter to time it"""
 
 		if not members:
 			await ctx.send("You need to name someone to ban")
@@ -172,7 +172,7 @@ class Admin(commands.Cog):
 				embed = discord.Embed(title = "You can't ban me, I'm an almighty bot")
 				await ctx.send(embed = embed)
 				continue
-			await ctx.guild.ban(member, reason=reason)
+			await ctx.guild.ban(member, reason=reason, delete_message_days=0)
 			await ctx.send("{0.mention} has been banned by {1.mention} for *{2}*".format(member, ctx.author, reason))
 
 		if mute_minutes > 0:
