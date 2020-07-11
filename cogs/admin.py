@@ -157,6 +157,31 @@ class Admin(commands.Cog):
 
 	@commands.command()
 	@commands.check(is_botmaster)
+	async def ban(self, ctx, members: commands.Greedy[discord.Member]=False,
+					   mute_minutes: int = 0,
+					   *, reason: str = "absolutely no reason"):
+		"""Mass mute members with an optional mute_minutes parameter to time it"""
+
+		if not members:
+			await ctx.send("You need to name someone to ban")
+			return
+		elif type(members)==str:
+			members = [self.bot.get_user(int(members))]
+		for member in members:
+			if self.bot.user == member: # what good is a muted bot?
+				embed = discord.Embed(title = "You can't ban me, I'm an almighty bot")
+				await ctx.send(embed = embed)
+				continue
+			await guild.ban(member, reason="A reason idk")
+			await ctx.send("{0.mention} has been banned by {1.mention} for *{2}*".format(member, ctx.author, reason))
+
+		if mute_minutes > 0:
+			await asyncio.sleep(mute_minutes * 60)
+			for member in members:
+				await guild.unban(member, reason="Time is up")
+
+	@commands.command()
+	@commands.check(is_botmaster)
 	async def logs(self, ctx):
 		"""Send the discord.log file"""
 		await ctx.message.delete()
