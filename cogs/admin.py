@@ -188,7 +188,7 @@ class Admin(commands.Cog):
 		file = discord.File("discord.log")
 		await ctx.send(file=file)
 
-	@commands.command(aliases=['ban'], hidden=True)
+	@commands.command(hidden=True)
 	@commands.check(is_mod)
 	async def blacklist(self, ctx, members: commands.Greedy[discord.Member]=None):
 		"""Ban someone from using the bot"""
