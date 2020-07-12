@@ -37,5 +37,7 @@
     "!source": "https://github.com/AnInternetTroll/mcbeDiscordBot",
     "!sr.c": "https://www.speedrun.com/mcbe",
     "!lbsite": "https://aninternettroll.github.io/mcbeVerifierLeaderboard/index.html",
-    "!leaderboardsite": "https://aninternettroll.github.io/mcbeVerifierLeaderboard/index.html"
+    "!leaderboardsite": "https://aninternettroll.github.io/mcbeVerifierLeaderboard/index.html",
+    "!stop_crying": "Mods are human, we have lives. If your run isn't verified within 0.1 seconds of you submitting it then please don't Dm us asking us to verify your run. Speedrun.com gives you up to 3 weeks as an estimated time so if after 3 weeks have passed and your run hasn't been verified, then shoot one of us a Dm. If you constantly Dm us and hassle mods, you will get 3 warnings before you become muted and if you still continue, punishments will escalate like other breachments of the rules.",
+    "!staff": "https://media.discordapp.net/attachments/709672550707363931/721226547817873519/tenor.gif"
 }

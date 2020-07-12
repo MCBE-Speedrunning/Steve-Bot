@@ -1,6 +1,7 @@
 from discord.ext import commands
 import discord
 import logging
+import aiohttp
 
 import datetime
 import json
@@ -35,6 +36,7 @@ class BedrockBot(commands.Bot):
 		super().__init__(command_prefix=get_prefix, case_insensitive=True)
 		self.logger = logging.getLogger('discord')
 		self.messageBlacklist = []
+		self.session = aiohttp.ClientSession()
 
 		with open('custom_commands.json', 'r') as f:
 			self.custom_commands = json.load(f)

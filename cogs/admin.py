@@ -1,7 +1,6 @@
 from discord.ext import commands
 import discord
 import asyncio
-import subprocess
 import json
 import git
 import os
@@ -158,7 +157,7 @@ class Admin(commands.Cog):
 	@commands.command()
 	@commands.check(is_botmaster)
 	async def ban(self, ctx, members: commands.Greedy[discord.Member]=False,
-					   mute_minutes: int = 0,
+					   ban_minutes: int = 0,
 					   *, reason: str = "absolutely no reason"):
 		"""Mass ban members with an optional mute_minutes parameter to time it"""
 
@@ -172,11 +171,12 @@ class Admin(commands.Cog):
 				embed = discord.Embed(title = "You can't ban me, I'm an almighty bot")
 				await ctx.send(embed = embed)
 				continue
+			await member.send(f"You have been banned from {ctx.guild.name} for {mute_minutes} minutes because: ```{reason}```")
 			await ctx.guild.ban(member, reason=reason, delete_message_days=0)
 			await ctx.send("{0.mention} has been banned by {1.mention} for *{2}*".format(member, ctx.author, reason))
 
 		if mute_minutes > 0:
-			await asyncio.sleep(mute_minutes * 60)
+			await asyncio.sleep(ban_minutes * 60)
 			for member in members:
 				await ctx.guild.unban(member, reason="Time is up")
 

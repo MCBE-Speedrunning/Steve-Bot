@@ -1,9 +1,7 @@
 from discord.ext import commands
 from discord.ext import tasks
 import discord
-import requests
 import json
-import asyncio
 import datetime
 # forgot to import this and ended up looking mentally unstable
 # troll literally pointed out atleast 4 things I did wrong in 3 lines of code

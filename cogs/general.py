@@ -515,61 +515,61 @@ class General(commands.Cog):
 			await ctx.send("You need to specify a gamer, gamer")
 			return
 
-		r = requests.get(f"https://xbl-api.prouser123.me/profile/gamertag/{gamertag}")
-		gamer = json.loads(r.text)
+		async with self.bot.session.get(f'https://xbl-api.prouser123.me/profile/gamertag/{gamertag}') as r:
+			gamer = json.loads(await r.text())
 
-		try:
-			await ctx.send(f"{gamer['error']}: {gamer['message']}")
-			return
-		except KeyError:
-			pass
+			try:
+				await ctx.send(f"{gamer['error']}: {gamer['message']}")
+				return
+			except KeyError:
+				pass
 
-		for i in gamer["profileUsers"][0]["settings"]:
-			if i["id"] == "GameDisplayName":
-				gameName = i["value"]
-				continue
-			if i["id"] == "AppDisplayPicRaw":
-				picUrl = i["value"]
-				continue
-			if i["id"] == "Gamerscore":
-				Gamerscore = i["value"]+"<:gamerscore:727131234534424586>"
-				continue
-			if i["id"] == "AccountTier":
-				accountTier = i["value"]
-				continue
-			if i["id"] == "XboxOneRep":
-				reputation = i["value"]
-				continue
-			if i["id"] == "PreferredColor":
-				color = int(json.loads(requests.get(i["value"]).text)["primaryColor"], 16)
-				continue
-			if i["id"] == "Location":
-				location = i["value"]
-				continue
-			if i["id"] == "Bio":
-				#if len(i["value"]) == 0:
-				#	Bio = "Unknown"
-				#else:
-				Bio = i["value"]
-				continue
-			if i["id"] == "Watermarks":
-				Watermarks = i["value"]
-				continue
-			if i["id"] == "RealName":
-				RealName = i["value"]
-				continue
+			for i in gamer["profileUsers"][0]["settings"]:
+				if i["id"] == "GameDisplayName":
+					gameName = i["value"]
+					continue
+				if i["id"] == "AppDisplayPicRaw":
+					picUrl = i["value"]
+					continue
+				if i["id"] == "Gamerscore":
+					Gamerscore = i["value"]+"<:gamerscore:727131234534424586>"
+					continue
+				if i["id"] == "AccountTier":
+					accountTier = i["value"]
+					continue
+				if i["id"] == "XboxOneRep":
+					reputation = i["value"]
+					continue
+				if i["id"] == "PreferredColor":
+					color = int(json.loads(requests.get(i["value"]).text)["primaryColor"], 16)
+					continue
+				if i["id"] == "Location":
+					location = i["value"]
+					continue
+				if i["id"] == "Bio":
+					#if len(i["value"]) == 0:
+					#	Bio = "Unknown"
+					#else:
+					Bio = i["value"]
+					continue
+				if i["id"] == "Watermarks":
+					Watermarks = i["value"]
+					continue
+				if i["id"] == "RealName":
+					RealName = i["value"]
+					continue
 
 
-		embed=discord.Embed(title=gameName, description=Bio, color=color, timestamp=ctx.message.created_at)
-		embed.set_thumbnail(url=picUrl)
-		embed.add_field(name="Gamerscore", value=Gamerscore, inline=True)
-		if len(location) != 0:
-			embed.add_field(name="Location", value=location, inline=True)
-		if len(Watermarks) != 0:
-			embed.add_field(name="Watermarks", value=Watermarks, inline=True)
-		embed.add_field(name="Account Tier", value=accountTier, inline=True)
-		embed.add_field(name="Reputation", value=reputation, inline=True)
-		await ctx.send(embed=embed)
+			embed=discord.Embed(title=gameName, description=Bio, color=color, timestamp=ctx.message.created_at)
+			embed.set_thumbnail(url=picUrl)
+			embed.add_field(name="Gamerscore", value=Gamerscore, inline=True)
+			if len(location) != 0:
+				embed.add_field(name="Location", value=location, inline=True)
+			if len(Watermarks) != 0:
+				embed.add_field(name="Watermarks", value=Watermarks, inline=True)
+			embed.add_field(name="Account Tier", value=accountTier, inline=True)
+			embed.add_field(name="Reputation", value=reputation, inline=True)
+			await ctx.send(embed=embed)
 
 	@commands.command(hidden=True)
 	async def xboxpresence(self, ctx, *, gamertag=None):
@@ -577,35 +577,35 @@ class General(commands.Cog):
 			await ctx.send("You need to specify a gamer, gamer")
 			return
 
-		r = requests.get(f"https://xbl-api.prouser123.me/presence/gamertag/{gamertag}")
-		gamer = json.loads(r.text)
+		async with self.bot.session.get(f"https://xbl-api.prouser123.me/presence/gamertag/{gamertag}") as r:
+			gamer = json.loads(await r.text())
 
-		try:
-			await ctx.send(f"{gamer['error']}: {gamer['message']}")
-			return
-		except KeyError:
-			pass
+			try:
+				await ctx.send(f"{gamer['error']}: {gamer['message']}")
+				return
+			except KeyError:
+				pass
 
-		state = gamer["state"]
+			state = gamer["state"]
 
-		try:
-			game = json.loads(requests.get(f"https://xbl-api.prouser123.me/titleinfo/{gamer['lastSeen']['titleId']}").text)
-			gameName = game["titles"][0]["name"]
-			gamePic = game["titles"][0]["images"][4]["url"]
-			timestamp = dateutil.parser.isoparse(gamer["lastSeen"]["timestamp"])
-			lastSeen = True
-		except Exception as e:
-			print(e)
-			lastSeen = False
+			try:
+				game = json.loads(requests.get(f"https://xbl-api.prouser123.me/titleinfo/{gamer['lastSeen']['titleId']}").text)
+				gameName = game["titles"][0]["name"]
+				gamePic = game["titles"][0]["images"][4]["url"]
+				timestamp = dateutil.parser.isoparse(gamer["lastSeen"]["timestamp"])
+				lastSeen = True
+			except Exception as e:
+				print(e)
+				lastSeen = False
 
-		if lastSeen:
-			embed=discord.Embed(title=gamer["gamertag"], description=state, timestamp=timestamp)
-			embed.set_thumbnail(url=gamePic)
-			embed.add_field(name="Game", value=gameName, inline=True)
-			await ctx.send(embed=embed)
-		else:
-			embed=discord.Embed(title=gamer["gamertag"], description=state, timestamp=ctx.message.created_at)
-			await ctx.send(embed=embed)
+			if lastSeen:
+				embed=discord.Embed(title=gamer["gamertag"], description=state, timestamp=timestamp)
+				embed.set_thumbnail(url=gamePic)
+				embed.add_field(name="Game", value=gameName, inline=True)
+				await ctx.send(embed=embed)
+			else:
+				embed=discord.Embed(title=gamer["gamertag"], description=state, timestamp=ctx.message.created_at)
+				await ctx.send(embed=embed)
 
 	@commands.command()
 	async def compile(self, ctx, language=None, *, code=None):
@@ -659,22 +659,23 @@ class General(commands.Cog):
 			"Content-Type":"application/json"
 			}
 		async with ctx.typing():
-			r = requests.post("https://wandbox.org/api/compile.json", headers=head, data=json.dumps(body))
-			try:
-				response = json.loads(r.text)
-				#await ctx.send(f"```json\n{json.dumps(response, indent=4)}```")
-				print(f"```json\n{json.dumps(response, indent=4)}```")
-			except json.decoder.JSONDecodeError:
-				await ctx.send(f"```json\n{r.text}```")
+			async with self.bot.session.post("https://wandbox.org/api/compile.json", headers=head, data=json.dumps(body)) as r:
+				#r = requests.post("https://wandbox.org/api/compile.json", headers=head, data=json.dumps(body))
+				try:
+					response = json.loads(await r.text())
+					#await ctx.send(f"```json\n{json.dumps(response, indent=4)}```")
+					print(f"```json\n{json.dumps(response, indent=4)}```")
+				except json.decoder.JSONDecodeError:
+					await ctx.send(f"```json\n{r.text}```")
 
-			try:
-				embed=discord.Embed(title="Compiled code")
-				embed.add_field(name="Output", value=f'```{response["program_message"]}```', inline=False)
-				embed.add_field(name="Exit code", value=response["status"], inline=True)
-				embed.add_field(name="Link", value=f"[Permalink]({response['url']})", inline=True)
-				await ctx.send(embed=embed)
-			except KeyError:
-				await ctx.send(f"```json\n{json.dumps(response, indent=4)}```")
+				try:
+					embed=discord.Embed(title="Compiled code")
+					embed.add_field(name="Output", value=f'```{response["program_message"]}```', inline=False)
+					embed.add_field(name="Exit code", value=response["status"], inline=True)
+					embed.add_field(name="Link", value=f"[Permalink]({response['url']})", inline=True)
+					await ctx.send(embed=embed)
+				except KeyError:
+					await ctx.send(f"```json\n{json.dumps(response, indent=4)}```")
 
 def setup(bot):
 	bot.add_cog(General(bot))
