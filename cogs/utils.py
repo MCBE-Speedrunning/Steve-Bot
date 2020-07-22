@@ -158,6 +158,14 @@ class Utils(commands.Cog):
 			await ctx.send(f"{ctx.message.author.display_name} -> your sleep is {sleepHrs} hours long - {moreSleepMsg[randint(0, len(moreSleepMsg) - 1)]}")
 
 	@commands.Cog.listener()
+	async def on_member_join(self, member):
+		def check(msg):
+			return msg.author == member
+		msg = await self.bot.wait_for("message", check=check, timeout=300)
+		await msg.channel.send("<:PeepoPog:732172337956257872>")
+
+			
+	@commands.Cog.listener()
 	async def on_message(self, message):
 		if not message.guild:
 			return
