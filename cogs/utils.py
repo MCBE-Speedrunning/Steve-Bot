@@ -160,7 +160,7 @@ class Utils(commands.Cog):
 	@commands.Cog.listener()
 	async def on_member_join(self, member):
 		def check(msg):
-			return msg.author == member
+			return msg.author == member and msg.type != discord.MessageType.new_member
 		msg = await self.bot.wait_for("message", check=check, timeout=300)
 		await msg.channel.send("<:PeepoPog:732172337956257872>")
 
