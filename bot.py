@@ -1,16 +1,15 @@
 from discord.ext import commands
 import discord
 import logging
+import aiohttp
 
 import datetime
-import config
 import json
 
 extensions = [
 	"cogs.utils",
 	"cogs.admin",
 	"cogs.src",
-	"cogs.help",
 	"cogs.trans",
 	"cogs.player",
 	"cogs.general",
@@ -36,12 +35,18 @@ class BedrockBot(commands.Bot):
 	def __init__(self):
 		super().__init__(command_prefix=get_prefix, case_insensitive=True)
 		self.logger = logging.getLogger('discord')
+		self.messageBlacklist = []
+		self.session = aiohttp.ClientSession()
 
 		with open('custom_commands.json', 'r') as f:
 			self.custom_commands = json.load(f)
 
 		for extension in extensions:
 			self.load_extension(extension)
+
+		with open('config.json', 'r') as f:
+			self.config = json.load(f)
+			config = self.config
 
 	async def on_ready(self):
 		self.uptime = datetime.datetime.utcnow()
@@ -59,9 +64,7 @@ class BedrockBot(commands.Bot):
 
 	async def on_message(self, message):
 
-		if message.author.bot:
-			return
-		if message.author.id in self.blacklist:
+		if message.author.bot or message.author.id in self.blacklist:
 			return
 		await self.process_commands(message)
 
@@ -77,4 +80,4 @@ class BedrockBot(commands.Bot):
 			return
 
 	def run(self):
-		super().run(config.token, reconnect=True)
+		super().run(self.config["token"], reconnect=True)

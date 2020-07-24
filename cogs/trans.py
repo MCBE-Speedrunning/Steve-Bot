@@ -20,6 +20,7 @@ async def translateMsg(text, target="en"):
 	result['translatedText'] = result['translatedText'].replace("&#39;", "'")
 	result['translatedText'] = result['translatedText'].replace("&quot;", '"')
 	result['translatedText'] = result['translatedText'].replace("<@! ", "<@!")
+	result['translatedText'] = result['translatedText'].replace("<@ ", "<@")
 	result['translatedText'] = result['translatedText'].replace("<# ", "<#")
 	return result;
 
@@ -28,8 +29,9 @@ class Trans(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
-	@commands.command(help="Translate text in english (using google translate)", brief="Translate to english")
+	@commands.command(help="Translate text in english (using google translate)", brief="Translate to english", aliases=["翻译", "脑热", "动漫"])
 	async def translate(self, ctx, *, message):
+		"""Translate to english"""
 		response = await translateMsg(message)
 		embed=discord.Embed(title="Translation",description=f"{ctx.message.author.mention} says:", timestamp=ctx.message.created_at, color=0x4d9aff)
 		embed.add_field(name=f"[{response['detectedSourceLanguage']}] Source:" , value=response['input'], inline=False)
@@ -38,6 +40,7 @@ class Trans(commands.Cog):
 
 	@commands.command()
 	async def trans(self, ctx, lan, *, message):
+		"""Translate to a specific language"""
 		response = await translateMsg(message, lan)
 		embed=discord.Embed(title="Translation",description=f"{ctx.message.author.mention} says:", timestamp=ctx.message.created_at, color=0x4d9aff)
 		embed.add_field(name=f"[{response['detectedSourceLanguage']}] Source:" , value=response['input'], inline=False)

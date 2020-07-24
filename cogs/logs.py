@@ -8,12 +8,19 @@ class Logs(commands.Cog):
 
 	@commands.Cog.listener()
 	async def on_message_delete(self, message):
+		if (message.id in self.bot.messageBlacklist):
+			self.bot.messageBlacklist.remove(message.id)
+			return
 		if message.guild.id != 574267523869179904:
 			return 
-		channel = self.bot.get_channel(718187032869994686)
+		if message.author.color.value == 0:
+			color = 16777210
+		else:
+			color = message.author.color
+		channel = self.bot.get_channel(int(self.bot.config[str(message.guild.id)]["logs_channel"]))
 		embed = discord.Embed(
 			title='Deleted Message',
-			color=message.author.color,
+			color=color,
 			timestamp=message.created_at
 		)
 		embed.add_field(
@@ -25,9 +32,12 @@ class Logs(commands.Cog):
 
 	@commands.Cog.listener()
 	async def on_message_edit(self, before, after):
+		if before.content == after.content:
+			return
+		
 		if after.guild.id != 574267523869179904:
 			return 
-		channel = self.bot.get_channel(718187032869994686)
+		channel = self.bot.get_channel(int(self.bot.config[str(before.guild.id)]["logs_channel"]))
 		if before.author.color.value == 0:
 			color = 16777210
 		else:

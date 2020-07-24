@@ -29,9 +29,9 @@ def run_bot():
 	bot.run()
 
 if __name__ == "__main__":
-	
+
 	init_colorama(autoreset=True)
 
 	setup_logging()
-	
+
 	run_bot()

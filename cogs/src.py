@@ -63,11 +63,6 @@ async def deleteRun(self, apiKey, ctx, run):
 		await ctx.send("Something went wrong")
 		await ctx.message.author.send(f"```json\n{json.dumps(json.loads(r.text),indent=4)}```")
 
-async def clear(self):
-	async for msg in self.bot.get_channel(699713639866957905).history():
-		await msg.delete()
-
-
 async def pendingRuns(self, ctx):
 	mcbe_runs = 0
 	mcbeil_runs = 0
@@ -124,11 +119,11 @@ async def pendingRuns(self, ctx):
 				mcbece_runs += 1
 			embed = discord.Embed(
 				title=leaderboard, url=link, description=f"{categoryName} in `{str(rta).replace('000','')}` by **{player}**", color=16711680+i*60, timestamp=timestamp)
-			await self.bot.get_channel(699713639866957905).send(embed=embed)
+			await self.bot.get_channel(int(self.bot.config[str(ctx.message.guild.id)]["pending_channel"])).send(embed=embed)
 		runs = runs2
 		gameID = gameID2
 	embed_stats = discord.Embed(title='Pending Run Stats', description=f"Full Game Runs: {mcbe_runs}\nIndividual Level Runs: {mcbeil_runs}\nCategory Extension Runs: {mcbece_runs}", color=16711680 + i * 60)
-	await self.bot.get_channel(699713639866957905).send(embed=embed_stats)
+	await self.bot.get_channel(int(self.bot.config[str(ctx.message.guild.id)]["pending_channel"])).send(embed=embed_stats)
 
 
 async def verifyNew(self, apiKey=None, userID=None):
@@ -176,7 +171,7 @@ async def verifyNew(self, apiKey=None, userID=None):
 
 	wrCounter = False
 	runnerCounter = False
-	
+
 	for i in pbs["data"]:
 		if i["place"] == 1:
 			if i["run"]["game"] == "yd4ovvg1" or i["run"]["game"] == "v1po7r76":
@@ -208,7 +203,7 @@ class Src(commands.Cog):
 	@commands.guild_only()
 	async def pending(self, ctx):
 		async with ctx.typing():
-			await clear(self)
+			await self.bot.get_channel(int(self.bot.config[str(ctx.message.guild.id)]["pending_channel"])).purge(limit=500)
 			await pendingRuns(self, ctx)
 
 	@commands.command(description="Reject runs quickly")
@@ -231,9 +226,12 @@ class Src(commands.Cog):
 
 	@commands.command()
 	async def verify(self, ctx, apiKey=None, userID=None):
-		#if apiKey == None:
-		#	await ctx.send(f"Please try again this command by getting an apiKey from https://www.speedrun.com/api/auth then do `{ctx.prefix}verify <apiKey>` in my DMs or anywhere in this server. \nBe careful who you share this key with. To learn more check out https://github.com/speedruncomorg/api/blob/master/authentication.md")
-		#	return
+		self.bot.messageBlacklist.append(ctx.message.id)
+		if apiKey == None:
+			data = json.loads(Path('./api_keys.json').read_text())
+			if not str(ctx.author.id) in data:
+				await ctx.send(f"Please try again this command by getting an apiKey from https://www.speedrun.com/api/auth then do `{ctx.prefix}verify <apiKey>` in my DMs or anywhere in this server. \nBe careful who you share this key with. To learn more check out https://github.com/speedruncomorg/api/blob/master/authentication.md")
+				return
 		if ctx.guild != None:
 			await ctx.message.delete()
 		async with ctx.typing():

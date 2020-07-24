@@ -1,5 +1,4 @@
 {
-    "!sr.c": "https://www.speedrun.com/mcbe",
     "/Troll": "is Super at his job",
     "/src": "https://www.speedrun.com/mcbe",
     "!Walk-On-through-the-Wind": "Walk On through the rain",
@@ -20,7 +19,6 @@
     "/swipe": "not an alt",
     "!HereWeGo": "10 in a Row!",
     "/Make": "Troll Supermod",
-    "!h": "<@!199070670221475842> no swearing in this christian discord server",
     "/boards": "https://www.speedrun.com/mcbe",
     "/ban": "shut up",
     "/pending": "this annoys me",
@@ -30,8 +28,16 @@
     "!lenny": "( \u0361\u00b0 \u035c\u0296 \u0361\u00b0)",
     "!hwg": "10 iar",
     "!GlasgowRangers": "You Let Your Club Die!",
-    "!murray": "the irishest of the Irish",
     "!e\ud83c\udd71\ufe0fic": "HEY GUYS ITS SHIGAME45",
     "!testy": "test",
-    "!toxicitypass": "```TOXICITY PASS\n\nTHE HOLDER OF THIS PASS HAS PERMISSION FROM THE HEAVENS ABOVE TO DO AND SAY WHATEVER THE HELL THEY WANT\nTHEY ARE ALLOWED TO BE AS TOXIC AS THEY WILL WITHOUT REPERCUSSIONS\n\nPASS OWNER: Duck W aka Weexy aka Indy Kambeitz```"
+    "!toxicitypass": "```TOXICITY PASS\n\nTHE HOLDER OF THIS PASS HAS PERMISSION FROM THE HEAVENS ABOVE TO DO AND SAY WHATEVER THE HELL THEY WANT\nTHEY ARE ALLOWED TO BE AS TOXIC AS THEY WILL WITHOUT REPERCUSSIONS\n\nPASS OWNER: Duck W aka Weexy aka Indy Kambeitz```",
+    "!welcome": "Welcome! <:mango:715738087627685908>",
+    "!learntoread": "When two players are tied on the leaderboards **ONLY ONE FUCKER WILL BE VISIBLE**",
+    "!mobiledupe": "1) place item to dupe in the crafting grid\n2) keep pressed until the green bar thing appears\nclick any \"Impossible\" craft (red ones)\n3)press the item to dupe (that is in your hotbar now -> it should have moved there since you pressed the impossible craft)\n4)your item should be duped",
+    "!source": "https://github.com/AnInternetTroll/mcbeDiscordBot",
+    "!sr.c": "https://www.speedrun.com/mcbe",
+    "!lbsite": "https://aninternettroll.github.io/mcbeVerifierLeaderboard/index.html",
+    "!leaderboardsite": "https://aninternettroll.github.io/mcbeVerifierLeaderboard/index.html",
+    "!stop_crying": "Mods are human, we have lives. If your run isn't verified within 0.1 seconds of you submitting it then please don't Dm us asking us to verify your run. Speedrun.com gives you up to 3 weeks as an estimated time so if after 3 weeks have passed and your run hasn't been verified, then shoot one of us a Dm. If you constantly Dm us and hassle mods, you will get 3 warnings before you become muted and if you still continue, punishments will escalate like other breachments of the rules.",
+    "!staff": "https://media.discordapp.net/attachments/709672550707363931/721226547817873519/tenor.gif"
 }
