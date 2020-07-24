@@ -9,84 +9,90 @@ import asyncio
 import dateutil.parser
 from pathlib import Path
 
+
 async def rejectRun(self, apiKey, ctx, run, reason):
 	await ctx.message.delete()
 	run = run.split('/')[-1]
-	reject = {
-		"status": {
-			"status": "rejected",
-			"reason": reason
-		}
-	}
-	r = requests.put(f"https://www.speedrun.com/api/v1/runs/{run}/status", headers={
-					 "X-API-Key": apiKey, "Accept": "application/json", "User-Agent": "mcbeDiscordBot/1.0"}, data=json.dumps(reject))
+	reject = {"status": {"status": "rejected", "reason": reason}}
+	r = requests.put(f"https://www.speedrun.com/api/v1/runs/{run}/status",
+					 headers={
+						 "X-API-Key": apiKey,
+						 "Accept": "application/json",
+						 "User-Agent": "mcbeDiscordBot/1.0"
+					 },
+					 data=json.dumps(reject))
 	if r.status_code == 200 or r.status_code == 204:
 		await ctx.send("Run rejected succesfully")
 	else:
 		await ctx.send("Something went wrong")
-		await ctx.message.author.send(f"```json\n{json.dumps(json.loads(r.text),indent=4)}```")
+		await ctx.message.author.send(
+			f"```json\n{json.dumps(json.loads(r.text),indent=4)}```")
 
 
 async def approveRun(self, apiKey, ctx, run, reason=None):
 	await ctx.message.delete()
 	run = run.split('/')[-1]
 	if reason == None:
-		approve = {
-			"status": {
-				"status": "verified"
-			}
-		}
+		approve = {"status": {"status": "verified"}}
 	else:
-		approve = {
-			"status": {
-				"status": "verified",
-				"reason":reason
-			}
-		}
-	r = requests.put(f"https://www.speedrun.com/api/v1/runs/{run}/status", headers={
-					 "X-API-Key": apiKey, "Accept": "application/json", "User-Agent": "mcbeDiscordBot/1.0"}, data=json.dumps(approve))
+		approve = {"status": {"status": "verified", "reason": reason}}
+	r = requests.put(f"https://www.speedrun.com/api/v1/runs/{run}/status",
+					 headers={
+						 "X-API-Key": apiKey,
+						 "Accept": "application/json",
+						 "User-Agent": "mcbeDiscordBot/1.0"
+					 },
+					 data=json.dumps(approve))
 	if r.status_code == 200 or r.status_code == 204:
 		await ctx.send("Run approved succesfully")
 	else:
 		await ctx.send("Something went wrong")
-		await ctx.message.author.send(f"```json\n{json.dumps(json.loads(r.text),indent=4)}```")
+		await ctx.message.author.send(
+			f"```json\n{json.dumps(json.loads(r.text),indent=4)}```")
 
 
 async def deleteRun(self, apiKey, ctx, run):
 	await ctx.message.delete()
 	run = run.split('/')[-1]
-	r = requests.delete(f"https://www.speedrun.com/api/v1/runs/{run}", headers={
-						"X-API-Key": apiKey, "Accept": "application/json", "User-Agent": "mcbeDiscordBot/1.0"})
+	r = requests.delete(f"https://www.speedrun.com/api/v1/runs/{run}",
+						headers={
+							"X-API-Key": apiKey,
+							"Accept": "application/json",
+							"User-Agent": "mcbeDiscordBot/1.0"
+						})
 	if r.status_code == 200 or r.status_code == 204:
 		await ctx.send("Run deleted succesfully")
 	else:
 		await ctx.send("Something went wrong")
-		await ctx.message.author.send(f"```json\n{json.dumps(json.loads(r.text),indent=4)}```")
+		await ctx.message.author.send(
+			f"```json\n{json.dumps(json.loads(r.text),indent=4)}```")
+
 
 async def pendingRuns(self, ctx):
 	mcbe_runs = 0
 	mcbeil_runs = 0
 	mcbece_runs = 0
-	head = {
-		"Accept": "application/json",
-		"User-Agent":"mcbeDiscordBot/1.0"
-		}
+	head = {"Accept": "application/json", "User-Agent": "mcbeDiscordBot/1.0"}
 	gameID = 'yd4ovvg1'  # ID of Minecraft bedrock
 	gameID2 = 'v1po7r76'  # ID of Category extension
 	runsRequest = requests.get(
-		f'https://www.speedrun.com/api/v1/runs?game={gameID}&status=new&max=200&embed=category,players,level&orderby=submitted', headers=head)
+		f'https://www.speedrun.com/api/v1/runs?game={gameID}&status=new&max=200&embed=category,players,level&orderby=submitted',
+		headers=head)
 	runs = json.loads(runsRequest.text)
 	runsRequest2 = requests.get(
-		f'https://www.speedrun.com/api/v1/runs?game={gameID2}&status=new&max=200&embed=category,players,level&orderby=submitted', headers=head)
+		f'https://www.speedrun.com/api/v1/runs?game={gameID2}&status=new&max=200&embed=category,players,level&orderby=submitted',
+		headers=head)
 	runs2 = json.loads(runsRequest2.text)
 	# Use https://www.speedrun.com/api/v1/games?abbreviation=mcbe for ID
 
 	for game in range(2):
 		for i in range(200):
-			leaderboard = '' # A little ugly but prevents name not defined error
+			leaderboard = ''  # A little ugly but prevents name not defined error
 			level = False
 			try:
 				for key, value in runs['data'][i].items():
+					if key == 'id':
+						run_id = value
 					if key == 'weblink':
 						link = value
 					if key == 'level':
@@ -95,6 +101,11 @@ async def pendingRuns(self, ctx):
 							categoryName = value["data"]["name"]
 					if key == 'category' and not level:
 						categoryName = value["data"]["name"]
+					if key == 'videos':
+						if value['links'][0]['uri'] in self.bot.video_blacklist:
+							await rejectRun(
+								self, self.bot.config['api_key'], ctx, run_id,
+								'Detected as spam by our automatic filter')
 					if key == 'players':
 						if value["data"][0]['rel'] == 'guest':
 							player = value["data"][0]['name']
@@ -113,30 +124,44 @@ async def pendingRuns(self, ctx):
 					leaderboard = 'Individual Level Run'
 				else:
 					mcbe_runs += 1
-					leaderboard = "Full Game Run" # If this doesn't work I'm starting a genocide
+					leaderboard = "Full Game Run"  # If this doesn't work I'm starting a genocide
 			elif game == 1:
 				leaderboard = "Category Extension Run"
 				mcbece_runs += 1
 			embed = discord.Embed(
-				title=leaderboard, url=link, description=f"{categoryName} in `{str(rta).replace('000','')}` by **{player}**", color=16711680+i*60, timestamp=timestamp)
-			await self.bot.get_channel(int(self.bot.config[str(ctx.message.guild.id)]["pending_channel"])).send(embed=embed)
+				title=leaderboard,
+				url=link,
+				description=
+				f"{categoryName} in `{str(rta).replace('000','')}` by **{player}**",
+				color=16711680 + i * 60,
+				timestamp=timestamp)
+			await self.bot.get_channel(
+				int(self.bot.config[str(
+					ctx.message.guild.id)]["pending_channel"])
+			).send(embed=embed)
 		runs = runs2
 		gameID = gameID2
-	embed_stats = discord.Embed(title='Pending Run Stats', description=f"Full Game Runs: {mcbe_runs}\nIndividual Level Runs: {mcbeil_runs}\nCategory Extension Runs: {mcbece_runs}", color=16711680 + i * 60)
-	await self.bot.get_channel(int(self.bot.config[str(ctx.message.guild.id)]["pending_channel"])).send(embed=embed_stats)
+	embed_stats = discord.Embed(
+		title='Pending Run Stats',
+		description=
+		f"Full Game Runs: {mcbe_runs}\nIndividual Level Runs: {mcbeil_runs}\nCategory Extension Runs: {mcbece_runs}",
+		color=16711680 + i * 60)
+	await self.bot.get_channel(
+		int(self.bot.config[str(ctx.message.guild.id)]["pending_channel"])
+	).send(embed=embed_stats)
 
 
 async def verifyNew(self, apiKey=None, userID=None):
-	if apiKey==None:
+	if apiKey == None:
 		head = {
-		"Accept": "application/json",
-		"User-Agent": "mcbeDiscordBot/1.0"
+			"Accept": "application/json",
+			"User-Agent": "mcbeDiscordBot/1.0"
 		}
 	else:
 		head = {
-		"X-API-Key": apiKey,
-		"Accept": "application/json",
-		"User-Agent": "mcbeDiscordBot/1.0"
+			"X-API-Key": apiKey,
+			"Accept": "application/json",
+			"User-Agent": "mcbeDiscordBot/1.0"
 		}
 	server = self.bot.get_guild(574267523869179904)
 	# Troll is mentally challenged I guess ¯\_(ツ)_/¯
@@ -149,11 +174,13 @@ async def verifyNew(self, apiKey=None, userID=None):
 	data = json.loads(Path('./api_keys.json').read_text())
 
 	if str(user.id) in data:
-		pbs = requests.get(f"https://www.speedrun.com/api/v1/users/{data[str(user.id)]}/personal-bests", headers=head)
+		pbs = requests.get(
+			f"https://www.speedrun.com/api/v1/users/{data[str(user.id)]}/personal-bests",
+			headers=head)
 		pbs = json.loads(pbs.text)
 	else:
-		r = requests.get(
-			'https://www.speedrun.com/api/v1/profile', headers=head)
+		r = requests.get('https://www.speedrun.com/api/v1/profile',
+						 headers=head)
 		# print(r.text)
 		if r.status_code >= 400:
 			await user.send(f"```json\n{r.text}```")
@@ -190,8 +217,8 @@ async def verifyNew(self, apiKey=None, userID=None):
 	else:
 		await server.get_member(user.id).remove_roles(RunneRole)
 
-class Src(commands.Cog):
 
+class Src(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 		self.checker.start()
@@ -203,7 +230,10 @@ class Src(commands.Cog):
 	@commands.guild_only()
 	async def pending(self, ctx):
 		async with ctx.typing():
-			await self.bot.get_channel(int(self.bot.config[str(ctx.message.guild.id)]["pending_channel"])).purge(limit=500)
+			await self.bot.get_channel(
+				int(self.bot.config[str(
+					ctx.message.guild.id)]["pending_channel"])).purge(limit=500
+																	  )
 			await pendingRuns(self, ctx)
 
 	@commands.command(description="Reject runs quickly")
@@ -230,7 +260,9 @@ class Src(commands.Cog):
 		if apiKey == None:
 			data = json.loads(Path('./api_keys.json').read_text())
 			if not str(ctx.author.id) in data:
-				await ctx.send(f"Please try again this command by getting an apiKey from https://www.speedrun.com/api/auth then do `{ctx.prefix}verify <apiKey>` in my DMs or anywhere in this server. \nBe careful who you share this key with. To learn more check out https://github.com/speedruncomorg/api/blob/master/authentication.md")
+				await ctx.send(
+					f"Please try again this command by getting an apiKey from https://www.speedrun.com/api/auth then do `{ctx.prefix}verify <apiKey>` in my DMs or anywhere in this server. \nBe careful who you share this key with. To learn more check out https://github.com/speedruncomorg/api/blob/master/authentication.md"
+				)
 				return
 		if ctx.guild != None:
 			await ctx.message.delete()
@@ -242,7 +274,7 @@ class Src(commands.Cog):
 	@tasks.loop(minutes=10.0)
 	async def checker(self):
 		data = json.loads(Path('./api_keys.json').read_text())
-		for key,value in data.items():
+		for key, value in data.items():
 			await verifyNew(self, None, key)
 
 
