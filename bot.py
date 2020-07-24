@@ -60,6 +60,12 @@ class BedrockBot(commands.Bot):
 			except json.decoder.JSONDecodeError:
 				self.blacklist = []
 
+		with open('video_blacklist.json', 'r') as f:
+			try:
+				self.video_blacklist = json.load(f)
+			except json.decoder.JSONDecodeError:
+				self.video_blacklist = []
+
 		self.logger.warning(f'Online: {self.user} (ID: {self.user.id})')
 
 	async def on_message(self, message):
