@@ -6,6 +6,26 @@ from colorama import init as init_colorama
 from bot import BedrockBot
 
 
+def check_jsons():
+	try:
+		f = open('config.json', 'r')
+	except FileNotFoundError:
+		token = input('BOT SETUP - Enter bot token: ')
+		with open('config.json', 'w+') as f:
+			json.dump({"token": token}, f, indent=4)
+
+	try:
+		f = open('blacklist.json', 'r')
+	except FileNotFoundError:
+		with open('blacklist.json', 'w+') as f:
+			json.dump([], f, indent=4)
+
+	try:
+		f = open('video_blacklist.json', 'r')
+	except FileNotFoundError:
+		with open('video_blacklist.json', 'w+') as f:
+			json.dump([], f, indent=4)
+
 def setup_logging():
 	FORMAT = '%(asctime)s - [%(levelname)s]: %(message)s'
 	DATE_FORMAT = '%d/%m/%Y (%H:%M:%S)'
@@ -33,5 +53,7 @@ if __name__ == "__main__":
 	init_colorama(autoreset=True)
 
 	setup_logging()
+
+	check_jsons()
 
 	run_bot()
