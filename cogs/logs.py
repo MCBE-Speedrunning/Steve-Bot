@@ -19,7 +19,7 @@ class Logs(commands.Cog):
 			color = message.author.color
 		channel = self.bot.get_channel(int(self.bot.config[str(message.guild.id)]["logs_channel"]))
 		embed = discord.Embed(
-			title='Deleted Message',
+			title='**Deleted Message**',
 			color=color,
 			timestamp=message.created_at
 		)
@@ -43,7 +43,7 @@ class Logs(commands.Cog):
 		else:
 			color = before.author.color
 		embed = discord.Embed(
-			title='Edited Message',
+			title='**Edited Message**',
 			color=color,
 			timestamp=after.edited_at
 		)
