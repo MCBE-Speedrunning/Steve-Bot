@@ -33,7 +33,7 @@ def get_prefix(bot, message):
 class BedrockBot(commands.Bot):
 
 	def __init__(self):
-		super().__init__(command_prefix=get_prefix, case_insensitive=True)
+		super().__init__(command_prefix=get_prefix, case_insensitive=True, allowed_mentions=discord.AllowedMentions(everyone=False, users=True, roles=False))
 		self.logger = logging.getLogger('discord')
 		self.messageBlacklist = []
 		self.session = aiohttp.ClientSession()
@@ -59,6 +59,12 @@ class BedrockBot(commands.Bot):
 				self.blacklist = json.load(f)
 			except json.decoder.JSONDecodeError:
 				self.blacklist = []
+
+		with open('video_blacklist.json', 'r') as f:
+			try:
+				self.video_blacklist = json.load(f)
+			except json.decoder.JSONDecodeError:
+				self.video_blacklist = []
 
 		self.logger.warning(f'Online: {self.user} (ID: {self.user.id})')
 

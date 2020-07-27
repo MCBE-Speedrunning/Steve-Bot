@@ -1,8 +1,9 @@
-__pycache__
-config.json
-discord.log
-api_keys.json
 .vscode/
-leaderboard.png
+__pycache__/
 downloads/
+api_keys.json
+config.json
 blacklist.json
+video_blacklist.json
+discord.log
+leaderboard.png

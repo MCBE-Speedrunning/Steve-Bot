@@ -237,6 +237,23 @@ class Admin(commands.Cog):
 		"""Print a config variable, use for testing"""
 		await ctx.send(self.bot.config[str(ctx.message.guild.id)][key])
 
+	@commands.command()
+	@commands.check(is_mod)
+	async def blacklistvideo(self, ctx, uri):
+		"""Set runs from a specific url to be auto rejected"""
+		with open('video_blacklist.json', 'w') as f:
+			self.bot.video_blacklist.append(uri)
+			json.dump(self.bot.video_blacklist, f, indent=4)
+		await ctx.send(f'Blacklisted runs from `{uri}`')
+
+	@commands.command()
+	@commands.check(is_mod)
+	async def video_blacklist(self, ctx):
+		"""Sends a list of blacklisted uris"""
+		message = '```The following URIs are blacklisted:\n'
+		for uri in self.bot.video_blacklist:
+			message += f'{uri}, '
+		await ctx.send(f'{message[:-2]}```')
 
 def setup(bot):
 	bot.add_cog(Admin(bot))

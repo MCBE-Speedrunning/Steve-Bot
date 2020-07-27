@@ -118,7 +118,7 @@ class Utils(commands.Cog):
 				return
 		else:
 			await ctx.send(error)
-			#await ctx.send(f"{ctx.message.author.display_name}, you have to wait {round(error.retry_after, 7)} seconds before using this again.")
+			#await ctx.send(f"{discord.utils.escape_mentions(ctx.message.author.display_name)}, you have to wait {round(error.retry_after, 7)} seconds before using this again.")
 
 	@commands.command()
 	async def findsleep(self, ctx):
@@ -147,15 +147,15 @@ class Utils(commands.Cog):
 
 		# Add extra comment based on number of sleepHrs
 		if sleepHrs == 0:
-						await ctx.send(f"{ctx.message.author.display_name} -> your sleep is 0 hours long - nice try \:D")
+						await ctx.send(f"{discord.utils.escape_mentions(ctx.message.author.display_name)} -> your sleep is 0 hours long - nice try \:D")
 		elif sleepHrs <= 5:
 			if sleepHrs == 1:
 				s = ''
 			else:
 				s = 's'
-			await ctx.send(f"{ctx.message.author.display_name} -> your sleep is {sleepHrs} hour{s} long - {lessSleepMsg[randint(0, len(lessSleepMsg) - 1)]}")
+			await ctx.send(f"{discord.utils.escape_mentions(ctx.message.author.display_name)} -> your sleep is {sleepHrs} hour{s} long - {lessSleepMsg[randint(0, len(lessSleepMsg) - 1)]}")
 		else:
-			await ctx.send(f"{ctx.message.author.display_name} -> your sleep is {sleepHrs} hours long - {moreSleepMsg[randint(0, len(moreSleepMsg) - 1)]}")
+			await ctx.send(f"{discord.utils.escape_mentions(ctx.message.author.display_name)} -> your sleep is {sleepHrs} hours long - {moreSleepMsg[randint(0, len(moreSleepMsg) - 1)]}")
 
 	@commands.Cog.listener()
 	async def on_member_join(self, member):
@@ -234,7 +234,7 @@ class Utils(commands.Cog):
 	async def leaderboard_handler(self,ctx,error):
 		if isinstance(error, commands.CommandOnCooldown):
 			#return
-			await ctx.send(f"{ctx.message.author.display_name}, you have to wait {round(error.retry_after, 2)} seconds before using this again.")
+			await ctx.send(f"{discord.utils.escape_mentions(ctx.message.author.display_name)}, you have to wait {round(error.retry_after, 2)} seconds before using this again.")
 
 	@commands.cooldown(1, 60, commands.BucketType.guild)
 	@commands.command()
