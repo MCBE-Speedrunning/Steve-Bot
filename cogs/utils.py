@@ -225,10 +225,12 @@ class Utils(commands.Cog):
 	async def leaderboard(self, ctx):
 		"""Leaderboard of the people that matter"""
 		async with ctx.typing():
-			lbFunc = functools.partial(save_leaderboard)
-			await self.bot.loop.run_in_executor(None, lbFunc)
-			await ctx.send(file=discord.File("leaderboard.png"))
-
+			try:
+				lbFunc = functools.partial(save_leaderboard)
+				await self.bot.loop.run_in_executor(None, lbFunc)
+				await ctx.send(file=discord.File("leaderboard.png"))
+			except:
+				await ctx.send("https://aninternettroll.github.io/mcbeVerifierLeaderboard/")
 
 	@leaderboard.error
 	async def leaderboard_handler(self,ctx,error):

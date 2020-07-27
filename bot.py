@@ -13,6 +13,7 @@ extensions = [
 	"cogs.trans",
 	"cogs.player",
 	"cogs.general",
+	"cogs.webserver",
 	"cogs.logs"
 ]
 

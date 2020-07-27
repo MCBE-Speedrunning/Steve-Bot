@@ -1,5 +1,5 @@
 asyncio==3.4.3
-discord.py>=discord.py==1.4.0a2409+gb77af19
+discord.py>=1.4.0a2409+gb77af19
 colorama==0.4.3
 GitPython==2.1.15
 google-api-core==1.17.0
