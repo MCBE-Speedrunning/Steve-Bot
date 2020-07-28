@@ -42,12 +42,10 @@ class BedrockBot(commands.Bot):
 		with open('custom_commands.json', 'r') as f:
 			self.custom_commands = json.load(f)
 
-		for extension in extensions:
-			self.load_extension(extension)
-
 		with open('config.json', 'r') as f:
 			self.config = json.load(f)
 			config = self.config
+
 
 	async def on_ready(self):
 		self.uptime = datetime.datetime.utcnow()
@@ -66,6 +64,9 @@ class BedrockBot(commands.Bot):
 				self.video_blacklist = json.load(f)
 			except json.decoder.JSONDecodeError:
 				self.video_blacklist = []
+
+		for extension in extensions:
+			self.load_extension(extension)
 
 		self.logger.warning(f'Online: {self.user} (ID: {self.user.id})')
 
