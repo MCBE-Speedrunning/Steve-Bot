@@ -111,8 +111,10 @@ async def pendingRuns(self, ctx):
 						if value["data"][0]["names"][
 								"international"] in self.bot.runs_blacklist[
 									"players"]:
-							await rejectRun(self, self.bot.config['api_key'],
-											ctx, run_id, 'Banned player')
+							await rejectRun(
+								self, self.bot.config['api_key'], ctx, run_id,
+								'Detected as a banned player by our automatic filter'
+							)
 						elif value["data"][0]['rel'] == 'guest':
 							player = value["data"][0]['name']
 						else:
