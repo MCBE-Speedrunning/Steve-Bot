@@ -4,6 +4,6 @@ downloads/
 api_keys.json
 config.json
 blacklist.json
-video_blacklist.json
+runs_blacklist.json
 discord.log
 leaderboard.png
