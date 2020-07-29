@@ -107,8 +107,9 @@ async def pendingRuns(self, ctx):
 								self, self.bot.config['api_key'], ctx, run_id,
 								'Detected as spam by our automatic filter')
 					if key == 'players':
-						if value["data"[0]["names"]["international"] in self.bot.runs_blacklist["players"]:
-							await rejectRun(self, self.bot.config['api_key'], ctx, run_id, 'Banned player. https://www.speedrun.com/mcbe/thread/5cuo8/1#d2m6x')
+						if value["data"][0]["names"]["international"] in self.bot.runs_blacklist["players"]:
+							await rejectRun(self, self.bot.config['api_key'], ctx, run_id,
+								'Banned player. https://www.speedrun.com/mcbe/thread/5cuo8/1#d2m6x')
 						elif value["data"][0]['rel'] == 'guest':
 							player = value["data"][0]['name']
 						else:
