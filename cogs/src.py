@@ -22,7 +22,7 @@ async def rejectRun(self, apiKey, ctx, run, reason):
 					 },
 					 data=json.dumps(reject))
 	if r.status_code == 200 or r.status_code == 204:
-		await ctx.send(f'Run rejected succesfully for {reason}')
+		await ctx.send(f'Run rejected succesfully for `{reason}`')
 	else:
 		await ctx.send("Something went wrong")
 		await ctx.message.author.send(
@@ -102,14 +102,17 @@ async def pendingRuns(self, ctx):
 					if key == 'category' and not level:
 						categoryName = value["data"]["name"]
 					if key == 'videos':
-						if value['links'][0]['uri'] in self.bot.runs_blacklist["videos"]:
+						if value['links'][0]['uri'] in self.bot.runs_blacklist[
+								"videos"]:
 							await rejectRun(
 								self, self.bot.config['api_key'], ctx, run_id,
 								'Detected as spam by our automatic filter')
 					if key == 'players':
-						if value["data"][0]["names"]["international"] in self.bot.runs_blacklist["players"]:
-							await rejectRun(self, self.bot.config['api_key'], ctx, run_id,
-								'Banned player. https://www.speedrun.com/mcbe/thread/5cuo8/1#d2m6x')
+						if value["data"][0]["names"][
+								"international"] in self.bot.runs_blacklist[
+									"players"]:
+							await rejectRun(self, self.bot.config['api_key'],
+											ctx, run_id, 'Banned player')
 						elif value["data"][0]['rel'] == 'guest':
 							player = value["data"][0]['name']
 						else:
