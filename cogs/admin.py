@@ -292,7 +292,7 @@ class Admin(commands.Cog):
     async def blacklistplayer(self, ctx, player):
         """Set runs from a specific player to be auto rejected"""
         with open('runs_blacklist.json', 'w') as f:
-            self.bot.runs_blacklist["players"].append(uri)
+            self.bot.runs_blacklist["players"].append(player)
             json.dump(self.bot.runs_blacklist, f, indent=4)
         await ctx.send(f'Blacklisted runs from `{player}`')
 
