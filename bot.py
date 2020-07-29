@@ -14,7 +14,8 @@ extensions = [
 	"cogs.player",
 	"cogs.general",
 	"cogs.webserver",
-	"cogs.logs"
+	"cogs.logs",
+	"cogs.twitter"
 ]
 
 

@@ -2,9 +2,13 @@ import json
 from discord.ext import commands, tasks
 import discord
 import tweepy
-import asyncio
+import requests
 
 class StreamListener(tweepy.StreamListener):
+	def __init__(self):
+		with open('./config.json') as f:
+			self.config = json.load(f)
+
 	def on_error(self, status_code):
 		if status_code == 420:
 			print("Rate limit reached. ")
@@ -12,26 +16,23 @@ class StreamListener(tweepy.StreamListener):
 			return False
 
 	def on_data(self, data):
-		global channelTweet
 		data = json.loads(data)
 		tweetUser = data['user']['screen_name']
 		tweetID = data['id_str']
 		tweetLink = f'https://twitter.com/{tweetUser}/status/{tweetID}'
-		loop = asyncio.get_event_loop()
-		try:
-			loop.run_until_complete(channelTweet.send(tweetLink))
-		finally:
-			loop.run_until_complete(loop.shutdown_asyncgens())
-			loop.close()
+		body = {
+			"content": tweetLink
+		}
+		global config
+		r = requests.post(self.config['574267523869179904']['tweetWebhook'], headers={"Content-Type": "application/json"}, data=json.dumps(body))#config['574267523869179904']['tweetWebhook'], data=json.dumps(body))
+		print(r.status_code)
+		print(r.text)
 		#print(json.dumps(data, indent='\t'))
 
 
 class Twitter(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
-
-		global channelTweet
-		channelTweet = self.bot.get_channel(737713121447378965)
 
 		auth = tweepy.OAuthHandler(self.bot.config['twitter']['consumer_key'], self.bot.config['twitter']['consumer_secret'])
 		auth.set_access_token(self.bot.config['twitter']['access_token'], self.bot.config['twitter']['access_token_secret'])
