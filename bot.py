@@ -7,15 +7,8 @@ import datetime
 import json
 
 extensions = [
-	"cogs.utils",
-	"cogs.admin",
-	"cogs.src",
-	"cogs.trans",
-	"cogs.player",
-	"cogs.general",
-	"cogs.webserver",
-	"cogs.logs",
-	"cogs.twitter"
+	"cogs.utils", "cogs.admin", "cogs.src", "cogs.trans", "cogs.player",
+	"cogs.general", "cogs.webserver", "cogs.logs", "cogs.twitter"
 ]
 
 
@@ -32,10 +25,13 @@ def get_prefix(bot, message):
 	# If we are in a guild, we allow for the user to mention us or use any of the prefixes in our list.
 	return commands.when_mentioned_or(*prefixes)(bot, message)
 
-class BedrockBot(commands.Bot):
 
+class BedrockBot(commands.Bot):
 	def __init__(self):
-		super().__init__(command_prefix=get_prefix, case_insensitive=True, allowed_mentions=discord.AllowedMentions(everyone=False, users=True, roles=False))
+		super().__init__(command_prefix=get_prefix,
+						 case_insensitive=True,
+						 allowed_mentions=discord.AllowedMentions(
+							 everyone=False, users=True, roles=False))
 		self.logger = logging.getLogger('discord')
 		self.messageBlacklist = []
 		self.session = aiohttp.ClientSession()
@@ -46,7 +42,6 @@ class BedrockBot(commands.Bot):
 		with open('config.json', 'r') as f:
 			self.config = json.load(f)
 			config = self.config
-
 
 	async def on_ready(self):
 		self.uptime = datetime.datetime.utcnow()
@@ -60,11 +55,11 @@ class BedrockBot(commands.Bot):
 			except json.decoder.JSONDecodeError:
 				self.blacklist = []
 
-		with open('video_blacklist.json', 'r') as f:
+		with open('runs_blacklist.json', 'r') as f:
 			try:
-				self.video_blacklist = json.load(f)
+				self.runs_blacklist = json.load(f)
 			except json.decoder.JSONDecodeError:
-				self.video_blacklist = []
+				self.runs_blacklist = {"videos": [], "players": []}
 
 		for extension in extensions:
 			self.load_extension(extension)

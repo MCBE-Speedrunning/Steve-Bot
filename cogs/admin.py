@@ -241,18 +241,32 @@ class Admin(commands.Cog):
 	@commands.check(is_mod)
 	async def blacklistvideo(self, ctx, uri):
 		"""Set runs from a specific url to be auto rejected"""
-		with open('video_blacklist.json', 'w') as f:
-			self.bot.video_blacklist.append(uri)
+		with open('runs_blacklist.json', 'w') as f:
+			self.bot.video_blacklist["videos"].append(uri)
 			json.dump(self.bot.video_blacklist, f, indent=4)
 		await ctx.send(f'Blacklisted runs from `{uri}`')
 
 	@commands.command()
 	@commands.check(is_mod)
-	async def video_blacklist(self, ctx):
-		"""Sends a list of blacklisted uris"""
+	async def blacklistplayer(self, ctx, player):
+		"""Set runs from a specific player to be auto rejected"""
+		with open('runs_blacklist.json', 'w') as f:
+			self.bot.video_blacklist["players"].append(uri)
+			json.dump(self.bot.video_blacklist, f, indent=4)
+		await ctx.send(f'Blacklisted runs from `{player}`')
+
+	@commands.command()
+	@commands.check(is_mod)
+	async def runs_blacklist(self, ctx):
+		"""Sends a list of blacklisted videos and players"""
 		message = '```The following URIs are blacklisted:\n'
-		for uri in self.bot.video_blacklist:
+		for uri in self.bot.runs_blacklist["videos"]:
 			message += f'{uri}, '
+		await ctx.send(f'{message[:-2]}```')
+
+		message = '```The following players are blacklisted:\n'
+		for player in self.bot.runs_blacklist["players"]:
+			message += f'{player}, '
 		await ctx.send(f'{message[:-2]}```')
 
 def setup(bot):
