@@ -17,8 +17,12 @@ class StreamListener(tweepy.StreamListener):
 
 	def on_data(self, data):
 		data = json.loads(data)
-		tweetUser = data['user']['screen_name']
-		tweetID = data['id_str']
+		try:
+			tweetUser = data['tweet']['user']['screen_name']
+			tweetID = data['tweet']['id_str']
+		except:
+			tweetUser = data['user']['screen_name']
+			tweetID = data['id_str']
 		tweetLink = f'https://twitter.com/{tweetUser}/status/{tweetID}'
 		body = {
 			"content": tweetLink
