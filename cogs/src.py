@@ -72,6 +72,7 @@ async def pendingRuns(self, ctx):
 	mcbe_runs = 0
 	mcbeil_runs = 0
 	mcbece_runs = 0
+	runs_to_reject = []
 	head = {"Accept": "application/json", "User-Agent": "mcbeDiscordBot/1.0"}
 	gameID = 'yd4ovvg1'  # ID of Minecraft bedrock
 	gameID2 = 'v1po7r76'  # ID of Category extension
@@ -111,10 +112,7 @@ async def pendingRuns(self, ctx):
 						if value["data"][0]["names"][
 								"international"] in self.bot.runs_blacklist[
 									"players"]:
-							await rejectRun(
-								self, self.bot.config['api_key'], ctx, run_id,
-								'Detected as a banned player by our automatic filter'
-							)
+							runs_to_reject.append([run_id, value['data'][0]['names']['international']])
 						elif value["data"][0]['rel'] == 'guest':
 							player = value["data"][0]['name']
 						else:
@@ -157,6 +155,9 @@ async def pendingRuns(self, ctx):
 	await self.bot.get_channel(
 		int(self.bot.config[str(ctx.message.guild.id)]["pending_channel"])
 	).send(embed=embed_stats)
+
+	for run in runs_to_reject:
+		await rejectRun(self, self.bot.config['api_key'], ctx, run[0], f'Detected as a banned player ({run[1]}) by our automatic filter')
 
 
 async def verifyNew(self, apiKey=None, userID=None):
