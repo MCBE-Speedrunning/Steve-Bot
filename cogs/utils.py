@@ -159,12 +159,18 @@ class Utils(commands.Cog):
 
 	@commands.Cog.listener()
 	async def on_member_join(self, member):
+		if member.id == 640933433215811634:
+			await member.edit(nick="JoetheSheepFucker")
 		def check(msg):
 			return msg.author == member and msg.type != discord.MessageType.new_member
 		msg = await self.bot.wait_for("message", check=check, timeout=300)
 		await msg.channel.send("<:PeepoPog:732172337956257872>")
+	
+	@commands.Cog.listener()
+	async def on_member_update(self, before, after):
+		if after.id == 640933433215811634:
+			await after.edit(nick="JoetheSheepFucker")
 
-			
 	@commands.Cog.listener()
 	async def on_message(self, message):
 		if not message.guild:
