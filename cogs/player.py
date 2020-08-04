@@ -109,7 +109,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
 		loop = loop or asyncio.get_event_loop()
 		requester = data['requester']
 
-		to_run = partial(ytdl.extract_info, url=data['webpage_url'], download=False)
+		to_run = partial(ytdl.extract_info, url=data['webpage_url'])
 		data = await loop.run_in_executor(None, to_run)
 
 		return cls(discord.FFmpegPCMAudio(data['url'], **ffmpegopts), data=data, requester=requester)
@@ -197,7 +197,7 @@ class Player(commands.Cog):
 
 	def __init__(self, bot):
 		self.bot = bot
-		self.cleanup.start()
+		#self.removedownloads.start()
 		self.players = {}
 
 	async def cleanup(self, guild):
@@ -249,7 +249,7 @@ class Player(commands.Cog):
 
 		return player
 
-	@commands.command(name='connectvc', aliases=['join'])
+	@commands.command(name='connect', aliases=['join'])
 	async def connect_(self, ctx, *, channel: discord.VoiceChannel=None):
 		"""Connect to voice.
 
@@ -307,7 +307,7 @@ class Player(commands.Cog):
 
 		# If download is False, source will be a dict which will be used later to regather the stream.
 		# If download is True, source will be a discord.FFmpegPCMAudio with a VolumeTransformer.
-		source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop, download=False)
+		source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop)
 
 		await player.queue.put(source)
 
@@ -434,10 +434,11 @@ class Player(commands.Cog):
 		await self.cleanup(ctx.guild)
 		
 	@tasks.loop(hours=10.0)
-	async def cleanup(self):
+	async def removedownloads(self):
 		for p in Path("./downloads/").glob("*"):
 			p.unlink()
 
 
 def setup(bot):
 	bot.add_cog(Player(bot))
+
