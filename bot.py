@@ -48,8 +48,8 @@ class ziBot(commands.Bot):
             command = message.content.split()[0]
         except IndexError:
             pass
-        self.logger.warning('Message from {message.author}: {message.content} \n on {message.channel}')
-        print('Message from {0.author}: {0.content} \n on {0.channel}'.format(message))
+        self.logger.warning('\nMessage from {message.author}: {message.content} \n on {message.channel}')
+        print('\nMessage from {0.author}: {0.content} \n on {0.channel}'.format(message))
 
     def run(self):
         super().run(self.config["token"], reconnect=True)
