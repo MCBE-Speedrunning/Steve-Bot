@@ -15,6 +15,7 @@ from selenium.webdriver.chrome.options import Options
 from PIL import Image
 from PIL import ImageFilter
 import functools
+import asyncio
 
 def set_viewport_size(driver, width, height):
 	window_size = driver.execute_script("""
