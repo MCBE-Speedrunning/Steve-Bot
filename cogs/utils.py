@@ -196,7 +196,9 @@ class Utils(commands.Cog):
 			['Samantha', self.bot.get_user(226312219787264000), datetime.date(2020, 6, 24)],
 			['Scott', self.bot.get_user(223937483774230528), datetime.date(2020, 6, 23)],
 						['Sky', self.bot.get_user(329538915805691905), datetime.date(2020, 6, 24)],
-			['Thomas', self.bot.get_user(280428276810383370), datetime.date(2020, 9, 29)]
+			['Thomas', self.bot.get_user(280428276810383370), datetime.date(2020, 9, 29)],
+			['Samantha', self.bot.get_user(536071288859656193), datetime.date(2020, 8, 23)],
+			['Landen', self.bot.get_user(654025117025828885), datetime.date(2020, 8, 25)]
 		]
 
 
