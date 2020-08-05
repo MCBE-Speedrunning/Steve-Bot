@@ -7,7 +7,7 @@ class Admin(commands.Cog):
         self.bot = bot
 
     @commands.command(aliases=['quit'], hidden=True)
-    @commands.has_any_role("Server Moderator","Zi")
+    @commands.has_any_role("Zi")
     async def force_close(self, ctx):
         await ctx.send("Self Destructing!")
         await ctx.bot.close()
