@@ -8,13 +8,13 @@ class Admin(commands.Cog):
 
     @commands.command(aliases=['quit'], hidden=True)
     @commands.has_any_role("Server Moderator","Zi")
-    async def force_exit(self, ctx):
+    async def force_close(self, ctx):
         await ctx.send("Self Destructing!")
         await ctx.bot.close()
 
-    @commands.command(aliases=['unload'], hidden=True)
+    @commands.command(hidden=True)
     @commands.has_any_role("Server Moderator","Zi")
-    async def _unload(self, ctx, ext):
+    async def unload(self, ctx, ext):
         await ctx.send(f"Unloading {ext}...")
         try:
             self.bot.unload_extension(f'cogs.{ext}')
@@ -26,9 +26,9 @@ class Admin(commands.Cog):
         except commands.ExtensionFailed:
             await ctx.send(f"{ext} failed to unload!")
 
-    @commands.command(aliases=['reload'], hidden=True)
+    @commands.command(hidden=True)
     @commands.has_any_role("Server Moderator","Zi")
-    async def _reload(self, ctx, ext):
+    async def reload(self, ctx, ext):
         await ctx.send(f"Reloading {ext}...")
         try:
             self.bot.reload_extension(f'cogs.{ext}')
@@ -40,9 +40,9 @@ class Admin(commands.Cog):
         except commands.ExtensionFailed:
             await ctx.send(f"{ext} failed to reload!")
 
-    @commands.command(aliases=['load'], hidden=True)
+    @commands.command(hidden=True)
     @commands.has_any_role("Server Moderator","Zi")
-    async def _load(self, ctx, ext):
+    async def load(self, ctx, ext):
         await ctx.send(f"Loading {ext}...")
         try:
             self.bot.load_extension(f"cogs.{ext}")
@@ -52,9 +52,9 @@ class Admin(commands.Cog):
         except commands.ExtensionFailed:
             await ctx.send(f"{ext} failed to load!")
 
-    @commands.command(aliases=['clearchat'], hidden=True)
+    @commands.command(aliases=['cc'], hidden=True)
     @commands.has_any_role("Server Moderator","Zi")
-    async def _clearchat(self, ctx, numb: int=50):
+    async def clearchat(self, ctx, numb: int=50):
         deleted_msg = await ctx.message.channel.purge(limit=int(numb)+1, check=None, before=None, after=None, around=None, oldest_first=False, bulk=True)
 
         msg_num = max(len(deleted_msg) - 1, 0)

@@ -13,13 +13,11 @@ class Welcome(commands.Cog):
         server = member.guild
         welcome_channel = self.bot.get_channel(740051039499059271)
         member_role = discord.utils.get(member.guild.roles, name="Member")
-        await member.add_roles(member_role)
+        try:
+            await member.add_roles(member_role)
+        except discord.Forbidden:
+            print("Add manage roles perm to the bot!")
         await welcome_channel.send(f"Welcome {member.mention}, to {server.name}! <:PogChamp:740102448047194152>")
-
-    @commands.command(aliases=['test'])
-    async def _test(self, ctx):
-        welcome_channel = self.bot.get_channel(740051039499059271)
-        await welcome_channel.send("test")
 
 def setup(bot):
     bot.add_cog(Welcome(bot))
