@@ -13,7 +13,7 @@ class General(commands.Cog):
     
     @commands.command(aliases=['source'])
     async def sauce(self, ctx):
-        git_link = "<PutLinkHere>"
+        git_link = "https://github.com/null2264/ziBot"
         await ctx.send(f"ziBot's Source Code: \n {git_link}")
 
 def setup(bot):

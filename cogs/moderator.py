@@ -7,11 +7,13 @@ class Admin(commands.Cog):
         self.bot = bot
 
     @commands.command(aliases=['quit'], hidden=True)
+    @commands.has_any_role("Server Moderator","Zi")
     async def force_exit(self, ctx):
         await ctx.send("Self Destructing!")
         await ctx.bot.close()
 
     @commands.command(aliases=['unload'], hidden=True)
+    @commands.has_any_role("Server Moderator","Zi")
     async def _unload(self, ctx, ext):
         await ctx.send(f"Unloading {ext}...")
         try:
@@ -25,6 +27,7 @@ class Admin(commands.Cog):
             await ctx.send(f"{ext} failed to unload!")
 
     @commands.command(aliases=['reload'], hidden=True)
+    @commands.has_any_role("Server Moderator","Zi")
     async def _reload(self, ctx, ext):
         await ctx.send(f"Reloading {ext}...")
         try:
@@ -38,6 +41,7 @@ class Admin(commands.Cog):
             await ctx.send(f"{ext} failed to reload!")
 
     @commands.command(aliases=['load'], hidden=True)
+    @commands.has_any_role("Server Moderator","Zi")
     async def _load(self, ctx, ext):
         await ctx.send(f"Loading {ext}...")
         try:
@@ -49,6 +53,7 @@ class Admin(commands.Cog):
             await ctx.send(f"{ext} failed to load!")
 
     @commands.command(aliases=['clearchat'], hidden=True)
+    @commands.has_any_role("Server Moderator","Zi")
     async def _clearchat(self, ctx, numb: int=50):
         deleted_msg = await ctx.message.channel.purge(limit=int(numb)+1, check=None, before=None, after=None, around=None, oldest_first=False, bulk=True)
 
