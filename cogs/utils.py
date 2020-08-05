@@ -2,7 +2,7 @@ from discord.ext import commands
 import discord
 import asyncio
 
-class Util(commands.Cog):
+class Utils(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -11,5 +11,5 @@ class Util(commands.Cog):
         await ctx.send(f'Pong! {round(self.bot.latency*1000)}ms')
 
 def setup(bot):
-    bot.add_cog(Util(bot))
+    bot.add_cog(Utils(bot))
 
