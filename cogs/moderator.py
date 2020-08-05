@@ -72,7 +72,10 @@ class Admin(commands.Cog):
     
     @commands.command(hidden=True)
     @commands.has_any_role("Server Moderator","Zi")
-    async def mute(self, ctx, member: discord.Member, reason: str="No Reason", min_muted: int=0):
+    async def mute(self, ctx, member: discord.Member=None, reason: str="No Reason", min_muted: int=0):
+        if member is None:
+            await ctx.send("Please specify the member you want to mute.")
+            return
         muted_role = discord.utils.get(member.guild.roles, name="Muted")
         if self.bot.user == member: # Just why would you want to mute him?
             await ctx.send(f'You\'re not allowed to mute ziBot!')
@@ -89,7 +92,10 @@ class Admin(commands.Cog):
 
     @commands.command(hidden=True)
     @commands.has_any_role("Server Moderator","Zi")
-    async def unmute(self, ctx, member: discord.Member, reason: str="No Reason"):
+    async def unmute(self, ctx, member: discord.Member=None, reason: str="No Reason"):
+        if member is None:
+            await ctx.send("Please specify the member you want to unmute.")
+            return
         muted_role = discord.utils.get(member.guild.roles, name="Muted")
         if muted_role in member.roles:
             await member.remove_roles(muted_role)

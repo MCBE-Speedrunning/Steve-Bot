@@ -12,6 +12,7 @@ class Welcome(commands.Cog):
     async def on_member_join(self, member):
         server = member.guild
         welcome_channel = self.bot.get_channel(740051039499059271)
+        # TODO: find a way to get channel id if possible
         member_role = discord.utils.get(member.guild.roles, name="Member")
         try:
             await member.add_roles(member_role)
