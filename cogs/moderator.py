@@ -92,7 +92,7 @@ class Admin(commands.Cog):
 
     @commands.command(hidden=True)
     @commands.has_any_role("Server Moderator","Zi")
-    async def unmute(self, ctx, member: discord.Member=None, reason: str="No Reason"):
+    async def unmute(self, ctx, member: discord.Member=None):
         if member is None:
             await ctx.send("Please specify the member you want to unmute.")
             return
@@ -102,6 +102,37 @@ class Admin(commands.Cog):
             await ctx.send(f'{member.mention} has been unmuted by {ctx.author.mention}.')
         else:
             await ctx.send(f'{member.mention} is not muted.')
+
+    @commands.command(hidden=True)
+    @commands.has_any_role("Server Moderator","Zi")
+    async def kick(self, ctx, member: discord.Member=None, reason: str="No Reason"): 
+        if member is None:
+            await ctx.send("Please specify the member you want to kick.")
+            return
+        if self.bot.user == member: # Just why would you want to mute him?
+            await ctx.send(f'You\'re not allowed to kick ziBot!')
+        else:
+            await member.send(f'You have been kicked from {ctx.guild.name} for {reason}!')
+            await ctx.guild.kick(member, reason=reason)
+            await ctx.send(f'{member.mention} has been kicked by {ctx.author.mention} for {reason}!')
+    
+    @commands.command(hidden=True)
+    @commands.has_any_role("Server Moderator","Zi")
+    async def ban(self, ctx, member: discord.Member=None, reason: str="No Reason", min_ban: int=0): 
+        if member is None:
+            await ctx.send("Please specify the member you want to ban.")
+            return
+        if self.bot.user == member: # Just why would you want to mute him?
+            await ctx.send(f'You\'re not allowed to ban ziBot!')
+        else:
+            await member.send(f'You have been banned from {ctx.guild.name} for {reason}!')
+            await ctx.guild.ban(member, reason=reason)
+            await ctx.send(f'{member.mention} has been banned by {ctx.author.mention} for {reason}!')
+        
+        if min_ban > 0:
+            await asyncio.sleep(min_ban * 60)
+            await ctx.guild.unban(member, reason="timed out")
+        # TODO: Make unban command?
 
 def setup(bot):
     bot.add_cog(Admin(bot))
