@@ -86,7 +86,7 @@ class Utils(commands.Cog):
 	@commands.cooldown(1, 25, commands.BucketType.guild)
 	@commands.command()
 	async def findseed(self, ctx):
-		"""Test yout luck"""
+		"""Test your luck"""
 		if ctx.message.channel.id != int(self.bot.config[str(ctx.message.guild.id)]["bot_channel"]):
 			await ctx.message.delete()
 			ctx.command.reset_cooldown(ctx)
@@ -163,8 +163,11 @@ class Utils(commands.Cog):
 			await member.edit(nick="JoetheSheepFucker")
 		def check(msg):
 			return msg.author == member and msg.type != discord.MessageType.new_member
-		msg = await self.bot.wait_for("message", check=check, timeout=300)
-		await msg.channel.send("<:PeepoPog:732172337956257872>")
+		try:
+			msg = await self.bot.wait_for("message", check=check, timeout=300)
+			await msg.channel.send("<:PeepoPog:732172337956257872>")
+		except asyncio.TimeoutError:
+			await msg.channel.send("<:pepesadcrash:739927552260440185>")
 	
 	@commands.Cog.listener()
 	async def on_member_update(self, before, after):
@@ -179,7 +182,7 @@ class Utils(commands.Cog):
 			return
 		if message.author.bot:
 			return
-		badWords = ["fair", "f a i r", "ⓕⓐⓘⓡ", "ⓕ ⓐ ⓘ ⓡ"]
+		badWords = ["fair", "ⓕⓐⓘⓡ"]
 		count = 0
 
 		coolKids = [
@@ -212,7 +215,7 @@ class Utils(commands.Cog):
 					self.tries +=1
 
 		for word in badWords:
-			if word in message.content.lower():
+			if word in message.content.lower().replace(" ", ""):
 				count += 1;
 				fair = 'Fair '*count
 		await message.channel.send(fair)
@@ -228,7 +231,7 @@ class Utils(commands.Cog):
 		else:
 			await reportStuff(self, ctx, message)
 
-	@commands.cooldown(1, 20, commands.BucketType.member)
+	@commands.cooldown(1, 20, commands.BucketType.guild)
 	@commands.command()
 	async def leaderboard(self, ctx):
 		"""Leaderboard of the people that matter"""
@@ -255,7 +258,7 @@ class Utils(commands.Cog):
 
 	@commands.command()
 	async def roll(self, ctx, pool):
-		"""Toll the dice"""
+		"""Roll the dice"""
 		await ctx.send(f"You rolled a {randint(0, int(pool))}")
 
 	@commands.command(aliases=['commands', 'allcommands'])

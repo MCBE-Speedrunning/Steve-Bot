@@ -248,18 +248,20 @@ class Src(commands.Cog):
 	@commands.command(description="Reject runs quickly")
 	@commands.check(is_mod)
 	@commands.guild_only()
-	async def reject(self, ctx, apiKey, run, *, reason):
+	async def reject(self, ctx, apiKey, run, *, reason="Rejected using Steve. No additional reason provided"):
+		if apiKey == None:
+			apiKey = self.bot.config['api_key']
 		await rejectRun(self, apiKey, ctx, run, reason)
 
 	@commands.command(description="Approve runs quickly")
 	@commands.check(is_mod)
 	@commands.guild_only()
-	async def approve(self, ctx, apiKey, run, *, reason=None):
+	async def approve(self, ctx, apiKey, run, *, reason="Approved using Steve. No additional reason provided"):
+		if apiKey == None:
+			apiKey = self.bot.config['api_key']
 		await approveRun(self, apiKey, ctx, run, reason)
 
 	@commands.command(description="Delete runs quickly")
-	@commands.check(is_mod)
-	@commands.guild_only()
 	async def delete(self, ctx, apiKey, run):
 		await deleteRun(self, apiKey, ctx, run)
 

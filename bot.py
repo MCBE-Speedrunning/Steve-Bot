@@ -7,8 +7,15 @@ import datetime
 import json
 
 extensions = [
-	"cogs.utils", "cogs.admin", "cogs.src", "cogs.trans", "cogs.player",
-	"cogs.general", "cogs.webserver", "cogs.logs", "cogs.twitter"
+	"cogs.utils", 
+	"cogs.admin", 
+	"cogs.src", 
+	"cogs.trans", 
+	"cogs.player",
+	"cogs.general", 
+	#"cogs.webserver", 
+	#"cogs.twitter", 
+	"cogs.logs"
 ]
 
 
