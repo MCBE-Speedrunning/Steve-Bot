@@ -11,7 +11,7 @@ class Admin(commands.Cog):
     async def force_close(self, ctx):
         await ctx.send("Self Destructing!")
         await ctx.bot.close()
-
+    
     @commands.command(hidden=True)
     @commands.has_any_role("Server Moderator","Zi")
     async def unload(self, ctx, ext):
@@ -69,6 +69,33 @@ class Admin(commands.Cog):
                                                             2 else "s")
 
         await ctx.send(resp)
+    
+    @commands.command(hidden=True)
+    @commands.has_any_role("Server Moderator","Zi")
+    async def mute(self, ctx, member: discord.Member, reason: str="No Reason", min_muted: int=0):
+        muted_role = discord.utils.get(member.guild.roles, name="Muted")
+        if self.bot.user == member: # Just why would you want to mute him?
+            await ctx.send(f'You\'re not allowed to mute ziBot!')
+        else:
+            if muted_role in member.roles:
+                await ctx.send(f'{member.mention} is already muted.')
+            else:
+                await member.add_roles(muted_role)
+                await ctx.send(f'{member.mention} has been muted by {ctx.author.mention} for {reason}!')
+
+        if min_muted > 0:
+            await asyncio.sleep(min_muted * 60)
+            await member.remove_roles(muted_role)
+
+    @commands.command(hidden=True)
+    @commands.has_any_role("Server Moderator","Zi")
+    async def unmute(self, ctx, member: discord.Member, reason: str="No Reason"):
+        muted_role = discord.utils.get(member.guild.roles, name="Muted")
+        if muted_role in member.roles:
+            await member.remove_roles(muted_role)
+            await ctx.send(f'{member.mention} has been unmuted by {ctx.author.mention}.')
+        else:
+            await ctx.send(f'{member.mention} is not muted.')
 
 def setup(bot):
     bot.add_cog(Admin(bot))
