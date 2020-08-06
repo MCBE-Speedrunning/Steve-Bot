@@ -14,6 +14,7 @@ def init_bot():
     bot = ziBot()
     with open('config.json', 'r') as f:
         data=json.load(f)
+    bot.remove_command('help')
     bot.run()
 
 if __name__ == "__main__":
