@@ -11,7 +11,7 @@ extensions = [
 def get_prefix(bot, message):
 	"""A callable Prefix for our bot. This could be edited to allow per server prefixes."""
 
-	prefixes = ['/', '!', '+', '.']
+	prefixes = ['>', '$>']
 
 	# Check to see if we are outside of a guild. e.g DM's etc.
 	# if not message.guild:
