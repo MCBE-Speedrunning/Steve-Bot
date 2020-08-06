@@ -27,8 +27,8 @@ class General(commands.Cog):
                 colour=discord.Colour.orange()
                 )
         # embed.set_author(name=f"{ctx.guild.name} Information")
-        embed.add_field(name="Owner",value=f"{ctx.guild.owner.mention}")
         embed.add_field(name="Created on",value=f"{ctx.guild.created_at.date()}")
+        embed.add_field(name="Created by",value=f"{ctx.guild.owner.mention}")
         embed.set_thumbnail(url=ctx.guild.icon_url)
         _emoji=""
         embed.add_field(name="Members",value=f"{ctx.guild.member_count}")

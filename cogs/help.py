@@ -6,7 +6,7 @@ class Help(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command()
+    @commands.command(aliases=["commands"])
     async def help(self, ctx):
         """Show this message."""
         embed = discord.Embed(
