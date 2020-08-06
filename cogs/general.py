@@ -400,9 +400,7 @@ class General(commands.Cog):
 		prefixes.pop(1)
 		prefixes.pop(1)
 		prefixes.pop(1)
-		output = ""
-		for i in prefixes:
-			output += i+", "
+		output = ", ".join(prefixes)
 
 		await ctx.send(f"My prefixes are {output}")
 
