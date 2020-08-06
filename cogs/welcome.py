@@ -2,6 +2,7 @@ from discord.ext import commands
 import discord
 import asyncio
 import logging
+from random import randint
 
 class Welcome(commands.Cog):
     # Welcome message + set roles when new member joined
@@ -14,11 +15,11 @@ class Welcome(commands.Cog):
         welcome_channel = self.bot.get_channel(740051039499059271)
         # TODO: find a way to get channel id if possible
         member_role = discord.utils.get(member.guild.roles, name="Member")
-        try:
-            await member.add_roles(member_role)
-        except discord.Forbidden:
-            print("Add manage roles perm to the bot!")
-        await welcome_channel.send(f"Welcome {member.mention}, to {server.name}! <:PogChamp:740102448047194152>")
+        welcome_msg=[f"It's a Bird, It's a Plane, It's {member.mention}!",
+                f"Welcome {member.mention}! <:PogChamp:740102448047194152>",
+                f"Good to see you, {member.mention}."]
+        await member.add_roles(member_role)
+        await welcome_channel.send(f"{welcome_msg[randint(0, len(welcome_msg) - 1)]}")
 
 def setup(bot):
     bot.add_cog(Welcome(bot))
