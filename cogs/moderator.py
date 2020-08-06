@@ -28,7 +28,7 @@ class Admin(commands.Cog):
 
     @commands.command(hidden=True)
     @commands.has_any_role("Server Moderator","Zi")
-    async def reload(self, ctx, ext):
+    async def reload(self, ctx, ext: str=None):
         await ctx.send(f"Reloading {ext}...")
         try:
             self.bot.reload_extension(f'cogs.{ext}')
@@ -133,6 +133,6 @@ class Admin(commands.Cog):
             await asyncio.sleep(min_ban * 60)
             await ctx.guild.unban(member, reason="timed out")
         # TODO: Make unban command?
-
+    
 def setup(bot):
     bot.add_cog(Admin(bot))

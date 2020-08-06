@@ -5,7 +5,7 @@ import aiohttp
 import logging
 
 extensions = [
-	"cogs.moderator", "cogs.general", "cogs.welcome", "cogs.utils"
+	"cogs.moderator", "cogs.general", "cogs.welcome", "cogs.utils", "cogs.help"
 ]
 
 def get_prefix(bot, message):
