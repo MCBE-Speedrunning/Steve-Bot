@@ -11,7 +11,7 @@ class Help(commands.Cog):
         """Show this message."""
         embed = discord.Embed(
                     title = "Help",
-                    description = "Bot prefixes are \">\", and \"$>\"",
+                    description = f"*` Bot prefixes are '>' and '$>' `*",
                     colour = discord.Colour.green()
                 )
 
@@ -25,7 +25,6 @@ class Help(commands.Cog):
                 _desc=f"{cmd.help}"
             _cmd = f"{str(cmd)}"
             embed.add_field(name=f"{_cmd}", value=f"{_desc}", inline=False)
-        
 
         await ctx.send(embed=embed)
 
