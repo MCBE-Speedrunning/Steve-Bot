@@ -23,7 +23,7 @@ class Help(commands.Cog):
                 _desc="No description."
             else:
                 _desc=f"{cmd.help}"
-            _cmd = f"{str(cmd)}"
+            _cmd = " | ".join([str(cmd),*cmd.aliases])
             embed.add_field(name=f"{_cmd}", value=f"{_desc}", inline=False)
 
         await ctx.send(embed=embed)
