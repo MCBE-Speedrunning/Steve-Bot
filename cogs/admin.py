@@ -186,7 +186,7 @@ class Admin(commands.Cog):
                     i, ctx.author))
 
     @commands.command()
-    @commands.check(is_botmaster)
+    @commands.check(is_mod)
     async def ban(self,
                   ctx,
                   members: commands.Greedy[discord.Member] = False,
