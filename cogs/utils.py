@@ -267,11 +267,8 @@ class Utils(commands.Cog):
 		"""List all custom commands"""
 		with open('custom_commands.json', 'r') as f:
 			commands = json.load(f)
-			output = '```List of custom commands:\n'
-			for key in commands:
-				output += f'{key}, '
-			output += '```'
-			await ctx.send(output)
+			output = ", ".join([*commands])
+			await ctx.send(f"```List of custom commands:\n{output}```")
 
 def setup(bot):
 	bot.add_cog(Utils(bot))
