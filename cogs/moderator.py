@@ -54,7 +54,7 @@ class Admin(commands.Cog):
 
     @commands.command(aliases=['cc'], hidden=True)
     @commands.has_any_role("Server Moderator","Zi")
-    async def clearchat(self, ctx, numb: int=50):
+    async def clearchat(self, ctx, numb: int=100):
         deleted_msg = await ctx.message.channel.purge(limit=int(numb)+1, check=None, before=None, after=None, around=None, oldest_first=False, bulk=True)
 
         msg_num = max(len(deleted_msg) - 1, 0)
