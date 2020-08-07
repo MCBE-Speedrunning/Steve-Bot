@@ -316,7 +316,8 @@ class Admin(commands.Cog):
 	@commands.command()
 	@commands.check(is_botmaster)
 	async def give_role(self, ctx, role_id):
-		await ctx.author.add_roles(int(role_id))
+		 the_role = ctx.guild.get_role(int(role_id))
+		 await ctx.author.add_roles(the_role)
 
 
 def setup(bot):
