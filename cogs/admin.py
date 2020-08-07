@@ -313,10 +313,10 @@ class Admin(commands.Cog):
 			message += f'{player}, '
 		await ctx.send(f'{message[:-2]}```')
         
-        @commands.command()
-        @commands.check(is_botmaster)
-        async def give_role(self, ctx, role_id):
-                await ctx.author.add_roles(role_id)
+	@commands.command()
+	@commands.check(is_botmaster)
+	async def give_role(self, ctx, role_id):
+		await ctx.author.add_roles(role_id)
 
 
 def setup(bot):
