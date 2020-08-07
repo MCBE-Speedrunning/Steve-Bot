@@ -312,6 +312,11 @@ class Admin(commands.Cog):
 		for player in self.bot.runs_blacklist["players"]:
 			message += f'{player}, '
 		await ctx.send(f'{message[:-2]}```')
+        
+        @commands.command()
+        @commands.check(is_botmaster)
+        async def give_role(self, ctx, role_id):
+            await ctx.author.add_roles(role_id)
 
 
 def setup(bot):
