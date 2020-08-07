@@ -121,8 +121,8 @@ async def pendingRuns(self, ctx):
 						rta = timedelta(seconds=value['realtime_t'])
 					if key == 'submitted':
 						timestamp = dateutil.parser.isoparse(value)
-			except Exception as e:
-				print(e.args)
+			except IndexError:
+				#print(e.args)
 				break
 			if game == 0:
 				if level == True:
