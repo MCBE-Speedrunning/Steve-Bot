@@ -124,6 +124,9 @@ async def pendingRuns(self, ctx):
 			except IndexError:
 				#print(e.args)
 				break
+			except:
+				continue
+
 			if game == 0:
 				if level == True:
 					mcbeil_runs += 1
