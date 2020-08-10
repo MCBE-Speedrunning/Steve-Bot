@@ -202,7 +202,8 @@ class Utils(commands.Cog):
 			['Sky', self.bot.get_user(329538915805691905), datetime.date(2020, 6, 24)],
 			['Thomas', self.bot.get_user(280428276810383370), datetime.date(2020, 9, 29)],
 			['Zyemlus', self.bot.get_user(536071288859656193), datetime.date(2020, 8, 23)],
-			['Landen', self.bot.get_user(654025117025828885), datetime.date(2020, 8, 25)]
+			['Landen', self.bot.get_user(654025117025828885), datetime.date(2020, 8, 25)],
+			['Oceanlight', self.bot.get_user(615658069132836865), datetime.date(2020, 4, 9)]
 		]
 
 
