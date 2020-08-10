@@ -231,7 +231,7 @@ class Admin(commands.Cog):
 		await ctx.send(file=file)
 
 	@commands.command(hidden=True)
-	@commands.check(is_mod)
+	@commands.check(is_botmaster)
 	async def blacklist(self,
 						ctx,
 						members: commands.Greedy[discord.Member] = None):
