@@ -1,8 +1,10 @@
 import json
-from discord.ext import commands, tasks
+
 import discord
-import tweepy
 import requests
+import tweepy
+from discord.ext import commands, tasks
+
 
 class StreamListener(tweepy.StreamListener):
 	def __init__(self):

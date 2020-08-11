@@ -18,19 +18,17 @@ e.g You might like to implement a vote before skipping the song or only allow ad
 Music bots require lots of work, and tuning. Goodluck.
 If you find any bugs feel free to ping me on discord. @Eviee#0666
 """
-import discord
-from discord.ext import commands
-
 import asyncio
 import itertools
 import sys
 import traceback
-from async_timeout import timeout
 from functools import partial
-from youtube_dl import YoutubeDL
 from pathlib import Path
-from discord.ext import tasks
 
+import discord
+from async_timeout import timeout
+from discord.ext import commands, tasks
+from youtube_dl import YoutubeDL
 
 ytdlopts = {
 	'format': 'bestaudio/best',

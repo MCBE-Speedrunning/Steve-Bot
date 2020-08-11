@@ -1,21 +1,20 @@
-from discord.ext import commands
-from discord.ext import tasks
-import discord
-import json
+import asyncio
 import datetime
+import functools
+import json
+from datetime import timedelta
 # forgot to import this and ended up looking mentally unstable
 # troll literally pointed out atleast 4 things I did wrong in 3 lines of code
-from random import choice
-from random import randint
-from datetime import timedelta
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+from random import choice, randint
+
+import discord
+from discord.ext import commands, tasks
 #from PIL.Image import core as Image
 #import image as Image
-from PIL import Image
-from PIL import ImageFilter
-import functools
-import asyncio
+from PIL import Image, ImageFilter
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
 
 def set_viewport_size(driver, width, height):
 	window_size = driver.execute_script("""

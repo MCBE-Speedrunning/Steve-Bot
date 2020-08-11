@@ -1,10 +1,10 @@
-from discord.ext import commands
-import discord
-import logging
-import aiohttp
-
 import datetime
 import json
+import logging
+
+import aiohttp
+import discord
+from discord.ext import commands
 
 extensions = [
 	"cogs.utils", 

@@ -1,9 +1,10 @@
-from discord.ext import commands
-import discord
 import asyncio
 import json
-import git
 import os
+
+import discord
+import git
+from discord.ext import commands
 
 
 class Admin(commands.Cog):

@@ -1,11 +1,15 @@
-from discord.ext import commands
-import discord
 import datetime
-import requests
+import inspect
 import json
-import dateutil.parser
+import os
+import sys
 from random import randint
-import os, sys, inspect
+
+import dateutil.parser
+import discord
+import requests
+from discord.ext import commands
+
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir) 

@@ -1,9 +1,10 @@
+import json
+import os
+
+import aiohttp
+import discord
 from aiohttp import web
 from discord.ext import commands, tasks
-import discord
-import os
-import aiohttp
-import json
 
 app = web.Application()
 routes = web.RouteTableDef()

@@ -1,7 +1,8 @@
-from discord.ext import commands
 import discord
-from google.cloud import translate_v2 as translate
 import six
+from discord.ext import commands
+from google.cloud import translate_v2 as translate
+
 translate_client = translate.Client()
 
 async def translateMsg(text, target="en"):

@@ -1,6 +1,6 @@
 import asyncio
-import logging
 import json
+import logging
 
 from colorama import init as init_colorama
 
