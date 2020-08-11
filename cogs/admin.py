@@ -287,6 +287,14 @@ class Admin(commands.Cog):
 		else:
 			await ctx.send(self.bot.config[str(ctx.message.guild.id)][key])
 
+	@commands.command(aliases=['rmvar'])
+	@commands.check(is_botmaster)
+	async def delvar(self, ctx, key):
+		"""Deletes a config variable, be careful"""
+		with open('config.json', 'w') as f:
+			await ctx.send(f"Removed {self.bot.config[str(ctx.message.guild.id)].pop(key)}")
+			json.dump(self.bot.config, f, indent=4)
+
 	@commands.command()
 	@commands.check(is_mod)
 	async def blacklistvideo(self, ctx, uri):
