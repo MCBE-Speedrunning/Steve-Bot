@@ -278,9 +278,13 @@ class Admin(commands.Cog):
 
 	@commands.command()
 	@commands.check(is_mod)
-	async def printvar(self, ctx, key):
-		"""Print a config variable, use for testing"""
-		await ctx.send(self.bot.config[str(ctx.message.guild.id)][key])
+	async def printvar(self, ctx, key = None):
+		"""Print config variables, use for testing"""
+		if key == None:
+			for key, value in self.bot.config[str(ctx.message.guild.id)].items():
+				ctx.send(f'Key: {key} | Value: {value}')
+		else:
+			await ctx.send(self.bot.config[str(ctx.message.guild.id)][key])
 
 	@commands.command()
 	@commands.check(is_mod)
@@ -313,7 +317,7 @@ class Admin(commands.Cog):
 		for player in self.bot.runs_blacklist["players"]:
 			message += f'{player}, '
 		await ctx.send(f'{message[:-2]}```')
-        
+
 	@commands.command()
 	@commands.check(is_botmaster)
 	async def give_role(self, ctx, role_id):
