@@ -78,6 +78,7 @@ class Utils(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 		self.tries = 1
+		self.pins = []
 
 	@commands.command(description="Pong!", help="Tells the ping of the bot to the discord servers", brief="Tells the ping")
 	async def ping(self, ctx):
@@ -159,7 +160,9 @@ class Utils(commands.Cog):
 
 	@commands.Cog.listener()
 	async def on_reaction_add(self, reaction, user):
-		if reaction.emoji == "⭐":
+		if reaction.emoji == "⭐" and not reaction.message.id in self.pins:
+			self.pins.append(reaction.message.id)
+
 			embed = discord.Embed(title=f"**{reaction.message.clean_content}**", colour=discord.Colour(0xb92c36), url=reaction.message.jump_url, timestamp=reaction.message.created_at)
 
 			for attachement in reaction.message.attachments:
@@ -168,7 +171,7 @@ class Utils(commands.Cog):
 			embed.set_author(name=str(reaction.message.author), icon_url=reaction.message.author.avatar_url_as(format="png"))
 			embed.set_footer(text=reaction.message.id)
 
-			embed.add_field(name="Stars", value=reaction.count)
+			#embed.add_field(name="Stars", value=reaction.count)
 			channel = self.bot.get_channel(int(self.bot.config[str(reaction.message.guild.id)]["pins_channel"]))
 			await channel.send(embed=embed)
 
