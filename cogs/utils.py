@@ -158,6 +158,21 @@ class Utils(commands.Cog):
 			await ctx.send(f"{discord.utils.escape_mentions(ctx.message.author.display_name)} -> your sleep is {sleepHrs} hours long - {moreSleepMsg[randint(0, len(moreSleepMsg) - 1)]}")
 
 	@commands.Cog.listener()
+	async def on_reaction_add(self, reaction, user):
+		if reaction.emoji == "⭐":
+			embed = discord.Embed(title=f"**{reaction.message.clean_content}**", colour=discord.Colour(0xb92c36), url=reaction.message.jump_url, timestamp=reaction.message.created_at)
+
+			for attachement in reaction.message.attachments:
+				if attachement.height:
+					embed.set_image(url=attachement.url)
+			embed.set_author(name=str(reaction.message.author), icon_url=reaction.message.author.avatar_url_as(format="png"))
+			embed.set_footer(text=reaction.message.id)
+
+			embed.add_field(name="Stars", value=reaction.count)
+			channel = self.bot.get_channel(int(self.bot.config[str(reaction.message.guild.id)]["pins_channel"]))
+			await channel.send(embed=embed)
+
+	@commands.Cog.listener()
 	async def on_member_join(self, member):
 		if member.id == 640933433215811634:
 			await member.edit(nick="JoetheSheepFucker")
@@ -167,7 +182,7 @@ class Utils(commands.Cog):
 			msg = await self.bot.wait_for("message", check=check, timeout=300)
 			await msg.channel.send("<:PeepoPog:732172337956257872>")
 		except asyncio.TimeoutError:
-			await msg.channel.send("<:pepesadcrash:739927552260440185>")
+			pass
 	
 	@commands.Cog.listener()
 	async def on_member_update(self, before, after):
