@@ -176,10 +176,10 @@ class Utils(commands.Cog):
 
 	@commands.Cog.listener()
 	async def on_reaction_add(self, reaction, user):
-		if reaction.emoji == "⭐" and not reaction.message.id in self.pins and reaction.count >= 3:
+		if reaction.emoji == "⭐" and not reaction.message.id in self.pins and reaction.count >= 5:
 			self.pins.append(reaction.message.id)
 
-			embed = discord.Embed(title="**New stared message**",
+			embed = discord.Embed(title="**New Starred Message**",
 								  description=reaction.message.content,
 								  colour=discord.Colour(0xb92c36),
 								  url=reaction.message.jump_url,
