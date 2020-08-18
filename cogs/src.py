@@ -10,6 +10,18 @@ from discord.ext import commands, tasks
 from discord.utils import get
 
 
+class SubmittedRun:
+	def __init__(self, game, _id, category, video, players, duration, _type):
+		self.game = game
+		self._id = _id
+		self.category = category
+		self.video = video
+		self.players = players
+		self.duration = duration
+		self._type = _type
+		self.link = f'https://www.speedrun.com/{game}/run/{_id}'
+
+
 async def rejectRun(self, apiKey, ctx, run, reason):
 	await ctx.message.delete()
 	run = run.split('/')[-1]
@@ -69,98 +81,158 @@ async def deleteRun(self, apiKey, ctx, run):
 
 
 async def pendingRuns(self, ctx):
+	def banned_player_coop(run):
+		for player in run.players:
+			if player in self.bot.runs_blacklist["players"]:
+				return True
+		return False
+
+	def duplicate_run(run):
+		for pending_run in pending_runs:
+			if run._id != pending_run._id and run.category == pending_run.category and run.video == pending_run.video and run.duration == pending_run.duration:
+				return True
+		return False
+
+	def get_player_name(player):
+		if player["rel"] == 'user':
+			return player["names"]["international"]
+		else:
+			return player["name"]
+
 	mcbe_runs = 0
 	mcbeil_runs = 0
 	mcbece_runs = 0
+	pending_runs = []
 	runs_to_reject = []
+	game_ids = ['yd4ovvg1', 'v1po7r76']  # [mcbe, mcbece]
 	head = {"Accept": "application/json", "User-Agent": "mcbeDiscordBot/1.0"}
-	gameID = 'yd4ovvg1'  # ID of Minecraft bedrock
-	gameID2 = 'v1po7r76'  # ID of Category extension
-	runsRequest = requests.get(
-		f'https://www.speedrun.com/api/v1/runs?game={gameID}&status=new&max=200&embed=category,players,level&orderby=submitted',
-		headers=head)
-	runs = json.loads(runsRequest.text)
-	runsRequest2 = requests.get(
-		f'https://www.speedrun.com/api/v1/runs?game={gameID2}&status=new&max=200&embed=category,players,level&orderby=submitted',
-		headers=head)
-	runs2 = json.loads(runsRequest2.text)
-	# Use https://www.speedrun.com/api/v1/games?abbreviation=mcbe for ID
 
-	for game in range(2):
-		for i in range(200):
-			leaderboard = ''  # A little ugly but prevents name not defined error
-			level = False
-			try:
-				for key, value in runs['data'][i].items():
-					if key == 'id':
-						run_id = value
-					if key == 'weblink':
-						link = value
-					if key == 'level':
-						if value["data"]:
-							level = True
-							categoryName = value["data"]["name"]
-					if key == 'category' and not level:
-						categoryName = value["data"]["name"]
-					if key == 'videos':
-						if value['links'][0]['uri'] in self.bot.runs_blacklist[
-								"videos"]:
-							await rejectRun(
-								self, self.bot.config['api_key'], ctx, run_id,
-								'Detected as spam by our automatic filter')
-					if key == 'players':
-						if value["data"][0]["names"][
-								"international"] in self.bot.runs_blacklist[
-									"players"]:
-							runs_to_reject.append([run_id, value['data'][0]['names']['international']])
-						elif value["data"][0]['rel'] == 'guest':
-							player = value["data"][0]['name']
-						else:
-							player = value["data"][0]["names"]["international"]
-					if key == 'times':
-						rta = timedelta(seconds=value['realtime_t'])
-					if key == 'submitted':
-						timestamp = dateutil.parser.isoparse(value)
-			except IndexError:
-				#print(e.args)
-				break
-			except:
-				continue
+	for game in game_ids:
+		runs_request = requests.get(
+			f'https://www.speedrun.com/api/v1/runs?game={game}&status=new&max=200&embed=category,players,level&orderby=submitted',
+			headers=head)
+		runs = json.loads(runs_request.text)
 
-			if game == 0:
-				if level == True:
-					mcbeil_runs += 1
-					leaderboard = 'Individual Level Run'
-				else:
-					mcbe_runs += 1
-					leaderboard = "Full Game Run"  # If this doesn't work I'm starting a genocide
-			elif game == 1:
-				leaderboard = "Category Extension Run"
+		for run in runs["data"]:
+			_id = run["id"]
+			duration = timedelta(seconds=run["times"]["realtime_t"])
+
+			if run["videos"] != None:
+				try:
+					video = run["videos"]["links"][0]["uri"]
+				except KeyError:
+					video = run["videos"]["text"]
+			else:
+				video = None
+
+			# Get the category name for each run, while specifiying if its a full game, il, or cat ext run
+			if run["level"]["data"] != []:
+				category = run["level"]["data"]["name"]
+				if game == 'yd4ovvg1':
+					_type = 'Individual Level'
+			else:
+				category = run["category"]["data"]["name"]
+				if game == 'yd4ovvg1':
+					_type = 'Full Game Run'
+
+			if game == 'v1po7r76':
+				_type = 'Category Extension'
+
+			# Set players to a string if solo, or a list if coop
+			if len(run["players"]["data"]) == 1:
+				players = get_player_name(run["players"]["data"][0])
+			else:
+				players = list(
+					map(lambda player: get_player_name(player),
+						run["players"]["data"]))
+
+			pending_run = SubmittedRun(game, _id, category, video, players,
+									   duration, _type)
+			pending_runs.append(pending_run)
+
+	for run in pending_runs:
+		# Reject run if video is blacklisted
+		if run.video in self.bot.runs_blacklist["videos"]:
+			runs_to_reject.append(
+				[run, 'Detected as spam by our automatic filter.'])
+
+		# Reject run if player is banned (solo runs)
+		elif type(
+				run.players
+		) == str and run.players in self.bot.runs_blacklist["players"]:
+			runs_to_reject.append([
+				run,
+				f'Detected as a banned player ({run.players}) run by our automatic filter.'
+			])
+
+		# Reject run if player is banned (coop runs)
+		elif banned_player_coop(run) == True:
+			runs_to_reject.append([
+				run,
+				f'Detected as a banned player ({player}) run by our automatic filter.'
+			])
+
+		# Reject run if duplicate submission
+		elif duplicate_run(run) == True:
+			runs_to_reject.append([
+				run,
+				'Detected as a duplicate submission by our automatic filter.'
+			])
+			pending_runs.remove(run)
+
+		else:
+			if run._type == 'Full Game Run':
+				mcbe_runs += 1
+			elif run._type == 'Individual Level':
+				mcbeil_runs += 1
+			else:
 				mcbece_runs += 1
+
+			# In the case of coop, change the player names from a list to a string for prettier output
+			if type(run.players) == list:
+				run.players = ', '.join(map(str, run.players))
+
 			embed = discord.Embed(
-				title=leaderboard,
-				url=link,
+				title=run._type,
+				url=run.link,
 				description=
-				f"{categoryName} in `{str(rta).replace('000','')}` by **{player}**",
-				color=16711680 + i * 60,
-				timestamp=timestamp)
+				f"{run.category} in `{str(run.duration).replace('000','')}` by **{run.players}**",
+				color=0x9400D3)
 			await self.bot.get_channel(
 				int(self.bot.config[str(
 					ctx.message.guild.id)]["pending_channel"])
 			).send(embed=embed)
-		runs = runs2
-		gameID = gameID2
+
 	embed_stats = discord.Embed(
 		title='Pending Run Stats',
 		description=
 		f"Full Game Runs: {mcbe_runs}\nIndividual Level Runs: {mcbeil_runs}\nCategory Extension Runs: {mcbece_runs}",
-		color=16711680 + i * 60)
+		color=0x000000)
 	await self.bot.get_channel(
 		int(self.bot.config[str(ctx.message.guild.id)]["pending_channel"])
 	).send(embed=embed_stats)
 
 	for run in runs_to_reject:
-		await rejectRun(self, self.bot.config['api_key'], ctx, run[0], f'Detected as a banned player ({run[1]}) by our automatic filter')
+		try:
+			reject = {"status": {"status": "rejected", "reason": run[1]}}
+			r = requests.put(
+				f"https://www.speedrun.com/api/v1/runs/{run[0]._id}/status",
+				headers={
+					"X-API-Key": self.bot.config["api_key"],
+					"Accept": "application/json",
+					"User-Agent": "mcbeDiscordBot/1.0"
+				},
+				data=json.dumps(reject))
+			if r.status_code == 200 or r.status_code == 204:
+				await ctx.send(
+					f'Run rejected succesfully for `{run[1]}`\nLink: {run[0].link}'
+				)
+			else:
+				await ctx.send("Something went wrong")
+				await ctx.message.author.send(
+					f"```json\n{json.dumps(json.loads(r.text),indent=4)}```")
+		except:
+			continue
 
 
 async def verifyNew(self, apiKey=None, userID=None):
@@ -251,7 +323,13 @@ class Src(commands.Cog):
 	@commands.command(description="Reject runs quickly")
 	@commands.check(is_mod)
 	@commands.guild_only()
-	async def reject(self, ctx, apiKey, run, *, reason="Rejected using Steve. No additional reason provided"):
+	async def reject(
+			self,
+			ctx,
+			apiKey,
+			run,
+			*,
+			reason="Rejected using Steve. No additional reason provided"):
 		if apiKey == None:
 			apiKey = self.bot.config['api_key']
 		await rejectRun(self, apiKey, ctx, run, reason)
@@ -259,7 +337,13 @@ class Src(commands.Cog):
 	@commands.command(description="Approve runs quickly")
 	@commands.check(is_mod)
 	@commands.guild_only()
-	async def approve(self, ctx, apiKey, run, *, reason="Approved using Steve. No additional reason provided"):
+	async def approve(
+			self,
+			ctx,
+			apiKey,
+			run,
+			*,
+			reason="Approved using Steve. No additional reason provided"):
 		if apiKey == None:
 			apiKey = self.bot.config['api_key']
 		await approveRun(self, apiKey, ctx, run, reason)
