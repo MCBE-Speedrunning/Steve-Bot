@@ -8,9 +8,9 @@ Install the dependencies with `python -m pip install -r requirements.txt`
 A few "dangerous" commands such as `!purge` are restriced to `bot_masters`, to add a bot master add it to `config.json`. Example:
 ```json
 {
-	"token": "your_bot_token",
+    "token": "your_bot_token",
     "<guild_id>": {
-	    "bot_masters": <users_discord_id>
+        "bot_masters": <users_discord_id>
     }
 }
 ```
