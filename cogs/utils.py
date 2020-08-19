@@ -382,10 +382,5 @@ class Utils(commands.Cog):
 			output = ", ".join([*commands])
 			await ctx.send(f"```List of custom commands:\n{output}```")
 
-	@commands.command(aliases=['eval', 'calc'])
-	async def math(self, ctx, *, equation: str = "2 + 2"):
-		"""Evaluate a mathematical equation"""
-		await ctx.send(f'`{equation} = {eval(equation)}`')
-
 def setup(bot):
 	bot.add_cog(Utils(bot))
