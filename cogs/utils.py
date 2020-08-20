@@ -294,14 +294,14 @@ class Utils(commands.Cog):
 				datetime.date(2020, 9, 29)
 			],
 			[
-				'Zyemlus',
+				'Samantha', # This one is Zyemlus
 				self.bot.get_user(536071288859656193),
 				datetime.date(2020, 8, 23)
 			],
 			[
 				'Landen',
 				self.bot.get_user(654025117025828885),
-				datetime.date(2020, 8, 25)
+				datetime.date(2020, 8, 24)
 			],
 			[
 				'Oceanlight',
