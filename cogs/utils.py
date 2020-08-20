@@ -267,8 +267,8 @@ class Utils(commands.Cog):
 				datetime.date(2020, 11, 10)
 			],
 			[
-				'RKREE',
-				self.bot.get_user(395872198323077121),
+				'Nevaeh',
+				self.bot.get_user(738279874749530172),
 				datetime.date(2020, 11, 5)
 			],
 			# idk if she goes by her irl name but I'm sticking with it for the sake of uniformity
@@ -284,7 +284,7 @@ class Utils(commands.Cog):
 				datetime.date(2020, 6, 23)
 			],
 			[
-				'Sky',
+				'Ben',
 				self.bot.get_user(329538915805691905),
 				datetime.date(2020, 6, 24)
 			],
@@ -294,14 +294,14 @@ class Utils(commands.Cog):
 				datetime.date(2020, 9, 29)
 			],
 			[
-				'Zyemlus',
+				'Samantha', # This one is Zyemlus
 				self.bot.get_user(536071288859656193),
 				datetime.date(2020, 8, 23)
 			],
 			[
 				'Landen',
 				self.bot.get_user(654025117025828885),
-				datetime.date(2020, 8, 25)
+				datetime.date(2020, 8, 24)
 			],
 			[
 				'Oceanlight',
