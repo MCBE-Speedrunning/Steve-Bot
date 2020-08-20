@@ -169,7 +169,7 @@ async def pendingRuns(self, ctx):
 		elif banned_player_coop(run) == True:
 			runs_to_reject.append([
 				run,
-				f'Detected as a banned player ({player}) run by our automatic filter.'
+				f'Detected a banned player in the list of runners ({run.players}) by our automatic filter.'
 			])
 
 		# Reject run if duplicate submission
