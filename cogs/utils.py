@@ -284,7 +284,7 @@ class Utils(commands.Cog):
 				datetime.date(2020, 6, 23)
 			],
 			[
-				'Skye',
+				'Ben',
 				self.bot.get_user(329538915805691905),
 				datetime.date(2020, 6, 24)
 			],
