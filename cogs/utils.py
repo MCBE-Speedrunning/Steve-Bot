@@ -267,8 +267,8 @@ class Utils(commands.Cog):
 				datetime.date(2020, 11, 10)
 			],
 			[
-				'RKREE',
-				self.bot.get_user(395872198323077121),
+				'Nevaeh',
+				self.bot.get_user(738279874749530172),
 				datetime.date(2020, 11, 5)
 			],
 			# idk if she goes by her irl name but I'm sticking with it for the sake of uniformity
@@ -284,7 +284,7 @@ class Utils(commands.Cog):
 				datetime.date(2020, 6, 23)
 			],
 			[
-				'Sky',
+				'Skye',
 				self.bot.get_user(329538915805691905),
 				datetime.date(2020, 6, 24)
 			],
