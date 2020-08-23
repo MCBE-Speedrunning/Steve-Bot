@@ -152,7 +152,7 @@ async def pendingRuns(self, ctx):
 
 	for run in pending_runs:
 		# Reject run if video is blacklisted
-		if run.video in self.bot.runs_blacklist["videos"]:
+		if run.video.split('/')[-1] in self.bot.runs_blacklist["videos"]:
 			runs_to_reject.append(
 				[run, 'Detected as spam by our automatic filter.'])
 

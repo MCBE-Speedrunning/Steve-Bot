@@ -292,15 +292,18 @@ class Admin(commands.Cog):
 	async def delvar(self, ctx, key):
 		"""Deletes a config variable, be careful"""
 		with open('config.json', 'w') as f:
-			await ctx.send(f"Removed {self.bot.config[str(ctx.message.guild.id)].pop(key)}")
+			await ctx.send(
+				f"Removed {self.bot.config[str(ctx.message.guild.id)].pop(key)}"
+			)
 			json.dump(self.bot.config, f, indent=4)
 
 	@commands.command()
 	@commands.check(is_mod)
 	async def blacklistvideo(self, ctx, uri):
 		"""Set runs from a specific url to be auto rejected"""
+		video_id = uri.split('/')[-1]
 		with open('runs_blacklist.json', 'w') as f:
-			self.bot.runs_blacklist["videos"].append(uri)
+			self.bot.runs_blacklist["videos"].append(video_id)
 			json.dump(self.bot.runs_blacklist, f, indent=4)
 		await ctx.send(f'Blacklisted runs from `{uri}`')
 
