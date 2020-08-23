@@ -222,9 +222,6 @@ class Utils(commands.Cog):
 	async def on_message(self, message):
 		if not message.guild:
 			return
-		if message.channel.id != int(self.bot.config[str(
-				message.guild.id)]["fair_channel"]):
-			return
 		if message.author.bot:
 			return
 		badWords = ["fair", "ⓕⓐⓘⓡ"]
