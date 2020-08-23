@@ -301,7 +301,7 @@ class Admin(commands.Cog):
 	@commands.check(is_mod)
 	async def blacklistvideo(self, ctx, uri):
 		"""Set runs from a specific url to be auto rejected"""
-		video_id = uri.split('/')[-1]
+		video_id = uri.split('/')[-1].split('=')[-1]
 		with open('runs_blacklist.json', 'w') as f:
 			self.bot.runs_blacklist["videos"].append(video_id)
 			json.dump(self.bot.runs_blacklist, f, indent=4)
@@ -320,7 +320,7 @@ class Admin(commands.Cog):
 	@commands.check(is_mod)
 	async def runs_blacklist(self, ctx):
 		"""Sends a list of blacklisted videos and players"""
-		message = '```The following URIs are blacklisted:\n'
+		message = '```The following videos are blacklisted:\n'
 		for uri in self.bot.runs_blacklist["videos"]:
 			message += f'{uri}, '
 		await ctx.send(f'{message[:-2]}```')
