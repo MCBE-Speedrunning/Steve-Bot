@@ -307,6 +307,11 @@ class Utils(commands.Cog):
 				'Oceanlight',
 				self.bot.get_user(615658069132836865),
 				datetime.date(2020, 4, 9)
+			],
+			[
+				'Shadowfi',
+				self.bot.get_user(586664256217415681),
+				datetime.date(2020, 11, 14)
 			]
 		]
 
