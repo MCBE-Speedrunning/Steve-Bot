@@ -309,9 +309,9 @@ class Utils(commands.Cog):
 				datetime.date(2020, 4, 9)
 			],
 			[
-				'Shadowfi`
+				'Shadowfi',
 				self.bot.get_user(586664256217415681),
-				datetime.date(2020, 14, 11)
+				datetime.date(2020, 11, 14)
 			]
 		]
 
