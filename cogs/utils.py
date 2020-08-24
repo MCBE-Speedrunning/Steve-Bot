@@ -291,7 +291,7 @@ class Utils(commands.Cog):
 				datetime.date(2020, 9, 29)
 			],
 			[
-				'Samantha', # This one is Zyemlus
+				'Samantha',  # This one is Zyemlus
 				self.bot.get_user(536071288859656193),
 				datetime.date(2020, 8, 23)
 			],
@@ -317,7 +317,7 @@ class Utils(commands.Cog):
 				try:
 					for i in range(self.tries):
 						await coolKid[1].send(
-							f'Happy Birthday {coolKid[0]}! You\'re a boomer now! :mango:'
+							f'Happy Birthday {coolKid[0]}! You\'re a boomer now! <:mangopog:730683234039365722>'
 						)
 					self.tries = 1
 				except:
@@ -383,6 +383,7 @@ class Utils(commands.Cog):
 			commands = json.load(f)
 			output = ", ".join([*commands])
 			await ctx.send(f"```List of custom commands:\n{output}```")
+
 
 def setup(bot):
 	bot.add_cog(Utils(bot))
