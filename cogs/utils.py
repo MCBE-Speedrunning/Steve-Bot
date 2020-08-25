@@ -409,7 +409,7 @@ class Utils(commands.Cog):
 		await ctx.send(
 			str(
 				timedelta(seconds=end_sec - start_sec +
-						  round((frames / framerate), 3))).replace('000', ''))
+						  round((int(frames) / int(framerate)), 3))).replace('000', ''))
 
 
 def setup(bot):
