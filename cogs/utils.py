@@ -384,6 +384,33 @@ class Utils(commands.Cog):
 			output = ", ".join([*commands])
 			await ctx.send(f"```List of custom commands:\n{output}```")
 
+	@commands.command()
+	async def retime(self, ctx, start_sec, end_sec, frames, framerate):
+		"""Retimes a run using the start/end timestamps, leftover frames, and framerate"""
+		if start_sec.count(':') == 2:
+			start_sec = sum(
+				x * int(t)
+				for x, t in zip([3600, 60, 1], start_sec.split(":")))
+		elif start_sec.count(':') == 1:
+			start_sec = sum(x * int(t)
+							for x, t in zip([60, 1], start_sec.split(":")))
+		else:
+			start_sec = int(start_sec)
+
+		if end_sec.count(':') == 2:
+			end_sec = sum(x * int(t)
+						  for x, t in zip([3600, 60, 1], end_sec.split(":")))
+		elif end_sec.count(':') == 1:
+			end_sec = sum(x * int(t)
+						  for x, t in zip([60, 1], end_sec.split(":")))
+		else:
+			end_sec = int(end_sec)
+
+		await ctx.send(
+			str(
+				timedelta(seconds=end_sec - start_sec +
+						  round((frames / framerate), 3))).replace('000', ''))
+
 
 def setup(bot):
 	bot.add_cog(Utils(bot))
