@@ -385,7 +385,7 @@ class Utils(commands.Cog):
 			await ctx.send(f"```List of custom commands:\n{output}```")
 
 	@commands.command()
-	async def retime(self, ctx, start_sec, end_sec, frames, framerate):
+	async def retime(self, ctx, start_sec, end_sec, frames=0, framerate=30):
 		"""Retimes a run using the start/end timestamps, leftover frames, and framerate"""
 		if start_sec.count(':') == 2:
 			start_sec = sum(
