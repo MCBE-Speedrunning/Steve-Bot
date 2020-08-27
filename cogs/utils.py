@@ -103,7 +103,7 @@ class Utils(commands.Cog):
 
 		# Don't ask
 		rigged_findseed = {
-			280428276810383370: 7,  # Thomas's User ID
+			280428276810383370: 12,  # Thomas's User ID
 			199070670221475842: -1,  # Kai's User ID
 			615658069132836865:
 			-12  # What a fraud! They didn't use their real name.
