@@ -110,12 +110,12 @@ class Utils(commands.Cog):
 		}
 
 		if ctx.author.id in rigged_findseed:
-			totalEyes = rigged_findseed[ctx.author.id]
+			total_eyes = rigged_findseed[ctx.author.id]
 		else:
 			total_eyes = sum([1 for i in range(12) if randint(1,10) == 1])
 
 		await ctx.send(
-			f"{discord.utils.escape_mentions(ctx.message.author.display_name)} -> your seed is a {totalEyes} eye"
+			f"{discord.utils.escape_mentions(ctx.message.author.display_name)} -> your seed is a {total_eyes} eye"
 		)
 
 	@findseed.error
