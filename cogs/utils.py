@@ -112,11 +112,8 @@ class Utils(commands.Cog):
 		if ctx.author.id in rigged_findseed:
 			totalEyes = rigged_findseed[ctx.author.id]
 		else:
-			totalEyes = 0
-			for i in range(12):
-				randomness = randint(1, 10)
-				if randomness <= 1:
-					totalEyes += 1
+			total_eyes = sum([1 for i in range(12) if randint(1,10) == 1])
+
 		await ctx.send(
 			f"{discord.utils.escape_mentions(ctx.message.author.display_name)} -> your seed is a {totalEyes} eye"
 		)
