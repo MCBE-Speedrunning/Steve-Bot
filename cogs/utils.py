@@ -223,37 +223,38 @@ class Utils(commands.Cog):
 			return
 		badWords = ["fair", "ⓕⓐⓘⓡ"]
 		count = 0
+		year = datetime.date.today().year
 
 		coolKids = [
 			[
 				'Cameron',
 				self.bot.get_user(468262902969663488),
-				datetime.date(2020, 10, 8)
+				datetime.date(year, 10, 8)
 			],
 			[
 				'Indy',
 				self.bot.get_user(274923326890311691),
-				datetime.date(2020, 9, 10)
+				datetime.date(year, 9, 10)
 			],
 			[
 				'Kai',
 				self.bot.get_user(199070670221475842),
-				datetime.date(2020, 11, 20)
+				datetime.date(year, 11, 20)
 			],
 			[
 				'Luca',
 				self.bot.get_user(99457716614885376),
-				datetime.date(2020, 11, 5)
+				datetime.date(year, 11, 5)
 			],
 			[
 				'Max',
 				self.bot.get_user(543958509243596800),
-				datetime.date(2020, 11, 10)
+				datetime.date(year, 11, 10)
 			],
 			[
 				'Mistaken',
 				self.bot.get_user(264121998173536256),
-				datetime.date(2020, 7, 6)
+				datetime.date(year, 7, 6)
 			],
 			[
 				'Jake',
@@ -263,49 +264,52 @@ class Utils(commands.Cog):
 			[
 				'Nevaeh',
 				self.bot.get_user(738279874749530172),
-				datetime.date(2020, 11, 5)
+				datetime.date(year, 11, 5)
 			],
 			# idk if she goes by her irl name but I'm sticking with it for the sake of uniformity
 			# also idk how to pronounce prakxo
+
+			# EDIT: Seems like real names are the standard now lol
+			# its just a name, aliases are stupid
 			[
 				'Samantha',
 				self.bot.get_user(226312219787264000),
-				datetime.date(2020, 6, 24)
+				datetime.date(year, 6, 24)
 			],
 			[
 				'Scott',
 				self.bot.get_user(223937483774230528),
-				datetime.date(2020, 6, 23)
+				datetime.date(year, 6, 23)
 			],
 			[
 				'Ben',
 				self.bot.get_user(329538915805691905),
-				datetime.date(2020, 6, 24)
+				datetime.date(year, 6, 24)
 			],
 			[
 				'Thomas',
 				self.bot.get_user(280428276810383370),
-				datetime.date(2020, 9, 29)
+				datetime.date(year, 9, 29)
 			],
 			[
 				'Samantha',  # This one is Zyemlus
 				self.bot.get_user(536071288859656193),
-				datetime.date(2020, 8, 23)
+				datetime.date(year, 8, 23)
 			],
 			[
 				'Landen',
 				self.bot.get_user(654025117025828885),
-				datetime.date(2020, 8, 24)
+				datetime.date(year, 8, 24)
 			],
 			[
 				'Oceanlight',
 				self.bot.get_user(615658069132836865),
-				datetime.date(2020, 4, 9)
+				datetime.date(year, 4, 9)
 			],
 			[
 				'Shadowfi',
 				self.bot.get_user(586664256217415681),
-				datetime.date(2020, 11, 14)
+				datetime.date(year, 11, 14)
 			]
 		]
 
