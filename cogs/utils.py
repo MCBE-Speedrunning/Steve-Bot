@@ -2,6 +2,7 @@ import asyncio
 import datetime
 import functools
 import json
+import random
 from datetime import timedelta
 # forgot to import this and ended up looking mentally unstable
 # troll literally pointed out atleast 4 things I did wrong in 3 lines of code
@@ -411,6 +412,16 @@ class Utils(commands.Cog):
 			str(
 				timedelta(seconds=end_sec - start_sec +
 						  round((int(frames) / int(framerate)), 3))).replace('000', ''))
+	@commands.command()
+	async def javamods(self, ctx):
+    		java_mods = [
+        	340677523497287680, # Emma
+        	142750090480713738, # CrafterDark
+        	159784041292234753, # Geosquare
+        	83231898179997696,  # April
+        	197121928065056770 # Willz
+    		]
+    	await ctx.send(f'<@!{random.choice(java_mods)}>')
 
 
 def setup(bot):
