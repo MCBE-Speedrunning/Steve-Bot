@@ -259,7 +259,7 @@ class Utils(commands.Cog):
 			[
 				'Jake',
 				self.bot.get_user(400344183333847060),
-				datetime.date(2020, 11, 10)
+				datetime.date(year, 11, 10)
 			],
 			[
 				'Nevaeh',
