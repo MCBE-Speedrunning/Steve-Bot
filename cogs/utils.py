@@ -252,7 +252,7 @@ class Utils(commands.Cog):
 				datetime.date(year, 11, 10)
 			],
 			[
-				'Mistaken',
+				'Daniel',
 				self.bot.get_user(264121998173536256),
 				datetime.date(year, 7, 6)
 			],
