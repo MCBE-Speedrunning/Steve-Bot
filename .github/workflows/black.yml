@@ -11,4 +11,4 @@ jobs:
         steps:
             - uses: actions/checkout@v1
             - name: Black Check
-              uses: jpetrucciani/black-check@19.10b0
+              run: black *.py && black cogs/*.py
