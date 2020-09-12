@@ -11,15 +11,16 @@ from discord.utils import get
 
 
 class SubmittedRun:
-    def __init__(self, game, _id, category, video, players, duration, _type):
+    def __init__(self, game, _id, category, video, players, duration, type_, values):
         self.game = game
         self._id = _id
         self.category = category
         self.video = video
         self.players = players
         self.duration = duration
-        self._type = _type
+        self.type_ = type_
         self.link = f"https://www.speedrun.com/{game}/run/{_id}"
+        self.values = values
 
 
 async def rejectRun(self, apiKey, ctx, run, reason):
@@ -103,6 +104,7 @@ async def pendingRuns(self, ctx):
                 and run.category == pending_run.category
                 and run.video == pending_run.video
                 and run.duration == pending_run.duration
+                and run.values == pending_run.values
             ):
                 return True
         return False
@@ -144,14 +146,14 @@ async def pendingRuns(self, ctx):
             if run["level"]["data"] != []:
                 category = run["level"]["data"]["name"]
                 if game == "yd4ovvg1":
-                    _type = "Individual Level"
+                    type_ = "Individual Level"
             else:
                 category = run["category"]["data"]["name"]
                 if game == "yd4ovvg1":
-                    _type = "Full Game Run"
+                    type_ = "Full Game Run"
 
             if game == "v1po7r76":
-                _type = "Category Extension"
+                type_ = "Category Extension"
 
             # Set players to a string if solo, or a list if coop
             if len(run["players"]["data"]) == 1:
@@ -161,8 +163,11 @@ async def pendingRuns(self, ctx):
                     map(lambda player: get_player_name(player), run["players"]["data"])
                 )
 
+            # Get the values of the run for the duplicate remover
+            values = run["values"]
+
             pending_run = SubmittedRun(
-                game, _id, category, video, players, duration, _type
+                game, _id, category, video, players, duration, type_, values
             )
             pending_runs.append(pending_run)
 
@@ -200,9 +205,9 @@ async def pendingRuns(self, ctx):
             pending_runs.remove(run)
 
         else:
-            if run._type == "Full Game Run":
+            if run.type_ == "Full Game Run":
                 mcbe_runs += 1
-            elif run._type == "Individual Level":
+            elif run.type_ == "Individual Level":
                 mcbeil_runs += 1
             else:
                 mcbece_runs += 1
@@ -212,7 +217,7 @@ async def pendingRuns(self, ctx):
                 run.players = ", ".join(map(str, run.players))
 
             embed = discord.Embed(
-                title=run._type,
+                title=run.type_,
                 url=run.link,
                 description=f"{run.category} in `{str(run.duration).replace('000','')}` by **{run.players}**",
                 color=0x9400D3,
@@ -238,11 +243,11 @@ async def pendingRuns(self, ctx):
                 headers={
                     "X-API-Key": self.bot.config["api_key"],
                     "Accept": "application/json",
-                    "User-Agent": "mcbeDiscordBot/1.0",
+                    "User-Agent": "MCBE_Moderation_Bot/1.0",
                 },
                 data=json.dumps(reject),
             )
-            if r.status_code == 200 or r.status_code == 204:
+            if r.status_code in [200, 204]:
                 await ctx.send(
                     f"Run rejected succesfully for `{run[1]}`\nLink: {run[0].link}"
                 )
