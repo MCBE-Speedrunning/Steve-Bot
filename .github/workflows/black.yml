@@ -1,14 +1,18 @@
-name: Black Autoformatting
+name: Black Check
 
+# Run action on PRs to master
 on:
-    push:
-    pull_request:
+  pull_request:
+    branches: [ master ]
 
 jobs:
-    format:
-        name: Black Autoformatting
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v1
-            - name: Black Check
-              uses: jpetrucciani/black-check@master
+  suggest:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so that black can inspect it
+      - uses: actions/checkout@v2
+      - uses: rgasper/python-black-pull-request-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LINE_LENGTH: 88
