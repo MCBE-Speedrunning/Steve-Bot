@@ -309,7 +309,7 @@ class Utils(commands.Cog):
                 self.bot.get_user(586664256217415681),
                 datetime.date(year, 11, 14),
             ],
-            ["Gold", self.bot.get_user(404873210597867541), datetime.date(year, 9, 12)],
+            ["Sawyer", self.bot.get_user(404873210597867541), datetime.date(year, 9, 12)],
         ]
 
         for coolKid in coolKids:
