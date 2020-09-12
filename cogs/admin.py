@@ -130,7 +130,7 @@ class Admin(commands.Cog):
             after=None,
             around=None,
             oldest_first=False,
-            bulk=True
+            bulk=True,
         )
 
     @commands.command()
@@ -141,7 +141,7 @@ class Admin(commands.Cog):
         members: commands.Greedy[discord.Member] = False,
         mute_minutes: int = 0,
         *,
-        reason: str = "absolutely no reason"
+        reason: str = "absolutely no reason",
     ):
         """Mass mute members with an optional mute_minutes parameter to time it"""
 
@@ -297,7 +297,9 @@ class Admin(commands.Cog):
     async def delvar(self, ctx, key):
         """Deletes a config variable, be careful"""
         with open("config.json", "w") as f:
-            await ctx.send(f"Removed {self.bot.config[str(ctx.message.guild.id)].pop(key)}")
+            await ctx.send(
+                f"Removed {self.bot.config[str(ctx.message.guild.id)].pop(key)}"
+            )
             json.dump(self.bot.config, f, indent=4)
 
     @commands.command()
