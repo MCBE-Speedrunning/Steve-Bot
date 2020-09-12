@@ -1,0 +1,14 @@
+name: Black Autoformatting
+
+on:
+    push:
+    pull_request:
+
+jobs:
+    format:
+        name: Black Autoformatting
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+            - name: Black Check
+              uses: jpetrucciani/black-check@19.10b0
