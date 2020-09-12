@@ -141,7 +141,7 @@ class Admin(commands.Cog):
         members: commands.Greedy[discord.Member] = False,
         mute_minutes: int = 0,
         *,
-        reason: str = "absolutely no reason",
+        reason: str = "absolutely no reason"
     ):
         """Mass mute members with an optional mute_minutes parameter to time it"""
 
