@@ -305,7 +305,7 @@ class Utils(commands.Cog):
                 datetime.date(year, 4, 9),
             ],
             [
-                "Shadowfi",
+                "Daniel", # Shadowfi
                 self.bot.get_user(586664256217415681),
                 datetime.date(year, 11, 14),
             ],
