@@ -297,9 +297,7 @@ class Admin(commands.Cog):
     async def delvar(self, ctx, key):
         """Deletes a config variable, be careful"""
         with open("config.json", "w") as f:
-            await ctx.send(
-                f"Removed {self.bot.config[str(ctx.message.guild.id)].pop(key)}"
-            )
+            await ctx.send(f"Removed {self.bot.config[str(ctx.message.guild.id)].pop(key)}")
             json.dump(self.bot.config, f, indent=4)
 
     @commands.command()
