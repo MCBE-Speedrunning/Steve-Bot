@@ -219,7 +219,7 @@ class Admin(commands.Cog):
                 )
             except discord.Forbidden:
                 pass
-            await ctx.guild.ban(member, reason=reason, delete_message_days=0)
+            await ctx.guild.ban(discord.Object(id), reason=reason, delete_message_days=0)
             await ctx.send(
                 "{0.mention} has been banned by {1.mention} for *{2}*".format(
                     member, ctx.author, reason
