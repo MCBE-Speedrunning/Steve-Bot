@@ -240,6 +240,7 @@ class Utils(commands.Cog):
             return
         if message.author.bot:
             return
+
         badWords = ["fair", "ⓕⓐⓘⓡ"]
         count = 0
         year = datetime.date.today().year
