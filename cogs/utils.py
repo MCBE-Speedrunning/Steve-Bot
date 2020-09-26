@@ -310,6 +310,11 @@ class Utils(commands.Cog):
                 datetime.date(year, 11, 14),
             ],
             ["Sawyer", self.bot.get_user(404873210597867541), datetime.date(year, 9, 12)],
+            [
+                "Marco",
+                self.bot.get_user(299668599650648065),
+                datetime.date(year, 11, 12),
+            ],
         ]
 
         for coolKid in coolKids:
