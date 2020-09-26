@@ -315,6 +315,11 @@ class Utils(commands.Cog):
                 self.bot.get_user(299668599650648065),
                 datetime.date(year, 11, 12),
             ],
+            [
+                "Tyler",
+                self.bot.get_user(619322461749641246),
+                datetime.date(year, 3, 4),
+            ],
         ]
 
         for coolKid in coolKids:
