@@ -332,6 +332,7 @@ class Src(commands.Cog):
     async def is_mod(ctx):
         return ctx.author.guild_permissions.manage_channels
 
+    @commands.cooldown(300, 1, commands.BucketType.guild)
     @commands.command(description="Posts all pending runs to #pending-runs")
     @commands.guild_only()
     async def pending(self, ctx):
