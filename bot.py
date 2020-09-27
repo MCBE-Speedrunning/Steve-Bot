@@ -16,6 +16,7 @@ extensions = [
     # "cogs.webserver",
     # "cogs.twitter",
     "cogs.logs",
+    "cogs.errorhandler"
 ]
 
 
