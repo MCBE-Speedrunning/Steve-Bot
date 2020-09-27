@@ -74,8 +74,8 @@ class YTDLSource(discord.PCMVolumeTransformer):
     def __getitem__(self, item: str):
         """Allows us to access attributes similar to a dict.
 
-		This is only useful when you are NOT downloading.
-		"""
+        This is only useful when you are NOT downloading.
+        """
         return self.__getattribute__(item)
 
     @classmethod
@@ -112,7 +112,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
     async def regather_stream(cls, data, *, loop):
         """Used for preparing a stream, instead of downloading.
 
-		Since Youtube Streaming links expire."""
+        Since Youtube Streaming links expire."""
         loop = loop or asyncio.get_event_loop()
         requester = data["requester"]
 
@@ -129,11 +129,11 @@ class YTDLSource(discord.PCMVolumeTransformer):
 class MusicPlayer:
     """A class which is assigned to each guild using the bot for Music.
 
-	This class implements a queue and loop, which allows for different guilds to listen to different playlists
-	simultaneously.
+    This class implements a queue and loop, which allows for different guilds to listen to different playlists
+    simultaneously.
 
-	When the bot disconnects from the Voice it's instance will be destroyed.
-	"""
+    When the bot disconnects from the Voice it's instance will be destroyed.
+    """
 
     __slots__ = (
         "bot",
@@ -289,14 +289,14 @@ class Player(commands.Cog):
     async def connect_(self, ctx, *, channel: discord.VoiceChannel = None):
         """Connect to voice.
 
-		Parameters
-		------------
-		channel: discord.VoiceChannel [Optional]
-			The channel to connect to. If a channel is not specified, an attempt to join the voice channel you are in
-			will be made.
+        Parameters
+        ------------
+        channel: discord.VoiceChannel [Optional]
+                The channel to connect to. If a channel is not specified, an attempt to join the voice channel you are in
+                will be made.
 
-		This command also handles moving the bot to different channels.
-		"""
+        This command also handles moving the bot to different channels.
+        """
         if not channel:
             try:
                 channel = ctx.author.voice.channel
@@ -328,14 +328,14 @@ class Player(commands.Cog):
     async def play_(self, ctx, *, search: str):
         """Request a song and add it to the queue.
 
-		This command attempts to join a valid voice channel if the bot is not already in one.
-		Uses YTDL to automatically search and retrieve a song.
+        This command attempts to join a valid voice channel if the bot is not already in one.
+        Uses YTDL to automatically search and retrieve a song.
 
-		Parameters
-		------------
-		search: str [Required]
-			The song to search and retrieve using YTDL. This could be a simple search, an ID or URL.
-		"""
+        Parameters
+        ------------
+        search: str [Required]
+                The song to search and retrieve using YTDL. This could be a simple search, an ID or URL.
+        """
         await ctx.trigger_typing()
 
         vc = ctx.voice_client
@@ -452,11 +452,11 @@ class Player(commands.Cog):
     async def change_volume(self, ctx, *, vol: float):
         """Change the player volume.
 
-		Parameters
-		------------
-		volume: float or int [Required]
-			The volume to set the player to in percentage. This must be between 1 and 100.
-		"""
+        Parameters
+        ------------
+        volume: float or int [Required]
+                The volume to set the player to in percentage. This must be between 1 and 100.
+        """
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():
@@ -479,9 +479,9 @@ class Player(commands.Cog):
     async def stop_(self, ctx):
         """Stop the currently playing song and destroy the player.
 
-		!Warning!
-			This will destroy the player assigned to your guild, also deleting any queued songs and settings.
-		"""
+        !Warning!
+                This will destroy the player assigned to your guild, also deleting any queued songs and settings.
+        """
         vc = ctx.voice_client
 
         if not vc or not vc.is_connected():

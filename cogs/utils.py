@@ -3,12 +3,14 @@ import datetime
 import functools
 import json
 from datetime import timedelta
+
 # forgot to import this and ended up looking mentally unstable
 # troll literally pointed out atleast 4 things I did wrong in 3 lines of code
 from random import choice, randint
 
 import discord
 from discord.ext import commands, tasks
+
 # from PIL.Image import core as Image
 # import image as Image
 from PIL import Image, ImageFilter
@@ -305,11 +307,15 @@ class Utils(commands.Cog):
                 datetime.date(year, 4, 9),
             ],
             [
-                "Daniel", # Shadowfi
+                "Daniel",  # Shadowfi
                 self.bot.get_user(586664256217415681),
                 datetime.date(year, 11, 14),
             ],
-            ["Sawyer", self.bot.get_user(404873210597867541), datetime.date(year, 9, 12)],
+            [
+                "Sawyer",
+                self.bot.get_user(404873210597867541),
+                datetime.date(year, 9, 12),
+            ],
             [
                 "Marco",
                 self.bot.get_user(299668599650648065),
