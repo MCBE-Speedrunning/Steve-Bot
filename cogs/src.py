@@ -321,7 +321,7 @@ async def verifyNew(self, apiKey=None, userID=None):
     if runnerCounter:
         await server.get_member(user.id).add_roles(RunneRole)
     else:
-        await server.get_member(user.id).r300emove_roles(RunneRole)
+        await server.get_member(user.id).remove_roles(RunneRole)
 
 
 class Src(commands.Cog):
