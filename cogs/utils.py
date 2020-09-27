@@ -366,14 +366,6 @@ class Utils(commands.Cog):
                     "https://aninternettroll.github.io/mcbeVerifierLeaderboard/"
                 )
 
-    @leaderboard.error
-    async def leaderboard_handler(self, ctx, error):
-        if isinstance(error, commands.CommandOnCooldown):
-            # return
-            await ctx.send(
-                f"{discord.utils.escape_mentions(ctx.message.author.display_name)}, you have to wait {round(error.retry_after, 2)} seconds before using this again."
-            )
-
     @commands.cooldown(1, 60, commands.BucketType.guild)
     @commands.command()
     async def someone(self, ctx):

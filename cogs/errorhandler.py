@@ -11,7 +11,7 @@ class Errorhandler(commands.Cog):
 			return
 
 		if isinstance(error, commands.CommandOnCooldown):
-			return
+			return await ctx.send(f'{ctx.author.mention}, you have to wait {round(error.retry_after, 2)} seconds before using this again')
 
 		raise error
 
