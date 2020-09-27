@@ -321,7 +321,7 @@ async def verifyNew(self, apiKey=None, userID=None):
     if runnerCounter:
         await server.get_member(user.id).add_roles(RunneRole)
     else:
-        await server.get_member(user.id).remove_roles(RunneRole)
+        await server.get_member(user.id).r300emove_roles(RunneRole)
 
 
 class Src(commands.Cog):
@@ -332,7 +332,7 @@ class Src(commands.Cog):
     async def is_mod(ctx):
         return ctx.author.guild_permissions.manage_channels
 
-    @commands.cooldown(300, 1, commands.BucketType.guild)
+    @commands.cooldown(1, 300, commands.BucketType.guild)
     @commands.command(description="Posts all pending runs to #pending-runs")
     @commands.guild_only()
     async def pending(self, ctx):
