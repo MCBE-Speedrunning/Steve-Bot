@@ -55,7 +55,7 @@ def save_leaderboard():
     chrome_options.add_argument("--disable-gpu")
     # chrome_options.binary_location = ""
     driver = webdriver.Chrome(DRIVER, chrome_options=chrome_options)
-    set_viewport_size(driver, 1000, 1000)
+    set_viewport_size(driver, 1000, 1100)
     driver.get("https://aninternettroll.github.io/mcbeVerifierLeaderboard/")
     screenshot = driver.find_element_by_id("table").screenshot("leaderboard.png")
     driver.quit()
