@@ -242,7 +242,7 @@ class Utils(commands.Cog):
             return
         if message.author.bot:
             return
-        if "<@280428276810383370>" in message.content:
+        if "<@!280428276810383370>" in message.content:
             await message.channel.send("<:MangoPing:760286455238361129>")
         badWords = ["fair", "ⓕⓐⓘⓡ"]
         count = 0
