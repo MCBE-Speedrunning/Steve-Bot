@@ -276,7 +276,7 @@ async def verifyNew(self, apiKey=None, userID=None):
     # if userID == None:
     # 	return
     # else:
-    user = self.bot.get_user(int(userID))
+    user = await self.bot.fetch_user(int(userID))
     data = json.loads(Path("./api_keys.json").read_text())
 
     if str(user.id) in data:
@@ -314,14 +314,15 @@ async def verifyNew(self, apiKey=None, userID=None):
             # I have no shame
             runnerCounter = True
 
+    member = await server.fetch_member(user.id)
     if wrCounter:
-        await server.get_member(user.id).add_roles(WrRole)
+        await member.add_roles(WrRole)
     else:
-        await server.get_member(user.id).remove_roles(WrRole)
+        await member.remove_roles(WrRole)
     if runnerCounter:
-        await server.get_member(user.id).add_roles(RunneRole)
+        await member.add_roles(RunneRole)
     else:
-        await server.get_member(user.id).remove_roles(RunneRole)
+        await member.remove_roles(RunneRole)
 
 
 class Src(commands.Cog):
@@ -397,8 +398,12 @@ class Src(commands.Cog):
     async def checker(self):
         data = json.loads(Path("./api_keys.json").read_text())
         for key, value in data.items():
-            await verifyNew(self, None, key)
-
+            try:
+                await verifyNew(self, None, key)
+            except Exception as e:
+                print(f"{key}: {value}")
+                print(e.args)
+                continue
 
 def setup(bot):
     bot.add_cog(Src(bot))

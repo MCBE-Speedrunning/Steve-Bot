@@ -10,7 +10,7 @@ extensions = [
     "cogs.utils",
     "cogs.admin",
     "cogs.src",
-    "cogs.trans",
+    #"cogs.trans",
     "cogs.player",
     "cogs.general",
     # "cogs.webserver",
@@ -42,6 +42,7 @@ class BedrockBot(commands.Bot):
             allowed_mentions=discord.AllowedMentions(
                 everyone=False, users=True, roles=False
             ),
+            intents=discord.Intents.all(),
         )
         self.logger = logging.getLogger("discord")
         self.messageBlacklist = []
@@ -75,7 +76,7 @@ class BedrockBot(commands.Bot):
         for extension in extensions:
             self.load_extension(extension)
 
-        self.logger.warning(f"Online: {self.user} (ID: {self.user.id})")
+        self.logger.warning(f"Online: {self.user} (ID: {self.user.id}) (Discord.py: {discord.__version__})")
 
     async def on_message(self, message):
 

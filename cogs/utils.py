@@ -345,7 +345,10 @@ class Utils(commands.Cog):
             if word in message.content.lower().replace(" ", ""):
                 count += 1
                 fair = "Fair " * count
-        await message.channel.send(fair)
+        try:
+            await message.channel.send(fair)
+        except UnboundLocalError:
+            pass
 
     @commands.cooldown(1, 60, commands.BucketType.member)
     @commands.command()
