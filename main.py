@@ -2,9 +2,8 @@ import asyncio
 import json
 import logging
 
-from colorama import init as init_colorama
-
 from bot import BedrockBot
+from colorama import init as init_colorama
 
 
 def check_jsons():

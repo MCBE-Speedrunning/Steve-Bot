@@ -11,7 +11,7 @@ class StreamListener(tweepy.StreamListener):
         with open("./config.json") as f:
             self.config = json.load(f)
 
-    def on_error(self, status_code):
+    def on_error(self, status_code: int) -> bool:
         if status_code == 420:
             print("Rate limit reached. ")
             # returning False in on_error disconnects the stream

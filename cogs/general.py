@@ -387,7 +387,7 @@ class MyHelpCommand(commands.MinimalHelpCommand):
     def get_command_signature(self, command):
         return f"``{self.clean_prefix}{command.qualified_name} {command.signature}``"
 
-    def get_ending_note(self):
+    def get_ending_note(self) -> str:
         return self.messages[randint(0, len(self.messages) - 1)]
 
 
