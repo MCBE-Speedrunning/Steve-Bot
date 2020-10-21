@@ -533,7 +533,7 @@ class General(commands.Cog):
         # embed.add_field(name="Emojis", value=emojiList, inline=True)
         embed.add_field(name="Owner", value=guild.owner.mention, inline=True)
         embed.add_field(
-            name="Members who haven't spoken in 7 days:",
+            name="Members who haven't been online in 7 days:",
             value=inactiveMembers,
             inline=True,
         )
