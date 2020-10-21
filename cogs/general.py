@@ -512,13 +512,13 @@ class General(commands.Cog):
             if guild.premium_subscription_count == 1:
                 embed.add_field(
                     name="Amount of boosts:",
-                    value=f"{guild.premium_subscription_count} boosts",
+                    value=f"{guild.premium_subscription_count} boost",
                     inline=True,
                 )
             else:
                 embed.add_field(
-                    name="Boosted by:",
-                    value=f"{guild.premium_subscription_count} members",
+                    name="Amount of boosts:",
+                    value=f"{guild.premium_subscription_count} boosts",
                     inline=True,
                 )
         if guild.premium_subscribers:
