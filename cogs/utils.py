@@ -271,11 +271,6 @@ class Utils(commands.Cog):
                 self.bot.get_user(400344183333847060),
                 datetime.date(year, 11, 10),
             ],
-            [
-                "Nevaeh",
-                self.bot.get_user(744383381843738633),
-                datetime.date(year, 11, 5),
-            ],
             # idk if she goes by her irl name but I'm sticking with it for the sake of uniformity
             # also idk how to pronounce prakxo
             # EDIT: Seems like real names are the standard now lol
