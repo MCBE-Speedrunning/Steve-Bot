@@ -258,7 +258,7 @@ class Utils(commands.Cog):
                 datetime.date(year, 10, 8),
             ],
             ["Indy", self.bot.get_user(274923326890311691), datetime.date(year, 9, 10)],
-            ["Kai", self.bot.get_user(199070670221475842), datetime.date(year, 11, 20)],
+            ["Kai", self.bot.get_user(199070670221475842), datetime.date(year, 11, 26)],
             ["Luca", self.bot.get_user(99457716614885376), datetime.date(year, 11, 5)],
             ["Max", self.bot.get_user(543958509243596800), datetime.date(year, 11, 10)],
             [
