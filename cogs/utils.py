@@ -2,15 +2,14 @@ import asyncio
 import datetime
 import functools
 import json
+from collections import namedtuple
 from datetime import timedelta
-
 # forgot to import this and ended up looking mentally unstable
 # troll literally pointed out atleast 4 things I did wrong in 3 lines of code
 from random import choice, randint
 
 import discord
 from discord.ext import commands, tasks
-
 # from PIL.Image import core as Image
 # import image as Image
 from PIL import Image, ImageFilter
@@ -121,7 +120,7 @@ class Utils(commands.Cog):
         if ctx.author.id in rigged_findseed:
             total_eyes = rigged_findseed[ctx.author.id]
         else:
-            total_eyes = sum([1 for i in range(12) if randint(1, 10) == 1])
+            total_eyes = sum(1 for i in range(12) if randint(1, 10) == 1)
 
         await ctx.send(
             f"{discord.utils.escape_mentions(ctx.message.author.display_name)} -> your seed is a {total_eyes} eye"
@@ -150,19 +149,19 @@ class Utils(commands.Cog):
             return
 
         # DON'T ASK!
-        lessSleepMsg = [
+        lessSleepMsg = (
             "gn, insomniac!",
             "counting sheep didn't work? try counting chloroform vials!",
             "try a glass of water",
             "some decaf coffee might do the trick!",
-        ]
+        )
 
-        moreSleepMsg = [
+        moreSleepMsg = (
             "waaakeee uuuppp!",
             "are they dead or asleep? I can't tell.",
             "wake up, muffin head",
             "psst... coffeeee \\:D",
-        ]
+        )
 
         # Optional TODO: Create non-normal distribution
         sleepHrs = randint(0, 24)
@@ -247,108 +246,128 @@ class Utils(commands.Cog):
             or "<@280428276810383370>" in message.content
         ):
             await message.channel.send("<:MangoPing:760286455238361129>")
-        badWords = ["fair", "ⓕⓐⓘⓡ"]
+        badWords = ("fair", "ⓕⓐⓘⓡ")
         count = 0
         year = datetime.date.today().year
+        CoolKids = namedtuple("CoolKid", ["name", "user", "bday",])
 
-        coolKids = [
-            [
-                "Cameron",
-                self.bot.get_user(468262902969663488),
-                datetime.date(year, 10, 8),
-            ],
-            ["Indy", self.bot.get_user(274923326890311691), datetime.date(year, 9, 10)],
-            ["Kai", self.bot.get_user(199070670221475842), datetime.date(year, 11, 26)],
-            ["Luca", self.bot.get_user(99457716614885376), datetime.date(year, 11, 5)],
-            ["Max", self.bot.get_user(543958509243596800), datetime.date(year, 11, 10)],
-            [
-                "Daniel",
-                self.bot.get_user(264121998173536256),
-                datetime.date(year, 7, 6),
-            ],
-            [
-                "Jake",
-                self.bot.get_user(400344183333847060),
-                datetime.date(year, 11, 10),
-            ],
-            [
-                "Nevaeh",
-                self.bot.get_user(744383381843738633),
-                datetime.date(year, 11, 5),
-            ],
-            # idk if she goes by her irl name but I'm sticking with it for the sake of uniformity
-            # also idk how to pronounce prakxo
-            # EDIT: Seems like real names are the standard now lol
-            # its just a name, aliases are stupid
-            [
-                "Samantha",
-                self.bot.get_user(226312219787264000),
-                datetime.date(year, 6, 24),
-            ],
-            [
-                "Scott",
-                self.bot.get_user(223937483774230528),
-                datetime.date(year, 6, 23),
-            ],
-            ["Skye", self.bot.get_user(329538915805691905), datetime.date(year, 6, 24)],
-            [
-                "Thomas",
-                self.bot.get_user(280428276810383370),
-                datetime.date(year, 9, 29),
-            ],
-            [
-                "Samantha",  # This one is Zyemlus
-                self.bot.get_user(536071288859656193),
-                datetime.date(year, 8, 23),
-            ],
-            [
-                "Landen",
-                self.bot.get_user(654025117025828885),
-                datetime.date(year, 8, 24),
-            ],
-            [
-                "Oceanlight",
-                self.bot.get_user(615658069132836865),
-                datetime.date(year, 4, 9),
-            ],
-            [
-                "Daniel",  # Shadowfi
-                self.bot.get_user(586664256217415681),
-                datetime.date(year, 11, 14),
-            ],
-            [
-                "Sawyer",
-                self.bot.get_user(404873210597867541),
-                datetime.date(year, 9, 12),
-            ],
-            [
-                "Marco",
-                self.bot.get_user(299668599650648065),
-                datetime.date(year, 11, 12),
-            ],
-            [
-                "Tyler",
-                self.bot.get_user(619322461749641246),
-                datetime.date(year, 3, 4),
-            ],
-            [
-                "Avery",
-                self.bot.get_user(538824552906489874),
-                datetime.date(year, 10, 16),
-            ],
-            [
-                "Matthew",
-                self.bot.get_user(525365553842356225),
-                datetime.date(year, 1, 2),
-            ],
-        ]
+        coolKids = (
+            CoolKids(
+                name="Cameron",
+                user=self.bot.get_user(468262902969663488),
+                bday=datetime.date(year, 10, 8),
+            ),
+            CoolKids(
+                name="Indy",
+                user=self.bot.get_user(274923326890311691),
+                bday=datetime.date(year, 9, 10),
+            ),
+            CoolKids(
+                name="Kai",
+                user=self.bot.get_user(199070670221475842),
+                bday=datetime.date(year, 11, 26),
+            ),
+            CoolKids(
+                name="Luca",
+                user=self.bot.get_user(99457716614885376),
+                bday=datetime.date(year, 11, 5),
+            ),
+            CoolKids(
+                name="Max",
+                user=self.bot.get_user(543958509243596800),
+                bday=datetime.date(year, 11, 10),
+            ),
+            CoolKids(
+                name="Daniel",
+                user=self.bot.get_user(264121998173536256),
+                bday=datetime.date(year, 7, 6),
+            ),  # Mistaken
+            CoolKids(
+                name="Jake",
+                user=self.bot.get_user(400344183333847060),
+                bday=datetime.date(year, 11, 10),
+            ),
+            CoolKids(
+                name="Nevaeh",
+                user=self.bot.get_user(744383381843738633),
+                bday=datetime.date(year, 11, 5),
+            ),
+            # Prakxo
+            CoolKids(
+                name="Samantha",
+                user=self.bot.get_user(226312219787264000),
+                bday=datetime.date(year, 6, 24),
+            ),
+            CoolKids(
+                name="Scott",
+                user=self.bot.get_user(223937483774230528),
+                bday=datetime.date(year, 6, 23),
+            ),
+            CoolKids(
+                name="Skye",
+                user=self.bot.get_user(329538915805691905),
+                bday=datetime.date(year, 6, 24),
+            ),
+            CoolKids(
+                name="Thomas",
+                user=self.bot.get_user(280428276810383370),
+                bday=datetime.date(year, 9, 29),
+            ),
+            # Zyemlus
+            CoolKids(
+                name="Samantha",
+                user=self.bot.get_user(536071288859656193),
+                bday=datetime.date(year, 8, 23),
+            ),
+            CoolKids(
+                name="Landen",
+                user=self.bot.get_user(654025117025828885),
+                bday=datetime.date(year, 8, 24),
+            ),
+            CoolKids(
+                name="Oceanlight",
+                user=self.bot.get_user(615658069132836865),
+                bday=datetime.date(year, 4, 9),
+            ),
+            # Shadowfi
+            CoolKids(
+                name="Daniel",
+                user=self.bot.get_user(586664256217415681),
+                bday=datetime.date(year, 11, 14),
+            ),
+            CoolKids(
+                name="Sawyer",
+                user=self.bot.get_user(404873210597867541),
+                bday=datetime.date(year, 9, 12),
+            ),
+            CoolKids(
+                name="Marco",
+                user=self.bot.get_user(299668599650648065),
+                bday=datetime.date(year, 11, 12),
+            ),
+            CoolKids(
+                name="Tyler",
+                user=self.bot.get_user(619322461749641246),
+                bday=datetime.date(year, 3, 4),
+            ),
+            CoolKids(
+                name="Avery",
+                user=self.bot.get_user(538824552906489874),
+                bday=datetime.date(year, 10, 16),
+            ),
+            CoolKids(
+                name="Matthew",
+                user=self.bot.get_user(525365553842356225),
+                bday=datetime.date(year, 1, 2),
+            ),
+        )
 
-        for coolKid in coolKids:
-            if datetime.date.today() == coolKid[2]:
+        for kid in coolKids:
+            if datetime.date.today() == kid.bday:
                 try:
                     for i in range(self.tries):
-                        await coolKid[1].send(
-                            f"Happy Birthday {coolKid[0]}! You're a boomer now! <:mangopog:730683234039365722>"
+                        await kid.user.send(
+                            f"Happy Birthday {kid.name}! You're a boomer now! <:mangopog:730683234039365722>"
                         )
                     self.tries = 1
                 except:
