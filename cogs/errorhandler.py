@@ -1,5 +1,6 @@
-import traceback
 import sys
+import traceback
+
 from discord.ext import commands
 
 
