@@ -91,13 +91,13 @@ async def deleteRun(self, apiKey, ctx, run):
 
 
 async def pendingRuns(self, ctx):
-    def banned_player_coop(run):
+    def banned_player_coop(run) -> bool:
         for player in run.players:
             if player in self.bot.runs_blacklist["players"]:
                 return True
         return False
 
-    def duplicate_run(run):
+    def duplicate_run(run) -> bool:
         for pending_run in pending_runs:
             if (
                 run._id != pending_run._id
@@ -120,7 +120,7 @@ async def pendingRuns(self, ctx):
     mcbece_runs = 0
     pending_runs = []
     runs_to_reject = []
-    game_ids = ["yd4ovvg1", "v1po7r76"]  # [mcbe, mcbece]
+    game_ids = ("yd4ovvg1", "v1po7r76")  # [mcbe, mcbece]
     head = {"Accept": "application/json", "User-Agent": "mcbeDiscordBot/1.0"}
 
     for game in game_ids:
@@ -159,7 +159,7 @@ async def pendingRuns(self, ctx):
             if len(run["players"]["data"]) == 1:
                 players = get_player_name(run["players"]["data"][0])
             else:
-                players = list(
+                players = tuple(
                     map(lambda player: get_player_name(player), run["players"]["data"])
                 )
 
@@ -182,25 +182,25 @@ async def pendingRuns(self, ctx):
             and run.players in self.bot.runs_blacklist["players"]
         ):
             runs_to_reject.append(
-                [
+                (
                     run,
                     f"Detected as a banned player ({run.players}) run by our automatic filter.",
-                ]
+                )
             )
 
         # Reject run if player is banned (coop runs)
         elif banned_player_coop(run) == True:
             runs_to_reject.append(
-                [
+                (
                     run,
                     f"Detected a banned player in the list of runners ({run.players}) by our automatic filter.",
-                ]
+                )
             )
 
         # Reject run if duplicate submission
         elif duplicate_run(run) == True:
             runs_to_reject.append(
-                [run, "Detected as a duplicate submission by our automatic filter."]
+                (run, "Detected as a duplicate submission by our automatic filter.")
             )
             pending_runs.remove(run)
 
