@@ -6,7 +6,7 @@ from google.cloud import translate_v2 as translate
 translate_client = translate.Client()
 
 
-async def translateMsg(text: str, target: str="en") -> str:
+async def translateMsg(text: str, target: str = "en") -> str:
     # Text can also be a sequence of strings, in which case this method
     # will return a sequence of results for each text.
     if isinstance(text, six.binary_type):
