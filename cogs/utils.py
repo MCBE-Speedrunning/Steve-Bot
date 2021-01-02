@@ -360,6 +360,11 @@ class Utils(commands.Cog):
                 user=self.bot.get_user(525365553842356225),
                 bday=datetime.date(year, 1, 2),
             ),
+            CoolKids(
+                name="Samuel",
+                user=self.bot.get_user(615235547920597150),
+                bday=datetime.date(year, 12, 13),
+            ),
         )
 
         for kid in coolKids:
