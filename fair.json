@@ -1,0 +1,14 @@
+{
+    "exampleUserId": {
+        "day": "total days user said 'fair'",
+        "streak": "fair streak",
+        "date": "date 'fair' was said last",
+        "timezone": "Defaults to Europe/London"
+    },
+    "615658069132836865": {
+        "day": -64,
+        "streak": 2,
+        "date": "2021-01-03",
+        "timezone": "Pacific/Honolulu"
+    }
+}
