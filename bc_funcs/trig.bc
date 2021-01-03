@@ -1,33 +1,33 @@
 define sin(x) {
-    auto b, s, r, a, q, i
+	auto b, s, r, a, q, i
 
-    if (x < 0)
-        return (-sin(-x))
+	if (x < 0)
+		return (-sin(-x))
 
-    b = ibase
-    ibase = A
-    s = scale
-    scale = 1.1 * s + 2
-    a = atan(1)
-    scale = 0
-    q = (x / a + 2) / 4
-    x -= 4 * q * a
+	b = ibase
+	ibase = A
+	s = scale
+	scale = 1.1 * s + 2
+	a = atan(1)
+	scale = 0
+	q = (x / a + 2) / 4
+	x -= 4 * q * a
 
-    if (q % 2)
-        x = -x
-        
-    scale = s + 2
-    r = a = x
-    q = -x * x
+	if (q % 2)
+		x = -x
 
-    for (i = 3; a; i += 2) {
-        a *= q / (i * (i - 1))
-        r += a
-    }
+	scale = s + 2
+	r = a = x
+	q = -x * x
 
-    scale = s
-    ibase = b
-    return (r / 1)
+	for (i = 3; a; i += 2) {
+		a *= q / (i * (i - 1))
+		r += a
+	}
+
+	scale = s
+	ibase = b
+	return (r / 1)
 }
 
 define cos(x) {
@@ -53,7 +53,7 @@ define atan(x) {
 		n = -1
 		x = -x
 	}
-    
+
 	if (scale < 65) {
 		if (x == 1) {
 			r = .7853981633974483096156608458198757210492923498437764552437361480/n
@@ -74,11 +74,11 @@ define atan(x) {
 		scale += 5
 		a = atan(.2)
 	}
-    
+
 	scale = s + 3
 
 	while (x > .2) {
-		m++
+		m += 1
 		x = (x - .2) / (1 + .2 * x)
 	}
 
