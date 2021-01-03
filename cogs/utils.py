@@ -2,6 +2,7 @@ import asyncio
 import datetime
 import functools
 import json
+import subprocess
 from collections import namedtuple
 from datetime import timedelta
 from pytz import timezone, exceptions
@@ -11,23 +12,24 @@ from random import choice, randint
 
 import discord
 from discord.ext import commands, tasks
+
 # from PIL.Image import core as Image
 # import image as Image
-from PIL import Image, ImageFilter
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+# from PIL import Image, ImageFilter
+# from selenium import webdriver
+# from selenium.webdriver.chrome.options import Options
 
 
-def set_viewport_size(driver, width, height):
-    window_size = driver.execute_script(
-        """
-		return [window.outerWidth - window.innerWidth + arguments[0],
-		  window.outerHeight - window.innerHeight + arguments[1]];
-		""",
-        width,
-        height,
-    )
-    driver.set_window_size(*window_size)
+# def set_viewport_size(driver, width, height):
+#     window_size = driver.execute_script(
+#         """
+# 		return [window.outerWidth - window.innerWidth + arguments[0],
+# 		  window.outerHeight - window.innerHeight + arguments[1]];
+# 		""",
+#         width,
+#         height,
+#     )
+#     driver.set_window_size(*window_size)
 
 
 async def reportStuff(self, ctx, message):
@@ -46,44 +48,44 @@ async def reportStuff(self, ctx, message):
     await ctx.author.send("Report has been submitted")
 
 
-def save_leaderboard():
-    DRIVER = "/usr/lib/chromium-browser/chromedriver"
-    chrome_options = Options()
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--no-sandbox")
-    chrome_options.add_argument("--disable-gpu")
-    # chrome_options.binary_location = ""
-    driver = webdriver.Chrome(DRIVER, chrome_options=chrome_options)
-    set_viewport_size(driver, 1000, 1100)
-    driver.get("https://aninternettroll.github.io/mcbeVerifierLeaderboard/")
-    screenshot = driver.find_element_by_id("table").screenshot("leaderboard.png")
-    driver.quit()
-    # transparency time
-    img = Image.open("leaderboard.png")
-    img = img.convert("RGB")
-    pallette = Image.open("palette.png")
-    pallette = pallette.convert("P")
-    img = img.quantize(colors=256, method=3, kmeans=0, palette=pallette)
-    img = img.convert("RGBA")
-    datas = img.getdata()
-
-    newData = []
-    for item in datas:
-        if item[0] == 255 and item[1] == 255 and item[2] == 255:
-            newData.append((255, 255, 255, 0))
-        else:
-            newData.append(item)
-
-    img.putdata(newData)
-    """
-	img = img.filter(ImageFilter.SHARPEN)
-	img = img.filter(ImageFilter.SHARPEN)
-	img = img.filter(ImageFilter.SHARPEN)
-	"""
-    # height, width = img.size
-    # img = img.resize((height*10,width*10), resample=Image.BOX)
-    img.save("leaderboard.png", "PNG")
+# def save_leaderboard():
+#     DRIVER = "/usr/lib/chromium-browser/chromedriver"
+#     chrome_options = Options()
+#     chrome_options.add_argument("--disable-dev-shm-usage")
+#     chrome_options.add_argument("--headless")
+#     chrome_options.add_argument("--no-sandbox")
+#     chrome_options.add_argument("--disable-gpu")
+#     # chrome_options.binary_location = ""
+#     driver = webdriver.Chrome(DRIVER, chrome_options=chrome_options)
+#     set_viewport_size(driver, 1000, 1100)
+#     driver.get("https://aninternettroll.github.io/mcbeVerifierLeaderboard/")
+#     screenshot = driver.find_element_by_id("table").screenshot("leaderboard.png")
+#     driver.quit()
+#     # transparency time
+#     img = Image.open("leaderboard.png")
+#     img = img.convert("RGB")
+#     pallette = Image.open("palette.png")
+#     pallette = pallette.convert("P")
+#     img = img.quantize(colors=256, method=3, kmeans=0, palette=pallette)
+#     img = img.convert("RGBA")
+#     datas = img.getdata()
+#
+#     newData = []
+#     for item in datas:
+#         if item[0] == 255 and item[1] == 255 and item[2] == 255:
+#             newData.append((255, 255, 255, 0))
+#         else:
+#             newData.append(item)
+#
+#     img.putdata(newData)
+#     """
+# 	img = img.filter(ImageFilter.SHARPEN)
+# 	img = img.filter(ImageFilter.SHARPEN)
+# 	img = img.filter(ImageFilter.SHARPEN)
+# 	"""
+#     # height, width = img.size
+#     # img = img.resize((height*10,width*10), resample=Image.BOX)
+#     img.save("leaderboard.png", "PNG")
 
 
 class Utils(commands.Cog):
@@ -528,6 +530,21 @@ class Utils(commands.Cog):
             commands = json.load(f)
             output = ", ".join([*commands])
             await ctx.send(f"```List of custom commands:\n{output}```")
+
+#    @commands.command(aliases=["calc"])
+#    async def math(self, ctx, *, eqn: str):
+#        try:
+#            # Allow for proper absolute value notation
+#            pipes = eqn.count("|")
+#            eqn = eqn.replace("|", "abs(", pipes // 2).replace("|", ")", pipes // 2)
+#
+#            result = subprocess.check_output(
+#                f"echo 'scale = 10; {eqn}' | bc bc_funcs/*", shell=True
+#            )
+#            await ctx.send(result.decode("utf-8").replace("\\\n", "").strip())
+#        except subprocess.CalledProcessError as err:
+#            print(err)
+#            await ctx.send("Something went wrong")
 
     @commands.command()
     async def retime(self, ctx, start_sec, end_sec, frames=0, framerate=30):
