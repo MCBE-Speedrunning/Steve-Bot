@@ -440,15 +440,13 @@ class Utils(commands.Cog):
 
     @commands.command(aliases=["calc"])
     async def math(self, ctx, *, eqn: str):
-        test = subprocess.check_output("pwd", shell=True)
-        ctx.send(test)
         try:
             # Allow for proper absolute value notation
             pipes = eqn.count("|")
             eqn = eqn.replace("|", "abs(", pipes // 2).replace("|", ")", pipes // 2)
 
             result = subprocess.check_output(
-                f"echo '{eqn}' | bc -f bc_funcs/*", shell=True
+                f"echo 'scale = 10; {eqn}' | bc bc_funcs/*", shell=True
             )
             await ctx.send(result.decode("utf-8").replace("\\\n", "").strip())
         except subprocess.CalledProcessError as err:
