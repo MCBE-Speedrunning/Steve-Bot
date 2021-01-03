@@ -11,6 +11,7 @@ from random import choice, randint
 
 import discord
 from discord.ext import commands, tasks
+
 # from PIL.Image import core as Image
 # import image as Image
 # from PIL import Image, ImageFilter
@@ -67,14 +68,14 @@ async def reportStuff(self, ctx, message):
 #     img = img.quantize(colors=256, method=3, kmeans=0, palette=pallette)
 #     img = img.convert("RGBA")
 #     datas = img.getdata()
-# 
+#
 #     newData = []
 #     for item in datas:
 #         if item[0] == 255 and item[1] == 255 and item[2] == 255:
 #             newData.append((255, 255, 255, 0))
 #         else:
 #             newData.append(item)
-# 
+#
 #     img.putdata(newData)
 #     """
 # 	img = img.filter(ImageFilter.SHARPEN)
@@ -441,7 +442,7 @@ class Utils(commands.Cog):
     async def math(self, ctx, eqn):
         try:
             result = subprocess.check_output(f"echo '{eqn}' | bc", shell=True)
-            await ctx.send(result.decode("utf-8").strip())
+            await ctx.send(result.decode("utf-8").replace("\\\n", "").strip())
         except subprocess.CalledProcessError as err:
             print(err)
             await ctx.send("Something went wrong")
