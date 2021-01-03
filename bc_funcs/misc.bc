@@ -1,0 +1,7 @@
+define findseed() {
+	auto x, i
+
+	for (i = 0; i < 12; i++)
+		x += (rand() % 10 < 1)
+	print "Your seed is a ", x, " eye"
+}

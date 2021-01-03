@@ -30,7 +30,7 @@ define sin(x) {
     return (r / 1)
 }
 
-define cos(x){
+define cos(x) {
 	auto b, s
 	b = ibase
 	ibase = A
@@ -43,7 +43,7 @@ define cos(x){
 	return (x / 1)
 }
 
-define atan(x){
+define atan(x) {
 	auto b, s, r, n, a, m, t, f, i, u
 	b = ibase
 	ibase = A
@@ -86,7 +86,7 @@ define atan(x){
 	f = -x * x
 	t = 1
 
-	for(i = 3; t; i += 2) {
+	for (i = 3; t; i += 2) {
 		u *= f
 		t = u / i
 		r += t
