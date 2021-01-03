@@ -439,7 +439,7 @@ class Utils(commands.Cog):
             await ctx.send(f"```List of custom commands:\n{output}```")
 
     @commands.command(aliases=["calc"])
-    async def math(self, ctx, eqn):
+    async def math(self, ctx, *, eqn):
         try:
             result = subprocess.check_output(f"echo '{eqn}' | bc", shell=True)
             await ctx.send(result.decode("utf-8").replace("\\\n", "").strip())
