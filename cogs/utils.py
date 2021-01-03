@@ -2,6 +2,7 @@ import asyncio
 import datetime
 import functools
 import json
+import subprocess
 from collections import namedtuple
 from datetime import timedelta
 # forgot to import this and ended up looking mentally unstable
@@ -430,6 +431,15 @@ class Utils(commands.Cog):
             commands = json.load(f)
             output = ", ".join([*commands])
             await ctx.send(f"```List of custom commands:\n{output}```")
+
+    @commands.command(aliases=["calc"])
+    async def math(self, ctx, eqn):
+        try:
+            result = subprocess.check_output(f"echo '{eqn}' | bc", shell=True)
+            await ctx.send(result.decode("utf-8").strip())
+        except subprocess.CalledProcessError as err:
+            print(err)
+            await ctx.send("Something went wrong")
 
     @commands.command()
     async def retime(self, ctx, start_sec, end_sec, frames=0, framerate=30):
