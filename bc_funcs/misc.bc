@@ -1,7 +1,9 @@
-define findseed() {
+define void findseed() {
 	auto x, i
 
 	for (i = 0; i < 12; i++)
-		x += (rand() % 10 < 1)
+		if (rand() % 10 < 1)
+			x++
+
 	print "Your seed is a ", x, " eye"
 }
