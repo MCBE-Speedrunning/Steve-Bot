@@ -439,9 +439,17 @@ class Utils(commands.Cog):
             await ctx.send(f"```List of custom commands:\n{output}```")
 
     @commands.command(aliases=["calc"])
-    async def math(self, ctx, *, eqn):
+    async def math(self, ctx, *, eqn: str):
+        bc_funcs = r"/home/thomas/Steve-Bot/bc_funcs"
+
         try:
-            result = subprocess.check_output(f"echo '{eqn}' | bc", shell=True)
+            # Allow for proper absolute value notation
+            pipes = eqn.count("|")
+            eqn = eqn.replace("|", "abs(", pipes // 2).replace("|", ")", pipes // 2)
+
+            result = subprocess.check_output(
+                f"echo '{eqn}' | bc -f */{bc_funcs}", shell=True
+            )
             await ctx.send(result.decode("utf-8").replace("\\\n", "").strip())
         except subprocess.CalledProcessError as err:
             print(err)
