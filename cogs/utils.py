@@ -5,6 +5,7 @@ import json
 import subprocess
 from collections import namedtuple
 from datetime import timedelta
+
 # forgot to import this and ended up looking mentally unstable
 # troll literally pointed out atleast 4 things I did wrong in 3 lines of code
 from random import choice, randint
@@ -448,7 +449,7 @@ class Utils(commands.Cog):
             eqn = eqn.replace("|", "abs(", pipes // 2).replace("|", ")", pipes // 2)
 
             result = subprocess.check_output(
-                f"echo '{eqn}' | bc -f */{bc_funcs}", shell=True
+                f"echo '{eqn}' | bc -f {bc_funcs}/*", shell=True
             )
             await ctx.send(result.decode("utf-8").replace("\\\n", "").strip())
         except subprocess.CalledProcessError as err:
