@@ -438,20 +438,20 @@ class Utils(commands.Cog):
             output = ", ".join([*commands])
             await ctx.send(f"```List of custom commands:\n{output}```")
 
-    @commands.command(aliases=["calc"])
-    async def math(self, ctx, *, eqn: str):
-        try:
-            # Allow for proper absolute value notation
-            pipes = eqn.count("|")
-            eqn = eqn.replace("|", "abs(", pipes // 2).replace("|", ")", pipes // 2)
-
-            result = subprocess.check_output(
-                f"echo 'scale = 10; {eqn}' | bc bc_funcs/*", shell=True
-            )
-            await ctx.send(result.decode("utf-8").replace("\\\n", "").strip())
-        except subprocess.CalledProcessError as err:
-            print(err)
-            await ctx.send("Something went wrong")
+#    @commands.command(aliases=["calc"])
+#    async def math(self, ctx, *, eqn: str):
+#        try:
+#            # Allow for proper absolute value notation
+#            pipes = eqn.count("|")
+#            eqn = eqn.replace("|", "abs(", pipes // 2).replace("|", ")", pipes // 2)
+#
+#            result = subprocess.check_output(
+#                f"echo 'scale = 10; {eqn}' | bc bc_funcs/*", shell=True
+#            )
+#            await ctx.send(result.decode("utf-8").replace("\\\n", "").strip())
+#        except subprocess.CalledProcessError as err:
+#            print(err)
+#            await ctx.send("Something went wrong")
 
     @commands.command()
     async def retime(self, ctx, start_sec, end_sec, frames=0, framerate=30):
