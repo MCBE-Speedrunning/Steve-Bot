@@ -468,9 +468,9 @@ class Utils(commands.Cog):
         except UnboundLocalError:
             pass
 
-    # 4 minute cooldown
+    # 24 hour cooldown
     # should probably be longer - we can't have these kids cheating!
-    @commands.cooldown(1, 24, commands.BucketType.guild)
+    @commands.cooldown(1, 86400, commands.BucketType.user)
     @commands.command()
     async def timezone(self, ctx, timeZone):
         """set timezone for fair days/streaks"""
