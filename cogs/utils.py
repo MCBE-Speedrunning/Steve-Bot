@@ -452,7 +452,7 @@ class Utils(commands.Cog):
 
     # 4 minute cooldown
     # should probably be longer - we can't have these kids cheating!
-    @commands.cooldown(1, 24, commands.BucketType.guild)
+    @commands.cooldown(1, 24, commands.BucketType.user)
     @commands.command()
     async def timezone(self, ctx, timeZone):
         """set timezone for fair days/streaks"""
