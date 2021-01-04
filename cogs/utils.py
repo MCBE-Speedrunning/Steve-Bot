@@ -2,6 +2,7 @@ import asyncio
 import datetime
 import functools
 import json
+import os
 import subprocess
 from collections import namedtuple
 from datetime import timedelta
@@ -30,6 +31,23 @@ from pytz import exceptions, timezone
 #         height,
 #     )
 #     driver.set_window_size(*window_size)
+
+
+async def bc_calc(ctx, eqn: str):
+    try:
+        # Allow for proper absolute value notation
+        pipes = eqn.count("|")
+        eqn = eqn.replace("|", "abs(", pipes // 2).replace("|", ")", pipes // 2)
+
+        with open("temp.txt", "w") as f:
+            f.write(eqn)
+
+        result = subprocess.check_output(f"bc bc_funcs/* temp.txt", shell=True)
+        os.remove("temp.txt")
+        await ctx.send(result.decode("utf-8").replace("\\\n", "").strip())
+    except subprocess.CalledProcessError as err:
+        print(err)
+        await ctx.send("Something went wrong")
 
 
 async def reportStuff(self, ctx, message):
@@ -548,20 +566,10 @@ class Utils(commands.Cog):
             output = ", ".join([*commands])
             await ctx.send(f"```List of custom commands:\n{output}```")
 
-    #    @commands.command(aliases=["calc"])
-    #    async def math(self, ctx, *, eqn: str):
-    #        try:
-    #            # Allow for proper absolute value notation
-    #            pipes = eqn.count("|")
-    #            eqn = eqn.replace("|", "abs(", pipes // 2).replace("|", ")", pipes // 2)
-    #
-    #            result = subprocess.check_output(
-    #                f"echo 'scale = 10; {eqn}' | bc bc_funcs/*", shell=True
-    #            )
-    #            await ctx.send(result.decode("utf-8").replace("\\\n", "").strip())
-    #        except subprocess.CalledProcessError as err:
-    #            print(err)
-    #            await ctx.send("Something went wrong")
+    @commands.command(aliases=["calc"])
+    async def math(self, ctx, *, eqn: str):
+        # 10 second timeout
+        await asyncio.wait_for(bc_calc(ctx, eqn), 10)
 
     @commands.command()
     async def retime(self, ctx, start_sec, end_sec, frames=0, framerate=30):
