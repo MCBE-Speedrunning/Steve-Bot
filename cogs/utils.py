@@ -42,7 +42,9 @@ async def bc_calc(ctx, eqn: str):
         with open("temp.txt", "w") as f:
             f.write(eqn)
 
-        result = subprocess.check_output(f"bc bc_funcs/* temp.txt", shell=True)
+        result = subprocess.check_output(
+            f"echo 'scale=20; $(cat temp.txt)' | bc bc_funcs/*", shell=True
+        )
         os.remove("temp.txt")
         await ctx.send(result.decode("utf-8").replace("\\\n", "").strip())
     except subprocess.CalledProcessError as err:
@@ -569,7 +571,8 @@ class Utils(commands.Cog):
     @commands.command(aliases=["calc"])
     async def math(self, ctx, *, eqn: str):
         # 10 second timeout
-        await asyncio.wait_for(bc_calc(ctx, eqn), 10)
+        await bc_calc(ctx, eqn)
+        # await asyncio.wait_for(bc_calc(ctx, eqn), 10)
 
     @commands.command()
     async def retime(self, ctx, start_sec, end_sec, frames=0, framerate=30):
