@@ -5,13 +5,13 @@ import json
 import subprocess
 from collections import namedtuple
 from datetime import timedelta
-from pytz import timezone, exceptions
 # forgot to import this and ended up looking mentally unstable
 # troll literally pointed out atleast 4 things I did wrong in 3 lines of code
 from random import choice, randint
 
 import discord
 from discord.ext import commands, tasks
+from pytz import exceptions, timezone
 
 # from PIL.Image import core as Image
 # import image as Image
@@ -387,16 +387,19 @@ class Utils(commands.Cog):
                 with open("fair.json", "r") as f:
                     fair = json.load(f)
 
-
                 # if fairer's ID in fair.json
-                if (userId := str(message.author.id)) in fair:
+                userId = str(message.author.id)
+                if userId in fair:
                     # TODO: use timezones (get this time based on timezones to fair.json - default to GMT)
                     tz = fair[userId]["timezone"]
                     today = str(datetime.datetime.now(timezone(tz)).date())
-                    yesterday = str(datetime.datetime.now(timezone(tz)).date() - timedelta(1))
+                    yesterday = str(
+                        datetime.datetime.now(timezone(tz)).date() - timedelta(1)
+                    )
 
                     # if date in json != current date
-                    if (date := fair[userId]["date"]) != today:
+                    date = fair[userId]["date"]
+                    if date != today:
                         # increment fair day
                         fairDay = fair[userId]["day"] + 1
 
@@ -409,24 +412,36 @@ class Utils(commands.Cog):
                             await message.channel.send("streak lost. :sad:")
 
                         # only send && update if user is fairing for the first time today
-                        fair[userId] = {"day": fairDay, "streak": fairStreak, "date": today, "timezone": tz}
+                        fair[userId] = {
+                            "day": fairDay,
+                            "streak": fairStreak,
+                            "date": today,
+                            "timezone": tz,
+                        }
 
                         fairInfo = f"day {fair[userId]['day']}, streak {fair[userId]['streak']}"
                         await message.channel.send(fairInfo)
-                        
+
                 # new user - not in fair.json
                 else:
                     # default to GMT
                     tz = "Europe/London"
                     today = str(datetime.datetime.now(timezone(tz)).date())
-                    fair[userId] = {"day": 1, "streak": 1, "date": today, "timezone": tz}
+                    fair[userId] = {
+                        "day": 1,
+                        "streak": 1,
+                        "date": today,
+                        "timezone": tz,
+                    }
 
-                    fairInfo = f"day {fair[userId]['day']}, streak {fair[userId]['streak']}"
+                    fairInfo = (
+                        f"day {fair[userId]['day']}, streak {fair[userId]['streak']}"
+                    )
                     await message.channel.send(fairInfo)
 
                 # overwrite with new fair object
                 with open("fair.json", "w") as f:
-                    json.dump(fair, f, indent = 4)    
+                    json.dump(fair, f, indent=4)
 
                 count += 1
                 fairMsg = "Fair " * count
@@ -434,7 +449,6 @@ class Utils(commands.Cog):
             await message.channel.send(fairMsg)
         except UnboundLocalError:
             pass
-    
 
     # 4 minute cooldown
     # should probably be longer - we can't have these kids cheating!
@@ -448,18 +462,21 @@ class Utils(commands.Cog):
             fair = json.load(f)
 
         # if this user has faired before
-        if (userId := str(ctx.author.id)) not in fair:
+        userId = str(ctx.author.id)
+        if userId not in fair:
             # new user
             await ctx.send("try saying 'fair' first")
             return
-        
+
         try:
             # let users timezone = input timezone (string version so as to please json)
             # use timezone() simply to see if it's valid
-            tz = str(timezone(timeZone))                    
+            tz = str(timezone(timeZone))
 
         except exceptions.UnknownTimeZoneError:
-            await ctx.send("That's not a valid timezone. You can look them up at https://kevinnovak.github.io/Time-Zone-Picker/")
+            await ctx.send(
+                "That's not a valid timezone. You can look them up at https://kevinnovak.github.io/Time-Zone-Picker/"
+            )
             return
 
         # set user's timezone to (verified) input zone
@@ -467,10 +484,11 @@ class Utils(commands.Cog):
 
         # overwrite with new fair object
         with open("fair.json", "w") as f:
-            json.dump(fair, f, indent = 4)
+            json.dump(fair, f, indent=4)
 
-        await ctx.send(f"{discord.utils.escape_mentions(ctx.message.author.display_name)} your timezone has been set to {timeZone}")
-            
+        await ctx.send(
+            f"{discord.utils.escape_mentions(ctx.message.author.display_name)} your timezone has been set to {timeZone}"
+        )
 
     # TODO (this also needs a better name)
     # @commands.cooldown(1, 20, commands.BucketType.guild)
@@ -480,7 +498,6 @@ class Utils(commands.Cog):
     #     # get fair object
     #     with open("fair.json", "r") as f:
     #         fair = json.load(f)
-
 
     @commands.cooldown(1, 60, commands.BucketType.member)
     @commands.command()
@@ -531,20 +548,20 @@ class Utils(commands.Cog):
             output = ", ".join([*commands])
             await ctx.send(f"```List of custom commands:\n{output}```")
 
-#    @commands.command(aliases=["calc"])
-#    async def math(self, ctx, *, eqn: str):
-#        try:
-#            # Allow for proper absolute value notation
-#            pipes = eqn.count("|")
-#            eqn = eqn.replace("|", "abs(", pipes // 2).replace("|", ")", pipes // 2)
-#
-#            result = subprocess.check_output(
-#                f"echo 'scale = 10; {eqn}' | bc bc_funcs/*", shell=True
-#            )
-#            await ctx.send(result.decode("utf-8").replace("\\\n", "").strip())
-#        except subprocess.CalledProcessError as err:
-#            print(err)
-#            await ctx.send("Something went wrong")
+    #    @commands.command(aliases=["calc"])
+    #    async def math(self, ctx, *, eqn: str):
+    #        try:
+    #            # Allow for proper absolute value notation
+    #            pipes = eqn.count("|")
+    #            eqn = eqn.replace("|", "abs(", pipes // 2).replace("|", ")", pipes // 2)
+    #
+    #            result = subprocess.check_output(
+    #                f"echo 'scale = 10; {eqn}' | bc bc_funcs/*", shell=True
+    #            )
+    #            await ctx.send(result.decode("utf-8").replace("\\\n", "").strip())
+    #        except subprocess.CalledProcessError as err:
+    #            print(err)
+    #            await ctx.send("Something went wrong")
 
     @commands.command()
     async def retime(self, ctx, start_sec, end_sec, frames=0, framerate=30):
