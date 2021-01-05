@@ -42,7 +42,7 @@ async def bc_calc(ctx, eqn: str):
         with open("temp.txt", "w") as f:
             f.write(eqn)
         result = subprocess.check_output(
-            f'echo "scale=20; $(cat temp.txt)" | /bin/bc bc_funcs/*', shell=True
+            f'echo "scale=20; $(cat temp.txt)" | bc bc_funcs/*', shell=True
         )
         os.remove("temp.txt")
 
