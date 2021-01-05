@@ -3,3 +3,22 @@ define abs(x) {
 		x *= -1
 	return x
 }
+
+define fact(x) {
+    auto r
+
+    if (x < 0) {
+        print "Error: Negative factorial\n"
+        return 0
+    }
+
+    if (x % 1 != 0) {
+        print "Error: Non-integer factorial\n"
+        return 0
+    }
+
+    r = 1
+    for (i = 2; i <= x; i++)
+        r *= i
+    return r
+}
