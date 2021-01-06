@@ -5,20 +5,26 @@ define abs(x) {
 }
 
 define fact(x) {
-    auto r
+	auto r, s
 
-    if (x < 0) {
-        print "Error: Negative factorial\n"
-        return 0
-    }
+	if (x < 0) {
+		print "Error: Negative factorial\n"
+		return 0
+	}
 
-    if (x % 1 != 0) {
-        print "Error: Non-integer factorial\n"
-        return 0
-    }
+	/* x % 1 requires scale set to 0 */
+	s = scale
+	scale = 0
+	if (x % 1 != 0) {
+		print "Error: Non-integer factorial\n"
+		scale = s
+		return 0
+	}
 
-    r = 1
-    for (i = 2; i <= x; i++)
-        r *= i
-    return r
+	r = 1
+	for (i = 2; i <= x; i++)
+		r *= i
+
+	scale = s
+	return r
 }
