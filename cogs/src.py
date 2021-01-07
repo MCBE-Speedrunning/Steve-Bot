@@ -213,7 +213,7 @@ async def pendingRuns(self, ctx):
                 mcbece_runs += 1
 
             # In the case of coop, change the player names from a list to a string for prettier output
-            if type(run.players) == list:
+            if type(run.players) == tuple:
                 run.players = ", ".join(map(str, run.players))
 
             embed = discord.Embed(
