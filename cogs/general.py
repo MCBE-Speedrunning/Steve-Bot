@@ -3,7 +3,7 @@ import inspect
 import json
 import os
 import sys
-from random import randint
+from random import choice
 
 import dateutil.parser
 import discord
@@ -388,7 +388,7 @@ class MyHelpCommand(commands.MinimalHelpCommand):
         return f"``{self.clean_prefix}{command.qualified_name} {command.signature}``"
 
     def get_ending_note(self) -> str:
-        return self.messages[randint(0, len(self.messages) - 1)]
+        return choice(self.messages)
 
 
 class General(commands.Cog):

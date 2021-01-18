@@ -415,7 +415,7 @@ class Utils(commands.Cog):
                             fairStreak = fair[userId]["streak"] + 1
                         else:
                             fairStreak = 1
-                            await message.channel.send("streak lost. :sad:")
+                            await message.channel.send("streak lost. <:sad:716629485449117708>")
 
                         # only send && update if user is fairing for the first time today
                         fair[userId] = {
