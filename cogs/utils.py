@@ -6,8 +6,6 @@ import os
 import subprocess
 from collections import namedtuple
 from datetime import timedelta
-# forgot to import this and ended up looking mentally unstable
-# troll literally pointed out atleast 4 things I did wrong in 3 lines of code
 from random import choice, randint
 
 import discord
@@ -31,25 +29,6 @@ from pytz import exceptions, timezone
 #         height,
 #     )
 #     driver.set_window_size(*window_size)
-
-
-async def bc_calc(ctx, eqn: str):
-    try:
-        # Allow for proper absolute value notation
-        pipes = eqn.count("|")
-        eqn = eqn.replace("|", "abs(", pipes // 2).replace("|", ")", pipes // 2)
-
-        with open("temp.txt", "w") as f:
-            f.write(eqn)
-        result = subprocess.check_output(
-            f'echo "scale=20; $(cat temp.txt)" | bc bc_funcs/*', shell=True
-        )
-        os.remove("temp.txt")
-
-        await ctx.send(result.decode("utf-8").replace("\\\n", "").strip())
-    except subprocess.CalledProcessError as err:
-        print(err)
-        await ctx.send("Something went wrong")
 
 
 async def reportStuff(self, ctx, message):
@@ -272,7 +251,14 @@ class Utils(commands.Cog):
         badWords = ("fair", "ⓕⓐⓘⓡ")
         count = 0
         year = datetime.date.today().year
-        CoolKids = namedtuple("CoolKid", ["name", "user", "bday",])
+        CoolKids = namedtuple(
+            "CoolKid",
+            [
+                "name",
+                "user",
+                "bday",
+            ],
+        )
 
         coolKids = (
             CoolKids(
@@ -570,8 +556,20 @@ class Utils(commands.Cog):
 
     @commands.command(aliases=["calc"])
     async def math(self, ctx, *, eqn: str):
-        # 10 second timeout
-        await asyncio.wait_for(bc_calc(ctx, eqn), 10)
+        try:
+            # Allow for proper absolute value notation
+            pipes = eqn.count("|")
+            eqn = eqn.replace("|", "abs(", pipes // 2).replace("|", ")", pipes // 2)
+
+            with open("bc_input.bc", "w") as f:
+                f.write(eqn)
+            result = subprocess.check_output("utils/math", shell=True)
+            os.remove("bc_input.bc")
+
+            await ctx.send(result.decode("utf-8").replace("\\\n", "").strip())
+        except subprocess.CalledProcessError as err:
+            print(err)
+            await ctx.send("Something went wrong")
 
     @commands.command()
     async def retime(self, ctx, start_sec, end_sec, frames=0, framerate=30):
