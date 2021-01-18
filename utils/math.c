@@ -21,43 +21,43 @@ bool timeout = false, child_done = false;
 
 void timeout_hander(int UNUSED(sig))
 {
-    timeout = true;
+	timeout = true;
 }
 
 void child_handler(int UNUSED(sig))
 {
-    child_done = true;
+	child_done = true;
 }
 
 int main(void)
 {
-    pid_t pid = fork();
-    switch (pid) {
-    case 0:
-        execl("/bin/bc", "", "-q", "bc_funcs/lib.bc", "bc_funcs/init.bc",
-              FILE_NAME, "bc_funcs/exit.bc", NULL);
-        fallthrough;
-    case -1:
-        perror("calc");
-        return EXIT_FAILURE;
-    default:
-        /* Setup signal handlers after fork so the child doesnt inherit them */
-        signal(SIGALRM, timeout_hander);
-        signal(SIGCHLD, child_handler);
-        alarm(TIMEOUT);
-        pause();
+	pid_t pid = fork();
+	switch (pid) {
+	case 0:
+		execlp("bc", "bc", "-q", "bc_funcs/lib.bc", "bc_funcs/init.bc",
+			   FILE_NAME, "bc_funcs/exit.bc", NULL);
+		fallthrough;
+	case -1:
+		perror("calc");
+		return EXIT_FAILURE;
+	default:
+		/* Setup signal handlers after fork so the child doesnt inherit them */
+		signal(SIGALRM, timeout_hander);
+		signal(SIGCHLD, child_handler);
+		alarm(TIMEOUT);
+		pause();
 
-        /*
-         * Wait for either the child process to terminate, or for 5 seconds to
-         * have passed
-         */
-        if (timeout) {
-            puts("Error: 5 second timeout reached");
-            kill(pid, 9);
-        }
+		/*
+		 * Wait for either the child process to terminate, or for 5 seconds to
+		 * have passed
+		 */
+		if (timeout) {
+			puts("Error: 5 second timeout reached");
+			kill(pid, 9);
+		}
 
-        break;
-    }
+		break;
+	}
 
-    return EXIT_SUCCESS;
+	return EXIT_SUCCESS;
 }
