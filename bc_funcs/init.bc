@@ -1,0 +1,3 @@
+# Any sort of code you want to run BEFORE the users input is evaluated
+
+scale = 20
