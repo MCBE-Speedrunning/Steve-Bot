@@ -1,9 +1,24 @@
+# Folders
 .vscode/
 __pycache__/
 downloads/
+
+# Configuration files
 api_keys.json
 config.json
 blacklist.json
 runs_blacklist.json
+
+# Log files
 discord.log
+
+# GCC output
+*.o
+*.d
+
+# C binaries
+math
+
+# Misc
+bc_input.bc
 leaderboard.png
