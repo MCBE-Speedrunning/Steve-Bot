@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+import subprocess
 
 import discord
 import git
@@ -180,7 +181,7 @@ class Admin(commands.Cog):
             await ctx.send("You need to name someone to unmute")
             return
         elif type(members) == str:
-            members = self.bot.get_user(int(user))
+            members = self.bot.get_user(int(members))
 
         muted_role = ctx.guild.get_role(
             int(self.bot.config[str(ctx.message.guild.id)]["mute_role"])
@@ -247,7 +248,7 @@ class Admin(commands.Cog):
             await ctx.send("You need to name someone to blacklist")
             return
         elif type(members) == "str":
-            members = self.bot.get_user(int(user))
+            members = self.bot.get_user(int(members))
 
         with open("blacklist.json", "w") as f:
             for i in members:
@@ -340,6 +341,16 @@ class Admin(commands.Cog):
     async def give_role(self, ctx, role_id):
         the_role = ctx.guild.get_role(int(role_id))
         await ctx.author.add_roles(the_role)
+
+    @commands.command(aliases=["calc"])
+    async def drun(self, ctx, *, uri: str):
+        """Check to see if a runs video is potentially stolen"""
+        try:
+            result = subprocess.check_output(f"echo {uri} | drun", shell=True)
+            await ctx.send(result.decode("utf-8").strip())
+        except subprocess.CalledProcessError as err:
+            print(err)
+            await ctx.send("Something went wrong")
 
 
 def setup(bot):
