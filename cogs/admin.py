@@ -342,7 +342,7 @@ class Admin(commands.Cog):
         the_role = ctx.guild.get_role(int(role_id))
         await ctx.author.add_roles(the_role)
 
-    @commands.command(aliases=["calc"])
+    @commands.command()
     async def drun(self, ctx, *, uri: str):
         """Check to see if a runs video is potentially stolen"""
         try:
