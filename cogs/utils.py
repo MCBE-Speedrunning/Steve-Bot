@@ -560,7 +560,7 @@ class Utils(commands.Cog):
 
     @commands.command(aliases=["calc"])
     async def math(self, ctx, *, eqn: str):
-        if '"' in ctx.message or "print" in ctx.message:
+        if '"' in eqn or "print" in eqn:
             return
         try:
             # Allow for proper absolute value notation
