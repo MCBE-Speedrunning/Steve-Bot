@@ -4,22 +4,24 @@ import functools
 import json
 import os
 import subprocess
+import unicodedata
 from collections import namedtuple
 from datetime import timedelta
-# forgot to import this and ended up looking mentally unstable
-# troll literally pointed out atleast 4 things I did wrong in 3 lines of code
 from random import choice, randint
 
 import discord
 from discord.ext import commands, tasks
 from pytz import exceptions, timezone
 
+# forgot to import this (randint) and ended up looking mentally unstable
+# troll literally pointed out atleast 4 things I did wrong in 3 lines of code
+
+
 # from PIL.Image import core as Image
 # import image as Image
 # from PIL import Image, ImageFilter
 # from selenium import webdriver
 # from selenium.webdriver.chrome.options import Options
-
 
 # def set_viewport_size(driver, width, height):
 #     window_size = driver.execute_script(
@@ -388,13 +390,19 @@ class Utils(commands.Cog):
                     self.tries = 1
                 except:
                     self.tries += 1
-                    
-        
-	    # *don't* ask
-        if message.author.id == 289721817516605440 and "women" in message.content.lower(): # an ultra special dude
-            await message.channel.send("https://cdn.discordapp.com/attachments/574267524380753942/797607190726180965/Screenshot_2020-12-18_at_19.58.32.png")
 
-            
+        # *Don't* ask
+        if message.author.id == 289721817516605440:  # An ultra special dude
+            text = (
+                unicodedata.normalize("NFD", text)
+                .encode("ascii", "ignore")
+                .decode("utf-8")
+            )
+            if "women" in text.lower():
+                await message.channel.send(
+                    "https://cdn.discordapp.com/attachments/574267524380753942/797607190726180965/Screenshot_2020-12-18_at_19.58.32.png"
+                )
+
         for word in badWords:
             if word in message.content.lower().replace(" ", ""):
                 # get fair object
