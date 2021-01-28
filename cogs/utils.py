@@ -388,7 +388,13 @@ class Utils(commands.Cog):
                     self.tries = 1
                 except:
                     self.tries += 1
+                    
+        
+	    # *don't* ask
+        if message.author.id == 289721817516605440 and "women" in message.content.lower(): # an ultra special dude
+            await message.channel.send("https://cdn.discordapp.com/attachments/574267524380753942/797607190726180965/Screenshot_2020-12-18_at_19.58.32.png")
 
+            
         for word in badWords:
             if word in message.content.lower().replace(" ", ""):
                 # get fair object
