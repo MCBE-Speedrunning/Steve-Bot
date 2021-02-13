@@ -1,24 +1,21 @@
-import asyncio
 import json
 from datetime import timedelta
 from pathlib import Path
 
-import dateutil.parser
 import discord
 import requests
 from discord.ext import commands, tasks
-from discord.utils import get
 
 
 class SubmittedRun:
-    def __init__(self, game, _id, category, video, players, duration, type_, values):
+    def __init__(self, game, _id, category, video, players, duration, _type, values):
         self.game = game
         self._id = _id
         self.category = category
         self.video = video
         self.players = players
         self.duration = duration
-        self.type_ = type_
+        self._type = _type
         self.link = f"https://www.speedrun.com/{game}/run/{_id}"
         self.values = values
 
@@ -109,7 +106,7 @@ async def pendingRuns(self, ctx):
                 return True
         return False
 
-    def get_player_name(player):
+    def get_player_name(player) -> str:
         if player["rel"] == "user":
             return player["names"]["international"]
         else:
@@ -134,7 +131,7 @@ async def pendingRuns(self, ctx):
             _id = run["id"]
             duration = timedelta(seconds=run["times"]["realtime_t"])
 
-            if run["videos"] != None:
+            if run["videos"]:
                 try:
                     video = run["videos"]["links"][0]["uri"]
                 except KeyError:
@@ -146,14 +143,14 @@ async def pendingRuns(self, ctx):
             if run["level"]["data"] != []:
                 category = run["level"]["data"]["name"]
                 if game == "yd4ovvg1":
-                    type_ = "Individual Level"
+                    _type = "Individual Level"
             else:
                 category = run["category"]["data"]["name"]
                 if game == "yd4ovvg1":
-                    type_ = "Full Game Run"
+                    _type = "Full Game Run"
 
             if game == "v1po7r76":
-                type_ = "Category Extension"
+                _type = "Category Extension"
 
             # Set players to a string if solo, or a list if coop
             if len(run["players"]["data"]) == 1:
@@ -167,14 +164,14 @@ async def pendingRuns(self, ctx):
             values = run["values"]
 
             pending_run = SubmittedRun(
-                game, _id, category, video, players, duration, type_, values
+                game, _id, category, video, players, duration, _type, values
             )
             pending_runs.append(pending_run)
 
     for run in pending_runs:
         # Reject run if video is blacklisted
         if run.video.split("/")[-1].split("=")[-1] in self.bot.runs_blacklist["videos"]:
-            runs_to_reject.append([run, "Detected as spam by our automatic filter."])
+            runs_to_reject.append((run, "Detected as spam by our automatic filter."))
 
         # Reject run if player is banned (solo runs)
         elif (
@@ -204,10 +201,20 @@ async def pendingRuns(self, ctx):
             )
             pending_runs.remove(run)
 
+        # Reject run if it's a clear fake (less than 30 second full game run, but not Kill Elder Guardian)
+        elif (
+            run._type == "Full Game Run"
+            and run.category != "Kill Bosses Glitchless"
+            and run.duration.seconds <= 60
+        ):
+            runs_to_reject.append(
+                (run, "Detected as a fake run by our automatic filter.")
+            )
+
         else:
-            if run.type_ == "Full Game Run":
+            if run._type == "Full Game Run":
                 mcbe_runs += 1
-            elif run.type_ == "Individual Level":
+            elif run._type == "Individual Level":
                 mcbeil_runs += 1
             else:
                 mcbece_runs += 1
@@ -217,7 +224,7 @@ async def pendingRuns(self, ctx):
                 run.players = ", ".join(map(str, run.players))
 
             embed = discord.Embed(
-                title=run.type_,
+                title=run._type,
                 url=run.link,
                 description=f"{run.category} in `{str(run.duration).replace('000','')}` by **{run.players}**",
                 color=0x9400D3,
