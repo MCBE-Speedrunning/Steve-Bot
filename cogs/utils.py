@@ -10,7 +10,7 @@ from datetime import timedelta
 from random import choice, randint
 
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands
 from pytz import exceptions, timezone
 
 # forgot to import this (randint) and ended up looking mentally unstable
@@ -394,7 +394,7 @@ class Utils(commands.Cog):
         # *Don't* ask
         if message.author.id == 289721817516605440:  # An ultra special dude
             text = (
-                unicodedata.normalize("NFD", text)
+                unicodedata.normalize("NFD", message.context)
                 .encode("ascii", "ignore")
                 .decode("utf-8")
             )
@@ -541,14 +541,12 @@ class Utils(commands.Cog):
     async def leaderboard(self, ctx):
         """Leaderboard of the people that matter"""
         async with ctx.typing():
-            try:
-                lbFunc = functools.partial(save_leaderboard)
-                await self.bot.loop.run_in_executor(None, lbFunc)
-                await ctx.send(file=discord.File("leaderboard.png"))
-            except:
-                await ctx.send(
-                    "https://aninternettroll.github.io/mcbeVerifierLeaderboard/"
-                )
+            #            try:
+            #                lbFunc = functools.partial(save_leaderboard)
+            #                await self.bot.loop.run_in_executor(None, lbFunc)
+            #                await ctx.send(file=discord.File("leaderboard.png"))
+            #            except:
+            await ctx.send("https://aninternettroll.github.io/mcbeVerifierLeaderboard/")
 
     @commands.cooldown(1, 60, commands.BucketType.guild)
     @commands.command()
