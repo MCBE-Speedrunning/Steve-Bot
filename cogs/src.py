@@ -204,7 +204,7 @@ async def pendingRuns(self, ctx):
         # Reject run if it's a clear fake (less than 30 second full game run, but not Kill Elder Guardian)
         elif (
             run._type == "Full Game Run"
-            and run.category != "Kill Bosses Glitchless"
+            and "Kill Bosses Glitchless" not in run.category
             and run.duration.seconds <= 60
         ):
             runs_to_reject.append(
