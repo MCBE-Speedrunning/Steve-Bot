@@ -399,7 +399,7 @@ class Utils(commands.Cog):
             )
             if "women" in text.lower() or "woman" in text.lower():
                 await message.channel.send(
-                    "https://cdn.discordapp.com/attachments/574267524380753942/797607190726180965/Screenshot_2020-12-18_at_19.58.32.png"
+                    "<:shut:808844274933694474>"
                 )
 
         for word in badWords:
