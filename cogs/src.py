@@ -331,43 +331,43 @@ async def verifyNew(self, apiKey=None, userID=None):
     else:
         await member.remove_roles(RunneRole)
 
+
 async def verifiedCount(self, ctx, modName):
-    head = {
-        "Accept": "application/json",
-        "User-Agent": "mcbeDiscordBot/1.0"
-        }
-    
-    r = requests.get(
-        f"https://www.speedrun.com/api/v1/users/{modName}",
-        headers=head
-        )
-    if r.status_code != 200:
-        await ctx.send(f"Could not find user {modName}")
-        return
-    try:
-        modID = r.json()['data']['id']
-    except:
-        await ctx.send("Something went wrong")
-        return
-    
-    hold = []
-    temp = requests.get(
-        f"https://www.speedrun.com/api/v1/runs?examiner={modID}&max=200",
-        headers=head)
-    while True:
-        if temp.status_code != 200:
+    head = {"Accept": "application/json", "User-Agent": "mcbeDiscordBot/1.0"}
+    async with self.bot.session.get(
+        f"https://www.speedrun.com/api/v1/users/{modName}", headers=head
+    ) as r:
+        if r.status != 200:
+            await ctx.send(f"Could not find user {modName}")
+            return
+        try:
+            modID = await r.json()
+            modID = modID["data"]["id"]
+        except:
             await ctx.send("Something went wrong")
             return
-        temp_json = temp.json()
-        hold.extend(temp_json['data'])
-        if 'pagination' not in temp_json or temp_json['pagination']['size'] < 200:
-            break
-        temp = requests.get(
-            {item['rel']: item['uri']
-             for item in temp_json['pagination']['links']}['next'],
-            headers=head)
-        
+
+    hold = []
+    async with self.bot.session.get(
+        f"https://www.speedrun.com/api/v1/runs?examiner={modID}&max=200", headers=head
+    ) as temp:
+        while True:
+            if temp.status != 200:
+                await ctx.send("Something went wrong")
+                return
+            temp_json = await temp.json()
+            hold.extend(temp_json["data"])
+            if "pagination" not in temp_json or temp_json["pagination"]["size"] < 200:
+                break
+            temp = await self.bot.session.get(
+                {item["rel"]: item["uri"] for item in temp_json["pagination"]["links"]}[
+                    "next"
+                ],
+                headers=head,
+            )
+
     await ctx.send(f"{modName} has verified {len(hold)} runs")
+
 
 class Src(commands.Cog):
     def __init__(self, bot):
@@ -444,8 +444,8 @@ class Src(commands.Cog):
             if modName is None:
                 await ctx.send("Please supply a moderator to view stats of")
                 return
-            await verifiedCount(self, ctx, modName) 
-    
+            await verifiedCount(self, ctx, modName)
+
     @tasks.loop(minutes=10.0)
     async def checker(self):
         data = json.loads(Path("./api_keys.json").read_text())

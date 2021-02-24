@@ -398,9 +398,7 @@ class Utils(commands.Cog):
                 .decode("utf-8")
             )
             if "women" in text.lower() or "woman" in text.lower():
-                await message.channel.send(
-                    "<:shut:808844274933694474>"
-                )
+                await message.channel.send("<:shut:808844274933694474>")
 
         for word in badWords:
             if word in message.content.lower().replace(" ", ""):
