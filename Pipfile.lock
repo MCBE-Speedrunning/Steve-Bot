@@ -33,7 +33,7 @@
                 "sha256:fb83326d8295e8840e4ba774edf346e87eca78ba8a89c55d2690352842c15ba5"
             ],
             "markers": "python_full_version >= '3.5.3'",
-            "version": "==3.6.3"
+            "version": ">=3.6.4"
         },
         "async-timeout": {
             "hashes": [

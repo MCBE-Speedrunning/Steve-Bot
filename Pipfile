@@ -6,6 +6,7 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
+aiohtto = ">=3.7.4"
 asyncio = "==3.4.3"
 "discord.py" = {extras = ["voice"], version = "*"}
 colorama = "==0.4.3"
