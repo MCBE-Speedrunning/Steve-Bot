@@ -399,7 +399,7 @@ class Utils(commands.Cog):
         # *Don't* ask
         if message.author.id == 289721817516605440:  # An ultra special dude
             text = (
-                unicodedata.normalize("NFD", message.context)
+                unicodedata.normalize("NFD", message.content)
                 .encode("ascii", "ignore")
                 .decode("utf-8")
             )
