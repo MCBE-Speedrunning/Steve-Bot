@@ -121,13 +121,24 @@ async def pendingRuns(self, ctx):
     head = {"Accept": "application/json", "User-Agent": "mcbeDiscordBot/1.0"}
 
     for game in game_ids:
-        runs_request = requests.get(
+        runs = []
+        async with self.bot.session.get(
             f"https://www.speedrun.com/api/v1/runs?game={game}&status=new&max=200&embed=category,players,level&orderby=submitted",
             headers=head,
-        )
-        runs = json.loads(runs_request.text)
-
-        for run in runs["data"]:
+        ) as temp:
+            while True:
+                temp_json = await temp.json()
+                runs.extend(temp_json["data"])
+                if "pagination" not in temp_json or temp_json["pagination"]["size"] < 200:
+                    break
+                temp = await self.bot.session.get(
+                    {item["rel"]: item["uri"] for item in temp_json["pagination"]["links"]}[
+                        "next"
+                    ],
+                    headers=head,
+                )
+                
+        for run in runs:
             _id = run["id"]
             duration = timedelta(seconds=run["times"]["realtime_t"])
 
