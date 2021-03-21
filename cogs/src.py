@@ -267,7 +267,7 @@ async def pendingRuns(self, ctx):
             )
             if r.status_code in [200, 204]:
                 await ctx.send(
-                    f"Run rejected succesfully for `{run[1]}`\nLink: {run[0].link}"
+                    f"Run rejected succesfully for `{run[1]}`\nLink: <{run[0].link}>"
                 )
             else:
                 await ctx.send("Something went wrong")
