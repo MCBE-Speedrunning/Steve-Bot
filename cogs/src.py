@@ -397,7 +397,7 @@ async def queueLength(self, ctx, game):
 
     hold = []
     async with self.bot.session.get(
-        f"https://www.speedrun.com/api/v1/runs?game={gameID}&max=200", headers=head
+        f"https://www.speedrun.com/api/v1/runs?game={gameID}&status=new&max=200", headers=head
     ) as temp:
         while True:
             if temp.status != 200:
