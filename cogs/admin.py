@@ -161,6 +161,16 @@ class Admin(commands.Cog):
                 embed = discord.Embed(title="You can't mute me, I'm an almighty bot")
                 await ctx.send(embed=embed)
                 continue
+            elif member.guild_permissions.manage_channels and not ctx.author.guild_permissions.administrator: 
+                if member == ctx.author: 
+                    embed = discord.Embed(title="Muting yourself is not the answer.") 
+                    await ctx.send(embed=embed)
+                    continue
+                else:
+                    embed = discord.Embed(title="Fellow mods are not to be silenced.")
+                    await ctx.send(embed=embed)
+                    continue
+                    
             await member.add_roles(muted_role, reason=reason)
             await ctx.send(
                 "{0.mention} has been muted by {1.mention} for *{2}*".format(
@@ -209,11 +219,22 @@ class Admin(commands.Cog):
             return
         elif type(members) == str:
             members = [self.bot.get_user(int(members))]
+            
         for member in members:
             if self.bot.user == member:  # what good is a muted bot?
                 embed = discord.Embed(title="You can't ban me, I'm an almighty bot")
                 await ctx.send(embed=embed)
                 continue
+            elif member.guild_permissions.manage_channels and not ctx.author.guild_permissions.administrator:   
+                if member == ctx.author: 
+                    embed = discord.Embed(title="Please refrain from banning yourself.") 
+                    await ctx.send(embed=embed)
+                    continue
+                else:
+                    embed = discord.Embed(title="It's not very nice of you to ban a fellow mod.")
+                    await ctx.send(embed=embed)
+                    continue
+
             try:
                 await member.send(
                     f"You have been banned from {ctx.guild.name} for {ban_minutes} minutes because: ```{reason}```"
