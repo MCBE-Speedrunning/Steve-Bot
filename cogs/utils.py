@@ -517,14 +517,59 @@ class Utils(commands.Cog):
             f"{discord.utils.escape_mentions(ctx.message.author.display_name)} your timezone has been set to {timeZone}"
         )
 
-    # TODO (this also needs a better name)
-    # @commands.cooldown(1, 20, commands.BucketType.guild)
-    # @commands.command()
-    # async def fairleaderboard(self, ctx, timeZone):
-    #     """show fair leaderboard, ordered by streak, then days?"""
-    #     # get fair object
-    #     with open("fair.json", "r") as f:
-    #         fair = json.load(f)
+     @commands.cooldown(2, 60, commands.BucketType.guild)
+     @commands.command()
+     async def fboard(self, ctx, requested: str = "streak"):
+         """Show fair leaderboard (day or streak)."""
+         # get fair object
+         with open("fair.json", "r") as f:
+             fair = json.load(f)
+   
+        #Detect people who didn't maintain their streak.
+        for user in fair:
+           tz = fair[user]["timezone"]
+           currentdate = datetime.datetime.now(timezone(tz)).date()
+           if fair[user]["date"] != str(currentdate) and fair[user]["date"] != str(currentdate-timedelta(1)) and fair[user]["streak"] != 1:
+                fair[user]["streak"] = 1
+                fair[user]["date"] = str(currentdate) 
+                await ctx.send(self.bot.get_user(int(user)).mention + ": You lost your streak! <:sad:716629485449117708>")
+
+        with open("fair.json", "w") as f:
+            json.dump(fair, f, indent=4)
+
+        leaderboard = []
+        
+        #String the requested info with its respective user and store it in our list         
+        if requested.lower() == "day":
+            for user in fair:
+                leaderboard.append(str(fair[user]["day"]) + user)
+            flag = "Day"
+
+        elif requested.lower() == "streak":
+            for user in fair:
+                leaderboard.append(str(fair[user]["streak"]) + user)
+            flag = "Streak"
+
+        else:
+            await ctx.send("Request the leaderboard by \"day\" or \"streak\".")
+            return
+
+        #Sort the "info + user" strings as ints. 
+        leaderboard.sort(reverse=True, key=int)
+
+        text = ""   
+        embed = discord.Embed(title="Fair Leaderboard", color=7853978, timestamp=ctx.message.created_at)
+        
+        #Get the top 10 entries and extract the info and user from each string
+        for i in range(10):
+            entry = leaderboard[i][:-18]
+            userstr = leaderboard[i][-18:]
+            text = text + f"{i+1}. {self.bot.get_user(int(userstr))}: {entry} \n"
+
+        embed.add_field(name=flag, value=discord.utils.escape_mentions(text), inline=False)
+                          
+        await ctx.send(embed=embed)
+         
 
     @commands.cooldown(1, 60, commands.BucketType.member)
     @commands.command()
