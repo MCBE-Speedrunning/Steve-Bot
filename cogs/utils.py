@@ -529,7 +529,7 @@ class Utils(commands.Cog):
         for user in fair:
            tz = fair[user]["timezone"]
            currentdate = datetime.datetime.now(timezone(tz)).date()
-           if fair[user]["date"] != str(currentdate) and fair[user]["date"] != str(currentdate-timedelta(1)) and fair[user]["streak"] != 1:
+           if fair[user]["date"] != str(currentdate) and fair[user]["date"] != str(currentdate-timedelta(1)):
                 fair[user]["streak"] = 1
                 fair[user]["date"] = str(currentdate) 
                 await ctx.send(self.bot.get_user(int(user)).mention + ": You lost your streak! <:sad:716629485449117708>")
