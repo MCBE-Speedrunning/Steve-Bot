@@ -129,15 +129,19 @@ async def pendingRuns(self, ctx):
             while True:
                 temp_json = await temp.json()
                 runs.extend(temp_json["data"])
-                if "pagination" not in temp_json or temp_json["pagination"]["size"] < 200:
+                if (
+                    "pagination" not in temp_json
+                    or temp_json["pagination"]["size"] < 200
+                ):
                     break
                 temp = await self.bot.session.get(
-                    {item["rel"]: item["uri"] for item in temp_json["pagination"]["links"]}[
-                        "next"
-                    ],
+                    {
+                        item["rel"]: item["uri"]
+                        for item in temp_json["pagination"]["links"]
+                    }["next"],
                     headers=head,
                 )
-                
+
         for run in runs:
             _id = run["id"]
             duration = timedelta(seconds=run["times"]["realtime_t"])
@@ -379,6 +383,7 @@ async def verifiedCount(self, ctx, modName):
 
     await ctx.send(f"{modName} has verified {len(hold)} runs")
 
+
 async def queueLength(self, ctx, game):
     head = {"Accept": "application/json", "User-Agent": "mcbeDiscordBot/1.0"}
     async with self.bot.session.get(
@@ -397,7 +402,8 @@ async def queueLength(self, ctx, game):
 
     hold = []
     async with self.bot.session.get(
-        f"https://www.speedrun.com/api/v1/runs?game={gameID}&status=new&max=200", headers=head
+        f"https://www.speedrun.com/api/v1/runs?game={gameID}&status=new&max=200",
+        headers=head,
     ) as temp:
         while True:
             if temp.status != 200:
@@ -415,6 +421,7 @@ async def queueLength(self, ctx, game):
             )
 
     await ctx.send(f"The queue for {gameName} has {len(hold)} runs")
+
 
 class Src(commands.Cog):
     def __init__(self, bot):
