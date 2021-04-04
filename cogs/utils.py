@@ -529,16 +529,28 @@ class Utils(commands.Cog):
         # Detect people who didn't maintain their streak.
         for user in fair:
             tz = fair[user]["timezone"]
-            currentdate = datetime.datetime.now(timezone(tz)).date()
+            try:
+                currentdate = datetime.datetime.now(timezone(tz)).date()
+            except:
+                # Ocean put in a test timezone and it messes with stuff
+                continue
             if fair[user]["date"] != str(currentdate) and fair[user]["date"] != str(
                 currentdate - timedelta(1)
             ):
                 fair[user]["streak"] = 1
                 fair[user]["date"] = str(currentdate)
-                await ctx.send(
-                    self.bot.get_user(int(user)).mention
-                    + ": You lost your streak! <:sad:716629485449117708>"
-                )
+                try:
+                    # It seems like people don't like spam pings
+
+                    # await ctx.send(
+                    #    self.bot.get_user(int(user)).mention
+                    #    + ": You lost your streak! <:sad:716629485449117708>"
+                    # )
+
+                    pass
+                except:
+                    # User left the server so the bot can't find them
+                    continue
 
         with open("fair.json", "w") as f:
             json.dump(fair, f, indent=4)
