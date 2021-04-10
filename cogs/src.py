@@ -420,8 +420,9 @@ async def queueLength(self, ctx, game):
     await ctx.send(f"The queue for {gameName} has {len(hold)} runs")
 
 def stalling_get(url):
+    head = {"Accept": "application/json", "User-Agent": "mcbeDiscordBot/1.0"}
     while True:
-        temp = requests.get(url)
+        temp = requests.get(url, headers=head)
         if temp.status_code == 200:
             return temp.json()
         elif temp.status_code == 420:
@@ -441,7 +442,7 @@ def augmented_search(userID):
     
     return (hold, username)
 
-async def topVerified():
+async def topVerified(self, ctx):
     USERS = ['kj9p77x4', 'qxkqvo9x', 'qjn1wzw8', 'zx7gkrx7', 'jn39g1qx', '0jm6pwy8',
              '0jml3y81', '68wk0748', 'v8lyv4jm', '48g5vo7j', '48g92r2x', '8ge5w52j',
              '0jm3r3z8', '18vk6oej', 'qjo9k3j6', 'e8e9l0pj', '98rk96x1', 'qjo22ke8',
