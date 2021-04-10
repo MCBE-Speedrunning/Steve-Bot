@@ -6,6 +6,9 @@ import discord
 import requests
 from discord.ext import commands, tasks
 
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
+import time
 
 class SubmittedRun:
     def __init__(self, game, _id, category, video, players, duration, _type, values):
@@ -416,6 +419,54 @@ async def queueLength(self, ctx, game):
 
     await ctx.send(f"The queue for {gameName} has {len(hold)} runs")
 
+def stalling_get(url):
+    while True:
+        temp = requests.get(url)
+        if temp.status_code == 200:
+            return temp.json()
+        elif temp.status_code == 420:
+            time.sleep(10)
+        else:
+            raise requests.exceptions.HTTPError
+
+def augmented_search(userID):
+    username = stalling_get(f"https://www.speedrun.com/api/v1/users/{userID}")["data"]["names"]["international"]
+    hold = 3999
+    temp = stalling_get(f"https://www.speedrun.com/api/v1/runs?examiner={userID}&offset=3999&max=200")
+    while True:
+        hold += len(temp["data"])
+        if "pagination" not in temp or temp["pagination"]["size"] < 200:
+            break
+        temp = stalling_get({item["rel"]: item["uri"] for item in temp["pagination"]["links"]}["next"])
+    
+    return (hold, username)
+
+async def topVerified():
+    USERS = ['kj9p77x4', 'qxkqvo9x', 'qjn1wzw8', 'zx7gkrx7', 'jn39g1qx', '0jm6pwy8',
+             '0jml3y81', '68wk0748', 'v8lyv4jm', '48g5vo7j', '48g92r2x', '8ge5w52j',
+             '0jm3r3z8', '18vk6oej', 'qjo9k3j6', 'e8e9l0pj', '98rk96x1', 'qjo22ke8',
+             '5j52r5zj', 'dx35zg7j', 'kjprgok8', 'qjnqro2j', '18v7ky8l', 'e8e5gg68',
+             'qj2gv68k', 'qjopronx']
+
+    try:
+        with ThreadPoolExecutor() as executor:
+            loop = asyncio.get_event_loop()
+            futures = [loop.run_in_executor(executor, augmented_search, userID)
+                       for userID in USERS]
+            rows = [resp.result() for resp in (await asyncio.wait(futures))[0]]
+        good_rows = [row for row in rows if row[0] > 3999]
+        lb = [[number] + list(data) for number, data in
+              enumerate(sorted(good_rows, reverse = True), start = 1)]
+        widths = [max(len(str(item[i])) for item in lb) for i in range(2)]
+        text = "```\n"
+        for row in lb:
+            text += f"{str(row[0]).rjust(widths[0])}. {str(row[1]).ljust(widths[1])} {row[2]}\n"
+        text += "```"
+        await ctx.send(text)
+    except:
+        await ctx.send("Something went wrong")
+        return
+
 class Src(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -500,6 +551,11 @@ class Src(commands.Cog):
                 await ctx.send("Please supply a game to get the queue length of")
                 return
             await queueLength(self, ctx, game)
+    
+    @commands.command()
+    async def topverified(self, ctx):
+        async with ctx.typing():
+            await topVerified(self, ctx)
 
     @tasks.loop(minutes=10.0)
     async def checker(self):
