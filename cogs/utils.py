@@ -523,14 +523,35 @@ class Utils(commands.Cog):
     @commands.command()
     async def fboard(self, ctx, requested: str = "streak"):
         """Show fair leaderboard (day or streak)."""
+	#Get fair object.
         with open("fair.json", "r") as f:
             fair = json.load(f)
 
         #Detect people who didn't maintain their streak.
         for user in fair:
-           currentdate = datetime.datetime.now().date()
-           if fair[user]["date"] != str(currentdate) and fair[user]["date"] != str(currentdate-datetime.timedelta(1)):
+            tz = fair[user]["timezone"]
+            try:
+                currentdate = datetime.datetime.now(timezone(tz)).date()
+            except:
+                # Ocean put in a test timezone and it messes with stuff
+                continue
+            if fair[user]["date"] != str(currentdate) and fair[user]["date"] != str(
+                currentdate - timedelta(1)
+            ):
                 fair[user]["streak"] = 1
+                fair[user]["date"] = str(currentdate)
+                try:
+                    # It seems like people don't like spam pings
+
+                    # await ctx.send(
+                    #    self.bot.get_user(int(user)).mention
+                    #    + ": You lost your streak! <:sad:716629485449117708>"
+                    # )
+
+                    pass
+                except:
+                    # User left the server so the bot can't find them
+                    continue
 
         with open("fair.json", "w") as f:
             json.dump(fair, f, indent=4)
