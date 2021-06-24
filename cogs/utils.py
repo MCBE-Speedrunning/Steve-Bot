@@ -7,6 +7,7 @@ import unicodedata
 from collections import namedtuple
 from datetime import timedelta
 from random import choice, randint
+from math import floor
 
 import discord
 from discord.ext import commands
@@ -522,35 +523,14 @@ class Utils(commands.Cog):
     @commands.command()
     async def fboard(self, ctx, requested: str = "streak"):
         """Show fair leaderboard (day or streak)."""
-        # get fair object
         with open("fair.json", "r") as f:
             fair = json.load(f)
 
-        # Detect people who didn't maintain their streak.
+        #Detect people who didn't maintain their streak.
         for user in fair:
-            tz = fair[user]["timezone"]
-            try:
-                currentdate = datetime.datetime.now(timezone(tz)).date()
-            except:
-                # Ocean put in a test timezone and it messes with stuff
-                continue
-            if fair[user]["date"] != str(currentdate) and fair[user]["date"] != str(
-                currentdate - timedelta(1)
-            ):
+           currentdate = datetime.datetime.now().date()
+           if fair[user]["date"] != str(currentdate) and fair[user]["date"] != str(currentdate-datetime.timedelta(1)):
                 fair[user]["streak"] = 1
-                fair[user]["date"] = str(currentdate)
-                try:
-                    # It seems like people don't like spam pings
-
-                    # await ctx.send(
-                    #    self.bot.get_user(int(user)).mention
-                    #    + ": You lost your streak! <:sad:716629485449117708>"
-                    # )
-
-                    pass
-                except:
-                    # User left the server so the bot can't find them
-                    continue
 
         with open("fair.json", "w") as f:
             json.dump(fair, f, indent=4)
@@ -579,15 +559,81 @@ class Utils(commands.Cog):
         embed = discord.Embed(
             title="Fair Leaderboard", color=7853978, timestamp=ctx.message.created_at
         )
+        
+        addNewField = True
+        callerid = ctx.message.author.id
 
         # Get the top 10 entries and extract the info and user from each string
         for i in range(10):
             entry = leaderboard[i][:-18]
             userstr = leaderboard[i][-18:]
-            text = text + f"{i+1}. {self.bot.get_user(int(userstr))}: {entry} \n"
+            #If caller is in top 10, then we highlight their entry
+            if str(callerid) == userstr:
+                text += f"**{i+1}. {self.bot.get_user(int(userstr))}: {entry}** \n"
+                addNewField = False
+            else: 
+                text += f"{i+1}. {self.bot.get_user(int(userstr))}: {entry} \n"
+        
+        if not str(callerid) in fair:
+            addNewField = False    
+        
+        #If caller is not in top 10, we add a new field with their place on the leaderboard and another one with number of people that have the same value (tied)
+        if addNewField:
+            if flag == "Day":
+                value = fair[str(callerid)]["day"]
+            elif flag == "Streak":
+                value = fair[str(callerid)]["streak"]
+                
+            #Binary searches for caller in leaderboard. First we find leftmost element that has [value] in it.
+            left = 0 
+            right = len(leaderboard)
+            while left < right:
+                middle = floor((left + right)/2)
+                if int(leaderboard[middle][:-18]) > value:
+                    left = middle + 1
+                else: 
+                    right = middle
+            
+            leftIndex = left
+            
+	        #Now we find the rightmost one.
+            left = 0
+            right = len(leaderboard)
+            while left < right:
+                middle = floor((left + right)/2)
+                if int(leaderboard[middle][:-18]) < value:
+                    right = middle
+                else:
+                    left = middle + 1
+
+            rightIndex = right - 1
+
+            callerIndex = False
+
+            #Finally, we find the caller id index
+            left = leftIndex
+            right = rightIndex
+            while left <= right:
+                middle = floor((left + right)/2)
+                if int(leaderboard[middle][-18:]) > callerid:
+                    left = middle + 1
+                elif int(leaderboard[middle][-18:]) < callerid:
+                    right = middle - 1
+                else:
+                    callerIndex = middle
+                    break
+
+            entry = leaderboard[callerIndex][:-18]
+            userstr = leaderboard[callerIndex][-18:]
+
+            #If caller is the 11th place on the leaderboard, highlight their entry.
+            if callerIndex == 10:
+                text += f"**{callerIndex + 1}. {self.bot.get_user(int(userstr))}: {entry}** \n"
+            else:
+                text += f"\n{callerIndex + 1}. {self.bot.get_user(int(userstr))}: {entry} \nTotal number of people with value {entry}: {rightIndex - leftIndex}\n"
 
         embed.add_field(
-            name=flag, value=discord.utils.escape_mentions(text), inline=False
+            name=flag, value=text, inline=False
         )
 
         await ctx.send(embed=embed)
