@@ -561,12 +561,12 @@ class Utils(commands.Cog):
         # String the requested info with its respective user and store it in our list
         if requested.lower() == "day":
             for user in fair:
-                leaderboard.append(str(fair[user]["day"]) + user)
+                leaderboard.append(str(fair[user]["day"]) + " " + user)
             flag = "Day"
 
         elif requested.lower() == "streak":
             for user in fair:
-                leaderboard.append(str(fair[user]["streak"]) + user)
+                leaderboard.append(str(fair[user]["streak"]) + " " + user)
             flag = "Streak"
 
         else:
@@ -574,7 +574,7 @@ class Utils(commands.Cog):
             return
 
         # Sort the "info + user" strings as ints.
-        leaderboard.sort(reverse=True, key=int)
+        leaderboard.sort(reverse=True, key=lambda pair: int(pair.split(" ")[0] + pair.split(" ")[1][:10]))
 
         text = ""
         embed = discord.Embed(
@@ -586,8 +586,8 @@ class Utils(commands.Cog):
 
         # Get the top 10 entries and extract the info and user from each string
         for i in range(10):
-            entry = leaderboard[i][:-18]
-            userstr = leaderboard[i][-18:]
+            entry = leaderboard[i].split(" ")[0]
+            userstr = leaderboard[i].split(" ")[1]
             #If caller is in top 10, then we highlight their entry
             if str(callerid) == userstr:
                 text += f"**{i+1}. {self.bot.get_user(int(userstr))}: {entry}** \n"
@@ -610,7 +610,7 @@ class Utils(commands.Cog):
             right = len(leaderboard)
             while left < right:
                 middle = floor((left + right)/2)
-                if int(leaderboard[middle][:-18]) > value:
+                if int(leaderboard[middle].split(" ")[0]) > value:
                     left = middle + 1
                 else: 
                     right = middle
@@ -622,7 +622,7 @@ class Utils(commands.Cog):
             right = len(leaderboard)
             while left < right:
                 middle = floor((left + right)/2)
-                if int(leaderboard[middle][:-18]) < value:
+                if int(leaderboard[middle].split(" ")[0]) < value:
                     right = middle
                 else:
                     left = middle + 1
@@ -636,16 +636,16 @@ class Utils(commands.Cog):
             right = rightIndex
             while left <= right:
                 middle = floor((left + right)/2)
-                if int(leaderboard[middle][-18:]) > callerid:
+                if int(leaderboard[middle].split(" ")[1]) > callerid:
                     left = middle + 1
-                elif int(leaderboard[middle][-18:]) < callerid:
+                elif int(leaderboard[middle].split(" ")[1]) < callerid:
                     right = middle - 1
                 else:
                     callerIndex = middle
                     break
 
-            entry = leaderboard[callerIndex][:-18]
-            userstr = leaderboard[callerIndex][-18:]
+            entry = leaderboard[callerIndex].split(" ")[0]
+            userstr = leaderboard[callerIndex].split(" ")[1]
 
             #If caller is the 11th place on the leaderboard, highlight their entry.
             if callerIndex == 10:
