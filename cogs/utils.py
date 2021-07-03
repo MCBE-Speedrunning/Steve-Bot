@@ -574,7 +574,7 @@ class Utils(commands.Cog):
             return
 
         # Sort the "info + user" strings as ints.
-        leaderboard.sort(reverse=True, key=lambda pair: int(pair.split(" ")[0] + pair.split(" ")[1][:10]))
+        leaderboard.sort(reverse=True, key=lambda pair: int(pair.split(" ")[0]))
 
         text = ""
         embed = discord.Embed(
@@ -627,31 +627,32 @@ class Utils(commands.Cog):
                 else:
                     left = middle + 1
 
-            rightIndex = right - 1
-
-            callerIndex = False
+            rightIndex = right
+	
+	    cutlist = leaderboard[leftIndex:right]
+            cutlist.sort(key=lambda pair: int(pair.split(" ")[1]))
 
             #Finally, we find the caller id index
-            left = leftIndex
-            right = rightIndex
+            left = 0
+            right = len(cutlist) - 1
             while left <= right:
                 middle = floor((left + right)/2)
-                if int(leaderboard[middle].split(" ")[1]) > callerid:
+                if int(cutlist[middle].split(" ")[1]) < callerid:
                     left = middle + 1
-                elif int(leaderboard[middle].split(" ")[1]) < callerid:
+                elif int(cutlist[middle].split(" ")[1]) > callerid:
                     right = middle - 1
                 else:
                     callerIndex = middle
                     break
-
-            entry = leaderboard[callerIndex].split(" ")[0]
-            userstr = leaderboard[callerIndex].split(" ")[1]
+		
+            entry = cutlist[callerIndex].split(" ")[0]
+            userstr = cutlist[callerIndex].split(" ")[1]
 
             #If caller is the 11th place on the leaderboard, highlight their entry.
-            if callerIndex == 10:
-                text += f"**{callerIndex + 1}. {self.bot.get_user(int(userstr))}: {entry}** \n"
+            if callerIndex + leftIndex == 10:
+                text += f"**11. {self.bot.get_user(int(userstr))}: {entry}** \n"
             else:
-                text += f"\n{callerIndex + 1}. {self.bot.get_user(int(userstr))}: {entry} \nTotal number of people with value {entry}: {rightIndex - leftIndex}\n"
+                text += f"\n{callerIndex + leftIndex + 1}. {self.bot.get_user(int(userstr))}: {entry} \nTotal number of people with value {entry}: {rightIndex - leftIndex}\n"
 
         embed.add_field(
             name=flag, value=text, inline=False
