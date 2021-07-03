@@ -547,9 +547,8 @@ class General(commands.Cog):
             return
 
         async with self.bot.session.get(
-            f"https://xbl-api.prouser123.me/profile/gamertag/{gamertag}", headers={
-                "User-Agent": "mcbeDiscordBot/1.0"
-            }
+            f"https://xbl-api.prouser123.me/profile/gamertag/{gamertag}",
+            headers={"User-Agent": "mcbeDiscordBot/1.0"},
         ) as r:
             gamer = json.loads(await r.text())
 

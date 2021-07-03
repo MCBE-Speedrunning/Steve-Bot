@@ -523,11 +523,11 @@ class Utils(commands.Cog):
     @commands.command()
     async def fboard(self, ctx, requested: str = "streak"):
         """Show fair leaderboard (day or streak)."""
-	#Get fair object.
+        # Get fair object.
         with open("fair.json", "r") as f:
             fair = json.load(f)
 
-        #Detect people who didn't maintain their streak.
+        # Detect people who didn't maintain their streak.
         for user in fair:
             tz = fair[user]["timezone"]
             try:
@@ -580,7 +580,7 @@ class Utils(commands.Cog):
         embed = discord.Embed(
             title="Fair Leaderboard", color=7853978, timestamp=ctx.message.created_at
         )
-        
+
         addNewField = True
         callerid = ctx.message.author.id
 
@@ -588,55 +588,55 @@ class Utils(commands.Cog):
         for i in range(10):
             entry = leaderboard[i].split(" ")[0]
             userstr = leaderboard[i].split(" ")[1]
-            #If caller is in top 10, then we highlight their entry
+            # If caller is in top 10, then we highlight their entry
             if str(callerid) == userstr:
                 text += f"**{i+1}. {self.bot.get_user(int(userstr))}: {entry}** \n"
                 addNewField = False
-            else: 
+            else:
                 text += f"{i+1}. {self.bot.get_user(int(userstr))}: {entry} \n"
-        
+
         if not str(callerid) in fair:
-            addNewField = False    
-        
-        #If caller is not in top 10, we add a new field with their place on the leaderboard and another one with number of people that have the same value (tied)
+            addNewField = False
+
+        # If caller is not in top 10, we add a new field with their place on the leaderboard and another one with number of people that have the same value (tied)
         if addNewField:
             if flag == "Day":
                 value = fair[str(callerid)]["day"]
             elif flag == "Streak":
                 value = fair[str(callerid)]["streak"]
-                
-            #Binary searches for caller in leaderboard. First we find leftmost element that has [value] in it.
-            left = 0 
-            right = len(leaderboard)
-            while left < right:
-                middle = floor((left + right)/2)
-                if int(leaderboard[middle].split(" ")[0]) > value:
-                    left = middle + 1
-                else: 
-                    right = middle
-            
-            leftIndex = left
-            
-	        #Now we find the rightmost one.
+
+            # Binary searches for caller in leaderboard. First we find leftmost element that has [value] in it.
             left = 0
             right = len(leaderboard)
             while left < right:
-                middle = floor((left + right)/2)
+                middle = floor((left + right) / 2)
+                if int(leaderboard[middle].split(" ")[0]) > value:
+                    left = middle + 1
+                else:
+                    right = middle
+
+            leftIndex = left
+
+            # Now we find the rightmost one.
+            left = 0
+            right = len(leaderboard)
+            while left < right:
+                middle = floor((left + right) / 2)
                 if int(leaderboard[middle].split(" ")[0]) < value:
                     right = middle
                 else:
                     left = middle + 1
 
             rightIndex = right
-	
-	    cutlist = leaderboard[leftIndex:right]
+
+            cutlist = leaderboard[leftIndex:right]
             cutlist.sort(key=lambda pair: int(pair.split(" ")[1]))
 
-            #Finally, we find the caller id index
+            # Finally, we find the caller id index
             left = 0
             right = len(cutlist) - 1
             while left <= right:
-                middle = floor((left + right)/2)
+                middle = floor((left + right) / 2)
                 if int(cutlist[middle].split(" ")[1]) < callerid:
                     left = middle + 1
                 elif int(cutlist[middle].split(" ")[1]) > callerid:
@@ -644,19 +644,17 @@ class Utils(commands.Cog):
                 else:
                     callerIndex = middle
                     break
-		
+
             entry = cutlist[callerIndex].split(" ")[0]
             userstr = cutlist[callerIndex].split(" ")[1]
 
-            #If caller is the 11th place on the leaderboard, highlight their entry.
+            # If caller is the 11th place on the leaderboard, highlight their entry.
             if callerIndex + leftIndex == 10:
                 text += f"**11. {self.bot.get_user(int(userstr))}: {entry}** \n"
             else:
                 text += f"\n{callerIndex + leftIndex + 1}. {self.bot.get_user(int(userstr))}: {entry} \nTotal number of people with value {entry}: {rightIndex - leftIndex}\n"
 
-        embed.add_field(
-            name=flag, value=text, inline=False
-        )
+        embed.add_field(name=flag, value=text, inline=False)
 
         await ctx.send(embed=embed)
 
