@@ -519,7 +519,7 @@ class Utils(commands.Cog):
             f"{discord.utils.escape_mentions(ctx.message.author.display_name)} your timezone has been set to {timeZone}"
         )
 
-    @commands.cooldown(2, 60, commands.BucketType.guild)
+    @commands.cooldown(2, 60, commands.BucketType.user)
     @commands.command()
     async def fboard(self, ctx, requested: str = "streak"):
         """Show fair leaderboard (day or streak)."""
