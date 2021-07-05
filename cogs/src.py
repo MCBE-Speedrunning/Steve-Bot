@@ -8,7 +8,9 @@ from discord.ext import commands, tasks
 
 
 class SubmittedRun:
-    def __init__(self, game, _id, category, video, players, duration, _type, values):
+    def __init__(
+        self, game, _id, category, video, players, duration, _type, link, values
+    ):
         self.game = game
         self._id = _id
         self.category = category
@@ -16,7 +18,7 @@ class SubmittedRun:
         self.players = players
         self.duration = duration
         self._type = _type
-        self.link = f"https://www.speedrun.com/{game}/run/{_id}"
+        self.link = link
         self.values = values
 
 
@@ -178,8 +180,10 @@ async def pendingRuns(self, ctx):
             # Get the values of the run for the duplicate remover
             values = run["values"]
 
+            link = run["weblink"]
+
             pending_run = SubmittedRun(
-                game, _id, category, video, players, duration, _type, values
+                game, _id, category, video, players, duration, _type, link, values
             )
             pending_runs.append(pending_run)
 
