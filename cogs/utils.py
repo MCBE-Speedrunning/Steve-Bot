@@ -408,6 +408,19 @@ class Utils(commands.Cog):
             if "women" in text.lower() or "woman" in text.lower():
                 await message.channel.send("<:shut:808843657167765546>")
 
+        if message.reference is not None and message.attachments == []: # Sticker attachments are empty lists
+            reply = await message.channel.fetch_message(message.reference.message_id)
+            if reply.is_system():
+                muted_role = message.guild.get_role(
+                int(self.bot.config[str(message.guild.id)]["mute_role"])
+                )
+                await message.author.add_roles(muted_role, reason="spam")
+                await message.channel.send(
+                    "{0.mention} has been muted for *spam*".format(message.author)
+                )
+                await asyncio.sleep(300)
+                await message.author.remove_roles(muted_role, reason="time's up ")
+
         for word in badWords:
             if word in message.content.lower().replace(" ", ""):
                 # get fair object
