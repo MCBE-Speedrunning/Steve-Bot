@@ -408,7 +408,7 @@ class Utils(commands.Cog):
             if "women" in text.lower() or "woman" in text.lower():
                 await message.channel.send("<:shut:808843657167765546>")
 
-        if message.reference is not None and message.attachments == []: # Sticker attachments are empty lists
+        if message.reference is not None and message.content is None:
             reply = await message.channel.fetch_message(message.reference.message_id)
             if reply.is_system():
                 muted_role = message.guild.get_role(
