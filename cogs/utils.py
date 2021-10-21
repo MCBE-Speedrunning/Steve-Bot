@@ -407,6 +407,32 @@ class Utils(commands.Cog):
             )
             if "women" in text.lower() or "woman" in text.lower():
                 await message.channel.send("<:shut:808843657167765546>")
+        if message.reference is not None and len(message.content) == 0:
+            reply = await message.channel.fetch_message(message.reference.message_id)
+            if reply.is_system():
+                def check(m):
+                    return (
+                        m.author == message.author
+                        and message.reference is not None
+                        and len(message.content) == 0
+                    )
+
+                try:
+                    msg2 = await self.bot.wait_for("message", check=check)
+                except asyncio.TimeoutError:
+                    return
+                reply2 = await msg2.channel.fetch_message(msg2.reference.message_id)
+                if not reply2.is_system():
+                    return
+                muted_role = message.guild.get_role(
+                    int(self.bot.config[str(message.guild.id)]["mute_role"])
+                )
+                await message.author.add_roles(muted_role, reason="spam")
+                await message.channel.send(
+                    "{0.mention} has been muted for *spam*".format(message.author)
+                )
+                await asyncio.sleep(300)
+                await message.author.remove_roles(muted_role, reason="time's up ")
 
         for word in badWords:
             if word in message.content.lower().replace(" ", ""):
@@ -756,3 +782,4 @@ class Utils(commands.Cog):
 
 def setup(bot):
     bot.add_cog(Utils(bot))
+
