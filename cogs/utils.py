@@ -431,7 +431,7 @@ class Utils(commands.Cog):
                 await message.channel.send(
                     "{0.mention} has been muted for *spam*".format(message.author)
                 )
-                await asyncio.sleep(300)
+                await asyncio.sleep(600)
                 await message.author.remove_roles(muted_role, reason="time's up ")
 
         for word in badWords:
