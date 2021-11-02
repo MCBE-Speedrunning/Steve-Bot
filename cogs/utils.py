@@ -308,13 +308,13 @@ class Utils(commands.Cog):
                 bday=datetime.date(year, 11, 10),
             ),
             CoolKids(
-                name="Nevaeh",
+                name="Faith",
                 user=self.bot.get_user(744383381843738633),
                 bday=datetime.date(year, 11, 5),
             ),
             # Prakxo
             CoolKids(
-                name="Samantha",
+                name="Samanta",
                 user=self.bot.get_user(226312219787264000),
                 bday=datetime.date(year, 6, 24),
             ),
@@ -324,7 +324,7 @@ class Utils(commands.Cog):
                 bday=datetime.date(year, 6, 23),
             ),
             CoolKids(
-                name="Skye",
+                name="Kyra",
                 user=self.bot.get_user(329538915805691905),
                 bday=datetime.date(year, 6, 24),
             ),
