@@ -678,7 +678,7 @@ class Utils(commands.Cog):
             if callerIndex + leftIndex == 10:
                 text += f"**11. {self.bot.get_user(int(userstr))}: {entry}** \n"
             else:
-                text += f"\n{callerIndex + leftIndex + 1}. {self.bot.get_user(int(userstr))}: {entry} \nTotal number of people with value {entry}: {rightIndex - leftIndex}\n"
+                text += f"\n{callerIndex + leftIndex + 1}. {self.bot.get_user(int(userstr))}: {entry} \nRange of positions with value {entry}: {leftIndex+1} - {rightIndex}\n"
 
         embed.add_field(name=flag, value=text, inline=False)
 
