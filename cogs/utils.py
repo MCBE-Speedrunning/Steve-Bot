@@ -709,7 +709,7 @@ class Utils(commands.Cog):
             #            except:
             await ctx.send("https://aninternettroll.github.io/mcbeVerifierLeaderboard/")
 
-    @commands.cooldown(1, 60, commands.BucketType.guild)
+    @commands.cooldown(1, 300, commands.BucketType.guild)
     @commands.command()
     async def someone(self, ctx):
         """Discord's mistake"""
