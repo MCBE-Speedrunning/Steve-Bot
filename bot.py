@@ -74,14 +74,13 @@ class BedrockBot(commands.Bot):
                 self.runs_blacklist = {"videos": [], "players": []}
 
         for extension in extensions:
-            self.load_extension(extension)
+            await self.load_extension(extension)
 
         self.logger.warning(
             f"Online: {self.user} (ID: {self.user.id}) (Discord.py: {discord.__version__})"
         )
 
     async def on_message(self, message):
-
         if message.author.bot or message.author.id in self.blacklist:
             return
         await self.process_commands(message)

@@ -336,20 +336,20 @@ class Player(commands.Cog):
         search: str [Required]
                 The song to search and retrieve using YTDL. This could be a simple search, an ID or URL.
         """
-        await ctx.trigger_typing()
 
-        vc = ctx.voice_client
+        async with ctx.typing():
+            vc = ctx.voice_client
 
-        if not vc:
-            await ctx.invoke(self.connect_)
+            if not vc:
+                await ctx.invoke(self.connect_)
 
-        player = self.get_player(ctx)
+            player = self.get_player(ctx)
 
-        # If download is False, source will be a dict which will be used later to regather the stream.
-        # If download is True, source will be a discord.FFmpegPCMAudio with a VolumeTransformer.
-        source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop)
+            # If download is False, source will be a dict which will be used later to regather the stream.
+            # If download is True, source will be a discord.FFmpegPCMAudio with a VolumeTransformer.
+            source = await YTDLSource.create_source(ctx, search, loop=self.bot.loop)
 
-        await player.queue.put(source)
+            await player.queue.put(source)
 
     @commands.command(name="pause")
     async def pause_(self, ctx):
@@ -497,5 +497,5 @@ class Player(commands.Cog):
             p.unlink()
 
 
-def setup(bot):
-    bot.add_cog(Player(bot))
+async def setup(bot):
+    await bot.add_cog(Player(bot))

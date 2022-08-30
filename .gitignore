@@ -2,11 +2,14 @@
 .vscode/
 __pycache__/
 downloads/
+venv/
 
 # Configuration files
 api_keys.json
-config.json
 blacklist.json
+config.json
+custom_commands.json
+fair.json
 runs_blacklist.json
 
 # Log files

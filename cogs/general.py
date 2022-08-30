@@ -428,10 +428,13 @@ class General(commands.Cog):
         else:
             color = user.color
 
-        if user.is_avatar_animated():
-            profilePic = user.avatar_url_as(format="gif")
+        if user.avatar:
+            if user.avatar.is_animated():
+                profilePic = user.avatar.replace(format="gif")
+            else:
+                profilePic = user.avatar.replace(format="png")
         else:
-            profilePic = user.avatar_url_as(format="png")
+            profilePic = None
 
         embed = discord.Embed(
             title=user.name,
@@ -442,7 +445,10 @@ class General(commands.Cog):
         if user.premium_since:
             embed.add_field(name="Boosting since", value=user.premium_since.date())
         # embed.set_thumbnail(url="attachment://temp.webp")
-        embed.set_thumbnail(url=profilePic)
+        if profilePic:
+            embed.set_thumbnail(url=profilePic)
+        else:
+            embed.set_thumbnail(url=user.default_avatar.replace(format="png"))
         embed.add_field(name="Nickname", value=user.display_name, inline=False)
         embed.add_field(name="Joined on", value=user.joined_at.date(), inline=True)
         embed.add_field(name="Status", value=user.status, inline=True)
@@ -475,7 +481,7 @@ class General(commands.Cog):
             await ctx.send("You are now in the coop gang")
 
     @commands.command()
-    async def serverinfo(self, ctx, guild=None):
+    async def serverinfo(self, ctx, guild: discord.Guild = None):
         """Get information about the server you are in"""
         if not guild:
             guild = ctx.message.guild
@@ -490,12 +496,15 @@ class General(commands.Cog):
 
         emojiList = " "
         for i in guild.emojis:
-            emojiList += str(i) + " "
+            emojiList += str(i)
 
-        if guild.is_icon_animated():
-            serverIcon = guild.icon_url_as(format="gif")
+        if guild.icon:
+            if guild.icon.is_animated():
+                serverIcon = guild.icon.replace(format="gif")
+            else:
+                serverIcon = guild.icon.replace(format="png")
         else:
-            serverIcon = guild.icon_url_as(format="png")
+            serverIcon = None
 
         inactiveMembers = await guild.estimate_pruned_members(days=7)
 
@@ -508,25 +517,20 @@ class General(commands.Cog):
         if guild.premium_subscription_count == 0:
             pass
         else:
-            if guild.premium_subscription_count == 1:
-                embed.add_field(
-                    name="Amount of boosts:",
-                    value=f"{guild.premium_subscription_count} boost",
-                    inline=True,
-                )
-            else:
-                embed.add_field(
-                    name="Amount of boosts:",
-                    value=f"{guild.premium_subscription_count} boosts",
-                    inline=True,
-                )
+            embed.add_field(
+                name="Amount of boosts:",
+                value=f"{guild.premium_subscription_count} boost{'s' if guild.premium_subscription_count != 1 else ''}",
+                inline=True,
+            )
+
         if guild.premium_subscribers:
             boosters = ""
             for i in guild.premium_subscribers:
                 boosters += i.mention + " "
             embed.add_field(name="Boosted by:", value=boosters, inline=True)
         embed.set_thumbnail(url=serverIcon)
-        embed.set_image(url=guild.splash_url_as(format="png"))
+        if guild.splash:
+            embed.set_image(url=guild.splash.replace(format="png"))
         embed.add_field(name="Created on", value=guild.created_at.date(), inline=True)
         embed.add_field(name="Members", value=guild.member_count, inline=True)
         # embed.add_field(name="Emojis", value=emojiList, inline=True)
@@ -738,5 +742,5 @@ class General(commands.Cog):
                     await ctx.send(f"```json\n{json.dumps(response, indent=4)}```")
 
 
-def setup(bot):
-    bot.add_cog(General(bot))
+async def setup(bot):
+    await bot.add_cog(General(bot))
