@@ -56,5 +56,5 @@ class Twitter(commands.Cog):
         stream.filter(follow=["1287799985040437254"], is_async=True)
 
 
-def setup(bot):
-    bot.add_cog(Twitter(bot))
+async def setup(bot):
+    await bot.add_cog(Twitter(bot))

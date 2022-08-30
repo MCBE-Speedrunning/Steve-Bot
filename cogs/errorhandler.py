@@ -56,13 +56,6 @@ class Errorhandler(commands.Cog):
                 f"{ctx.author.mention}, you have to wait {round(error.retry_after, 2)} seconds before using this again"
             )
 
-        # For this error example we check to see where it came from...
-        elif isinstance(error, commands.BadArgument):
-            if (
-                ctx.command.qualified_name == "tag list"
-            ):  # Check if the command being invoked is 'tag list'
-                await ctx.send("I could not find that member. Please try again.")
-
         else:
             # All other Errors not returned come here. And we can just print the default TraceBack.
             print(
@@ -73,5 +66,5 @@ class Errorhandler(commands.Cog):
             )
 
 
-def setup(bot):
-    bot.add_cog(Errorhandler(bot))
+async def setup(bot):
+    await bot.add_cog(Errorhandler(bot))

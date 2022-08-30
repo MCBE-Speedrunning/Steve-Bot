@@ -6,8 +6,8 @@ import subprocess
 import unicodedata
 from collections import namedtuple
 from datetime import timedelta
-from random import choice, randint
 from math import floor
+from random import choice, randint
 
 import discord
 from discord.ext import commands
@@ -132,19 +132,6 @@ class Utils(commands.Cog):
         await ctx.send(
             f"{discord.utils.escape_mentions(ctx.message.author.display_name)} -> your seed is a {total_eyes} eye"
         )
-
-    @findseed.error
-    async def findseed_handler(self, ctx, error):
-        if isinstance(error, commands.CommandOnCooldown):
-            if ctx.message.channel.id != int(
-                self.bot.config[str(ctx.message.guild.id)]["bot_channel"]
-            ):
-                ctx.command.reset_cooldown(ctx)
-                await ctx.message.delete()
-                return
-        else:
-            await ctx.send(error)
-            # await ctx.send(f"{discord.utils.escape_mentions(ctx.message.author.display_name)}, you have to wait {round(error.retry_after, 7)} seconds before using this again.")
 
     @commands.command()
     async def findsleep(self, ctx):
@@ -410,6 +397,7 @@ class Utils(commands.Cog):
         if message.reference is not None and len(message.content) == 0:
             reply = await message.channel.fetch_message(message.reference.message_id)
             if reply.is_system():
+
                 def check(m):
                     return (
                         m.author == message.author
@@ -713,10 +701,8 @@ class Utils(commands.Cog):
     @commands.command()
     async def someone(self, ctx):
         """Discord's mistake"""
-        if ctx.channel.id != int(
-            self.bot.config[str(ctx.message.guild.id)]["fair_channel"]
-        ):
-            await ctx.send(choice(ctx.guild.members).mention)
+
+        await ctx.send(choice(ctx.guild.members).mention)
 
     @commands.command()
     async def roll(self, ctx, pool):
@@ -780,6 +766,5 @@ class Utils(commands.Cog):
         )
 
 
-def setup(bot):
-    bot.add_cog(Utils(bot))
-
+async def setup(bot):
+    await bot.add_cog(Utils(bot))

@@ -64,7 +64,7 @@ class Admin(commands.Cog):
     async def _reload(self, ctx, ext):
         """Reloads an extension"""
         try:
-            self.bot.reload_extension(f"cogs.{ext}")
+            await self.bot.reload_extension(f"cogs.{ext}")
             await ctx.send(f"The extension {ext} was reloaded!")
         except commands.ExtensionNotFound:
             await ctx.send(f"The extension {ext} doesn't exist.")
@@ -85,7 +85,7 @@ class Admin(commands.Cog):
     async def _load(self, ctx, ext):
         """Loads an extension"""
         try:
-            self.bot.load_extension(f"cogs.{ext}")
+            await self.bot.load_extension(f"cogs.{ext}")
             await ctx.send(f"The extension {ext} was loaded!")
         except commands.ExtensionNotFound:
             await ctx.send(f"The extension {ext} doesn't exist!")
@@ -106,7 +106,7 @@ class Admin(commands.Cog):
     async def _unload(self, ctx, ext):
         """Loads an extension"""
         try:
-            self.bot.unload_extension(f"cogs.{ext}")
+            await self.bot.unload_extension(f"cogs.{ext}")
             await ctx.send(f"The extension {ext} was unloaded!")
         except commands.ExtensionNotFound:
             await ctx.send(f"The extension {ext} doesn't exist!")
@@ -353,5 +353,5 @@ class Admin(commands.Cog):
             await ctx.send("Something went wrong")
 
 
-def setup(bot):
-    bot.add_cog(Admin(bot))
+async def setup(bot):
+    await bot.add_cog(Admin(bot))
