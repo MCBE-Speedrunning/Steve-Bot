@@ -1,0 +1,29 @@
+# Folders
+.vscode/
+__pycache__/
+downloads/
+venv/
+
+# Configuration files
+api_keys.json
+blacklist.json
+config.json
+custom_commands.json
+fair.json
+runs_blacklist.json
+
+# Log files
+discord.log
+
+# GCC output
+*.o
+*.d
+
+# C binaries
+math
+
+# Misc
+bc_input.bc
+leaderboard.png
+output.log
+runs
