@@ -2,6 +2,7 @@ import json
 from datetime import timedelta
 from pathlib import Path
 
+import aiohttp
 import discord
 import requests
 from discord.ext import commands, tasks
@@ -91,10 +92,15 @@ async def deleteRun(self, apiKey, ctx, run):
 
 async def pendingRuns(self, ctx):
     def banned_player_coop(run) -> bool:
-        for player in run.players:
-            if player in self.bot.runs_blacklist["players"]:
+        if isinstance(run.players, list):
+            for player in run.players:
+                if player in self.bot.runs_blacklist["players"]:
+                    return True
+        else:
+            if run.players in self.bot.runs_blacklist["players"]:
                 return True
         return False
+
 
     def duplicate_run(run) -> bool:
         for pending_run in pending_runs:
@@ -122,9 +128,10 @@ async def pendingRuns(self, ctx):
     game_ids = ("yd4ovvg1", "v1po7r76")  # [mcbe, mcbece]
     head = {"Accept": "application/json", "User-Agent": "mcbeDiscordBot/1.0"}
 
+    session = aiohttp.ClientSession()
     for game in game_ids:
         runs = []
-        async with self.bot.session.get(
+        async with session.get(
             f"https://www.speedrun.com/api/v1/runs?game={game}&status=new&max=200&embed=category,players,level&orderby=submitted",
             headers=head,
         ) as temp:
@@ -136,7 +143,7 @@ async def pendingRuns(self, ctx):
                     or temp_json["pagination"]["size"] < 200
                 ):
                     break
-                temp = await self.bot.session.get(
+                temp = await session.get(
                     {
                         item["rel"]: item["uri"]
                         for item in temp_json["pagination"]["links"]
@@ -353,7 +360,8 @@ async def verifyNew(self, apiKey=None, userID=None):
 
 async def verifiedCount(self, ctx, modName):
     head = {"Accept": "application/json", "User-Agent": "mcbeDiscordBot/1.0"}
-    async with self.bot.session.get(
+    session = aiohttp.ClientSession()
+    async with session.get(
         f"https://www.speedrun.com/api/v1/users/{modName}", headers=head
     ) as r:
         if r.status != 200:
@@ -367,7 +375,7 @@ async def verifiedCount(self, ctx, modName):
             return
 
     hold = []
-    async with self.bot.session.get(
+    async with session.get(
         f"https://www.speedrun.com/api/v1/runs?examiner={modID}&max=200", headers=head
     ) as temp:
         while True:
@@ -378,7 +386,7 @@ async def verifiedCount(self, ctx, modName):
             hold.extend(temp_json["data"])
             if "pagination" not in temp_json or temp_json["pagination"]["size"] < 200:
                 break
-            temp = await self.bot.session.get(
+            temp = await session.get(
                 {item["rel"]: item["uri"] for item in temp_json["pagination"]["links"]}[
                     "next"
                 ],
