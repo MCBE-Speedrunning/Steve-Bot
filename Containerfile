@@ -10,6 +10,7 @@ RUN xbps-install -Suy \
 	python3-colorama \
 	python3-dateutil \
 	python3-pytz \
+	python3-grpcio \
 	python3-google-api-core \
 	python3-google-api-python-client \
 	python3-google-auth \
@@ -21,7 +22,7 @@ RUN xbps-install -Suy \
 	python3-virtualenv \
 	python3-youtube-dl
 
-RUN useradd --no-create-home --shell /bin/sh app
+RUN useradd --create-home --shell /bin/sh app
 USER app
 
 WORKDIR /app
