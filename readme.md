@@ -23,3 +23,24 @@ A user added as a botmaster will be able to edit the config via discord with the
 
 This bot was built as a fork of [celesteBot](https://github.com/CelesteClassic/celestebot), so a lot of code is recycled.
 Feel free to make a pull request or use the code here.
+
+## Container
+
+The discord bot can be ran into a container as well. To build the
+container simply run
+
+```sh
+podman build -t steve-bot .
+```
+
+And to start it
+
+```sh
+podman run \
+    --volume="./api_keys.json:/app/api_keys.json"\
+    --volume="./config.json:/app/config.json" \
+    --volume="./custom_commands.json:/app/custom_commands.json" \
+    --volume="./fair.json:/app/fair.json" \
+    --volume="./runs_blacklist.json:/app/runs_blacklist.json" \
+    -it steve-bot:latest
+```
