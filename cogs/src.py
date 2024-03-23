@@ -455,7 +455,7 @@ class Src(commands.Cog):
             data = json.loads(Path("./api_keys.json").read_text())
             if not str(ctx.author.id) in data:
                 await ctx.send(
-                    f"Please try this command again by getting an api key from https://www.speedrun.com/api/auth then do `{ctx.prefix}verify <apiKey>` in my DMs or anywhere in this server. \nBe careful who you share this key with. To learn more check out https://github.com/speedruncomorg/api/blob/master/authentication.md"
+                    f"Please try this command again by getting an api key from https://www.speedrun.com/settings/api then do `{ctx.prefix}verify <apiKey>` in my DMs or anywhere in this server. \nBe careful who you share this key with. To learn more check out https://github.com/speedruncomorg/api/blob/master/authentication.md"
                 )
                 return
         if ctx.guild != None:
