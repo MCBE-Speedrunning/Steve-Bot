@@ -22,8 +22,11 @@ RUN xbps-install -Suy \
 	python3-virtualenv \
 	python3-youtube-dl
 
-RUN useradd --create-home --shell /bin/sh app
-USER app
+# Can't do non-rootless user because we can't mount the various config files as
+# a non-root user. If we ignore the write operations then this would work just
+# fine
+# RUN useradd --create-home --shell /bin/sh app
+# USER app
 
 WORKDIR /app
 
@@ -32,7 +35,7 @@ ADD requirements.txt requirements.txt
 RUN venv/bin/pip install -r requirements.txt
 
 COPY main.py bot.py palette.png ./
-COPY --chown=app:app utils ./utils
+COPY utils ./utils
 RUN cd utils && make
 COPY bc_funcs ./bc_funcs
 COPY cogs ./cogs

@@ -37,10 +37,11 @@ And to start it
 
 ```sh
 podman run \
-    --volume="./api_keys.json:/app/api_keys.json"\
-    --volume="./config.json:/app/config.json" \
-    --volume="./custom_commands.json:/app/custom_commands.json" \
-    --volume="./fair.json:/app/fair.json" \
-    --volume="./runs_blacklist.json:/app/runs_blacklist.json" \
-    -it steve-bot:latest
+    --volume="./blacklist.json:/app/blacklist.json:rw"\
+    --volume="./api_keys.json:/app/api_keys.json:rw"\
+    --volume="./config.json:/app/config.json:rw" \
+    --volume="./custom_commands.json:/app/custom_commands.json:rw" \
+    --volume="./fair.json:/app/fair.json:rw" \
+    --volume="./runs_blacklist.json:/app/runs_blacklist.json:rw" \
+    --name steve-bot --restart no --replace -it steve-bot:latest
 ```
