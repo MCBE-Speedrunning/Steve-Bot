@@ -1,11 +1,12 @@
-FROM ghcr.io/void-linux/void-musl:d1ee412
+FROM ghcr.io/void-linux/void-musl:20240526R1
 
-RUN xbps-install -Suy \
+RUN xbps-install -Suy && xbps-install -y \
 	make \
 	gcc \
 	shadow \
 	python3 \
 	python3-async-timeout \
+	python3-aiohttp \
 	python3-GitPython \
 	python3-colorama \
 	python3-dateutil \
@@ -20,7 +21,8 @@ RUN xbps-install -Suy \
 	python3-requests \
 	python3-six \
 	python3-virtualenv \
-	python3-youtube-dl
+	yt-dlp \
+	ffmpeg6
 
 # Can't do non-rootless user because we can't mount the various config files as
 # a non-root user. If we ignore the write operations then this would work just

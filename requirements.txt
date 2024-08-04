@@ -15,4 +15,4 @@ requests>=2.31.0
 selenium>=4.16.0
 six>=1.16.0
 subprocess32>=3.5.4
-youtube_dl>=2021.12.17
+yt-dlp>=2024.8.1

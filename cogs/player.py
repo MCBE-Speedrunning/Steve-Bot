@@ -28,7 +28,7 @@ from pathlib import Path
 import discord
 from async_timeout import timeout
 from discord.ext import commands, tasks
-from youtube_dl import YoutubeDL
+from yt_dlp import YoutubeDL
 
 ytdlopts = {
     "format": "bestaudio/best",
