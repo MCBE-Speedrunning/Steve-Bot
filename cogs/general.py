@@ -550,7 +550,8 @@ class General(commands.Cog):
             await ctx.send("You need to specify a gamer, gamer")
             return
 
-        async with self.bot.session.get(
+        session = aiohttp.ClientSession()
+        async with session.get(
             f"https://xbl-api.prouser123.me/profile/gamertag/{gamertag}",
             headers={"User-Agent": "mcbeDiscordBot/1.0"},
         ) as r:
@@ -621,7 +622,8 @@ class General(commands.Cog):
             await ctx.send("You need to specify a gamer, gamer")
             return
 
-        async with self.bot.session.get(
+        session = aiohttp.ClientSession()
+        async with session.get(
             f"https://xbl-api.prouser123.me/presence/gamertag/{gamertag}"
         ) as r:
             gamer = json.loads(await r.text())
@@ -708,8 +710,9 @@ class General(commands.Cog):
             return
         body = {"compiler": compiler, "code": code, "save": True}
         head = {"Content-Type": "application/json"}
+        session = aiohttp.ClientSession()
         async with ctx.typing():
-            async with self.bot.session.post(
+            async with session.post(
                 "https://wandbox.org/api/compile.json",
                 headers=head,
                 data=json.dumps(body),

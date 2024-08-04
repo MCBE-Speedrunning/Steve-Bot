@@ -20,7 +20,14 @@ RUN xbps-install -Suy && xbps-install -y \
 	python3-pynacl \
 	python3-requests \
 	python3-six \
-	python3-virtualenv \
+	python3-pysocks \
+	python3-trio-websocket \
+	python3-wsproto \
+	python3-sniffio \
+	python3-outcome \
+	python3-h11 \
+	python3-pathlib2 \
+	python3-urllib3 \
 	yt-dlp \
 	ffmpeg6
 
@@ -32,7 +39,7 @@ RUN xbps-install -Suy && xbps-install -y \
 
 WORKDIR /app
 
-RUN virtualenv --system-site-packages venv
+RUN python -m venv --system-site-packages venv
 ADD requirements.txt requirements.txt
 RUN venv/bin/pip install -r requirements.txt
 

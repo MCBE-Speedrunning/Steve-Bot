@@ -46,7 +46,6 @@ class BedrockBot(commands.Bot):
         )
         self.logger = logging.getLogger("discord")
         self.messageBlacklist = []
-        self.session = aiohttp.ClientSession()
 
         with open("custom_commands.json", "r") as f:
             self.custom_commands = json.load(f)
