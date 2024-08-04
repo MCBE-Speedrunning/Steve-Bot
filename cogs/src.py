@@ -329,8 +329,10 @@ async def verifyNew(self, apiKey=None, userID=None):
         except json.decoder.JSONDecodeError:
             return
         srcUserID = profile["data"]["id"]
+
+        data[user.id] = srcUserID
+
         with open("api_keys.json", "w") as file:
-            data[user.id] = srcUserID
             json.dump(data, file, indent=4)
         pbs = requests.get(profile["data"]["links"][3]["uri"], headers=head)
         pbs = json.loads(pbs.text)
@@ -476,13 +478,50 @@ class Src(commands.Cog):
     @tasks.loop(minutes=10.0)
     async def checker(self):
         data = json.loads(Path("./api_keys.json").read_text())
+        keys_to_delete = []
+        alts_to_remove = []
         for key, value in data.items():
+            skip = False
+            for key2, value2 in data.items():
+                if value == value2 and not key == key2:
+                    print(f"Alt found: {value} is the same for {key} and {key2}")
+                    alts_to_remove.append(key)
+                    skip = True
             try:
-                await verifyNew(self, None, key)
+                if not skip:
+                    await verifyNew(self, None, key)
+            except discord.NotFound:
+                print(f"Didn't find user {key}. Deleting")
+                keys_to_delete.append(key)
             except Exception as e:
                 print(f"{key}: {value}")
                 print(e.args)
                 continue
+
+        data = json.loads(Path("./api_keys.json").read_text())
+        for key in keys_to_delete:
+            id = str(key)
+            if id in data.keys():
+                del data[id]
+
+        # TODO: Don't copy logic from verifyNew
+        server = self.bot.get_guild(574267523869179904)
+        RunnerRole = server.get_role(574268937454223361)
+        WrRole = server.get_role(583622436378116107)
+
+        for key in alts_to_remove:
+            try:
+                member = await server.fetch_member(int(key))
+                await member.remove_roles(RunnerRole)
+                await member.remove_roles(WrRole)
+            except discord.NotFound:
+                print(f"Didn't find user {key}. Deleting")
+            id = str(key)
+            if id in data.keys():
+                del data[id]
+
+        with open("api_keys.json", "w") as file:
+            json.dump(data, file, indent=4)
 
 
 async def setup(bot):
