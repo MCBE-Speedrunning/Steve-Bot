@@ -163,7 +163,7 @@ class Utils(commands.Cog):
         # Add extra comment based on number of sleepHrs
         if sleepHrs == 0:
             await ctx.send(
-                f"{discord.utils.escape_mentions(ctx.message.author.display_name)} -> your sleep is 0 hours long - nice try \:D"
+                f"{discord.utils.escape_mentions(ctx.message.author.display_name)} -> your sleep is 0 hours long - nice try :D"
             )
         elif sleepHrs <= 5:
             if sleepHrs == 1:

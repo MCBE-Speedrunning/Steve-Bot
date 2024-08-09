@@ -1,5 +1,7 @@
 import json
-from datetime import timedelta
+from datetime import timedelta, datetime
+import dateutil.parser
+from dateutil.relativedelta import relativedelta
 from pathlib import Path
 
 import aiohttp
@@ -303,24 +305,32 @@ async def verifyNew(self, apiKey=None, userID=None):
             "User-Agent": "mcbeDiscordBot/1.0",
         }
     server = self.bot.get_guild(574267523869179904)
-    # Troll is mentally challenged I guess ¯\_(ツ)_/¯
-    RunneRole = server.get_role(574268937454223361)
+    RunnerRole = server.get_role(574268937454223361)
+    ActiveRunnerRole = server.get_role(1271515943050412042)
     WrRole = server.get_role(583622436378116107)
     # if userID == None:
     # 	return
     # else:
     user = await self.bot.fetch_user(int(userID))
+    member = await server.fetch_member(user.id)
     data = json.loads(Path("./api_keys.json").read_text())
 
     if str(user.id) in data:
+        srcId = data[str(user.id)]
         pbs = requests.get(
-            f"https://www.speedrun.com/api/v1/users/{data[str(user.id)]}/personal-bests",
+            f"https://www.speedrun.com/api/v1/users/{srcId}/personal-bests",
             headers=head,
         )
+        if pbs.status_code == 404:
+            self.bot.logger.warning(f"Speedrun.com user {srcId} not found. Deleting")
+            await member.remove_roles(ActiveRunnerRole)
+            await member.remove_roles(RunnerRole)
+            await member.remove_roles(WrRole)
+            # TODO: Custom exception here?
+            raise Exception("speedrun_com_user_not_found")
         pbs = json.loads(pbs.text)
     else:
         r = requests.get("https://www.speedrun.com/api/v1/profile", headers=head)
-        # print(r.text)
         if r.status_code >= 400:
             await user.send(f"```json\n{r.text}```")
             return
@@ -337,27 +347,33 @@ async def verifyNew(self, apiKey=None, userID=None):
         pbs = requests.get(profile["data"]["links"][3]["uri"], headers=head)
         pbs = json.loads(pbs.text)
 
+    cutoff = (datetime.now() - relativedelta(years=2)).timestamp()
     wrCounter = False
     runnerCounter = False
+    activeRunnerCounter = False
 
     for i in pbs["data"]:
-        if i["place"] == 1:
-            if i["run"]["game"] == "yd4ovvg1" or i["run"]["game"] == "v1po7r76":
+        if i["run"]["game"] == "yd4ovvg1" or i["run"]["game"] == "v1po7r76":
+            if i["place"] == 1:
                 if not i["run"]["level"]:
                     wrCounter = True
-        if i["run"]["game"] == "yd4ovvg1" or i["run"]["game"] == "v1po7r76":
-            # I have no shame
+            # If the run was submitted after the cutoff date, the runner is active
+            if dateutil.parser.isoparse(i["run"]["submitted"]).timestamp() > cutoff:
+                activeRunnerCounter = True
             runnerCounter = True
 
-    member = await server.fetch_member(user.id)
     if wrCounter:
         await member.add_roles(WrRole)
     else:
         await member.remove_roles(WrRole)
     if runnerCounter:
-        await member.add_roles(RunneRole)
+        await member.add_roles(RunnerRole)
     else:
-        await member.remove_roles(RunneRole)
+        await member.remove_roles(RunnerRole)
+    if activeRunnerCounter:
+        await member.add_roles(ActiveRunnerRole)
+    else:
+        await member.remove_roles(ActiveRunnerRole)
 
 
 async def verifiedCount(self, ctx, modName):
@@ -475,7 +491,7 @@ class Src(commands.Cog):
                 return
             await verifiedCount(self, ctx, modName)
 
-    @tasks.loop(minutes=10.0)
+    @tasks.loop(minutes=30.0)
     async def checker(self):
         data = json.loads(Path("./api_keys.json").read_text())
         keys_to_delete = []
@@ -483,20 +499,21 @@ class Src(commands.Cog):
         for key, value in data.items():
             skip = False
             for key2, value2 in data.items():
-                if value == value2 and not key == key2:
-                    print(f"Alt found: {value} is the same for {key} and {key2}")
+                if value == value2 and key != key2 and key2 not in alts_to_remove:
+                    self.bot.logger.info(f"Alt found: {value} is the same for {key} and {key2}. Deleting")
                     alts_to_remove.append(key)
                     skip = True
             try:
                 if not skip:
                     await verifyNew(self, None, key)
             except discord.NotFound:
-                print(f"Didn't find user {key}. Deleting")
+                self.bot.logger.info(f"Didn't find user {key}. Deleting")
                 keys_to_delete.append(key)
             except Exception as e:
-                print(f"{key}: {value}")
-                print(e.args)
-                continue
+                if e.args[0] == "speedrun_com_user_not_found":
+                    keys_to_delete.append(key)
+                else:
+                    self.bot.logger.error(f"{key}: {value}", exc_info=e)
 
         data = json.loads(Path("./api_keys.json").read_text())
         for key in keys_to_delete:
@@ -508,14 +525,24 @@ class Src(commands.Cog):
         server = self.bot.get_guild(574267523869179904)
         RunnerRole = server.get_role(574268937454223361)
         WrRole = server.get_role(583622436378116107)
+        ActiveRunnerRole = server.get_role(1271515943050412042)
 
         for key in alts_to_remove:
+            userID = int(key)
             try:
-                member = await server.fetch_member(int(key))
+                user = await self.bot.fetch_user(userID)
+            except discord.NotFound:
+                self.bot.logger.info(f"Didn't find user {key}. Deleting")
+
+            try:
+                member = await server.fetch_member(key)
                 await member.remove_roles(RunnerRole)
                 await member.remove_roles(WrRole)
+                await member.remove_roles(ActiveRunnerRole)
             except discord.NotFound:
-                print(f"Didn't find user {key}. Deleting")
+                # self.bot.logger.info(f"Didn't find user {key} in server. Not deleting")
+                continue
+
             id = str(key)
             if id in data.keys():
                 del data[id]
