@@ -516,6 +516,7 @@ class Src(commands.Cog):
                     keys_to_delete.append(key)
                 elif e.args[0] == "discord_member_not_found":
                     # Do not delete, we want to keep these in the database
+                    pass
                 else:
                     self.bot.logger.error(f"{key}: {value}", exc_info=e)
 
