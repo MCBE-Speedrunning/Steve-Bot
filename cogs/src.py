@@ -312,6 +312,7 @@ async def verifyNew(self, apiKey=None, userID=None):
     # 	return
     # else:
     user = await self.bot.fetch_user(int(userID))
+    member = None
     try:
         member = await server.fetch_member(user.id)
     except discord.NotFound:
@@ -499,14 +500,12 @@ class Src(commands.Cog):
         data = json.loads(Path("./api_keys.json").read_text())
         keys_to_delete = []
         for key, value in data.items():
-            skip = False
             for key2, value2 in data.items():
-                if value == value2 and key != key2 and key2 not in keys_to_delete:
+                if value == value2 and key != key2 and key not in keys_to_delete:
                     self.bot.logger.info(f"Alt found: {value} is the same for {key} and {key2}. Deleting")
                     keys_to_delete.append(key)
-                    skip = True
             try:
-                if not skip:
+                if key not in keys_to_delete:
                     await verifyNew(self, None, key)
             except discord.NotFound:
                 self.bot.logger.info(f"Didn't find user {key}. Deleting")
