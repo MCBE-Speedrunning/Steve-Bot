@@ -528,20 +528,26 @@ class Src(commands.Cog):
         ActiveRunnerRole = server.get_role(1271515943050412042)
 
         for key in alts_to_remove:
+            if key in keys_to_delete:
+                # Already deleted
+                continue
+
             userID = int(key)
+            # If fetch_user call fails, delete the key
+            # If fetch_member fails, don't delete
+            # If it succeeds, remove rolls and delete
             try:
                 user = await self.bot.fetch_user(userID)
+                try:
+                    member = await server.fetch_member(key)
+                    await member.remove_roles(RunnerRole)
+                    await member.remove_roles(WrRole)
+                    await member.remove_roles(ActiveRunnerRole)
+                except discord.NotFound:
+                    # self.bot.logger.info(f"Didn't find user {key} in server. Not deleting")
+                    continue
             except discord.NotFound:
                 self.bot.logger.info(f"Didn't find user {key}. Deleting")
-
-            try:
-                member = await server.fetch_member(key)
-                await member.remove_roles(RunnerRole)
-                await member.remove_roles(WrRole)
-                await member.remove_roles(ActiveRunnerRole)
-            except discord.NotFound:
-                # self.bot.logger.info(f"Didn't find user {key} in server. Not deleting")
-                continue
 
             id = str(key)
             if id in data.keys():
