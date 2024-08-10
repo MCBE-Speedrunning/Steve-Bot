@@ -499,11 +499,13 @@ class Src(commands.Cog):
     async def checker(self):
         data = json.loads(Path("./api_keys.json").read_text())
         keys_to_delete = []
+        alts_to_delete = []
         for key, value in data.items():
             for key2, value2 in data.items():
                 if value == value2 and key != key2 and key not in keys_to_delete:
                     self.bot.logger.info(f"Alt found: {value} is the same for {key} and {key2}. Deleting")
                     keys_to_delete.append(key)
+                    alts_to_delete.append(key)
             try:
                 if key not in keys_to_delete:
                     await verifyNew(self, None, key)
@@ -540,8 +542,9 @@ class Src(commands.Cog):
                     await member.remove_roles(WrRole)
                     await member.remove_roles(ActiveRunnerRole)
                 except discord.NotFound:
-                    # self.bot.logger.info(f"Didn't find user {key} in server. Not deleting")
-                    continue
+                    if key not in alts_to_delete:
+                        # self.bot.logger.info(f"Didn't find user {key} in server. Not deleting")
+                        continue
             except discord.NotFound:
                 self.bot.logger.info(f"Didn't find user {key}. Deleting")
 
