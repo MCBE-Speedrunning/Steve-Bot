@@ -312,7 +312,10 @@ async def verifyNew(self, apiKey=None, userID=None):
     # 	return
     # else:
     user = await self.bot.fetch_user(int(userID))
-    member = await server.fetch_member(user.id)
+    try:
+        member = await server.fetch_member(user.id)
+    except discord.NotFound:
+            raise Exception("discord_member_not_found")
     data = json.loads(Path("./api_keys.json").read_text())
 
     if str(user.id) in data:
@@ -495,13 +498,12 @@ class Src(commands.Cog):
     async def checker(self):
         data = json.loads(Path("./api_keys.json").read_text())
         keys_to_delete = []
-        alts_to_remove = []
         for key, value in data.items():
             skip = False
             for key2, value2 in data.items():
-                if value == value2 and key != key2 and key2 not in alts_to_remove:
+                if value == value2 and key != key2 and key2 not in keys_to_delete:
                     self.bot.logger.info(f"Alt found: {value} is the same for {key} and {key2}. Deleting")
-                    alts_to_remove.append(key)
+                    keys_to_delete.append(key)
                     skip = True
             try:
                 if not skip:
@@ -512,14 +514,12 @@ class Src(commands.Cog):
             except Exception as e:
                 if e.args[0] == "speedrun_com_user_not_found":
                     keys_to_delete.append(key)
+                elif e.args[0] == "discord_member_not_found":
+                    # Do not delete, we want to keep these in the database
                 else:
                     self.bot.logger.error(f"{key}: {value}", exc_info=e)
 
         data = json.loads(Path("./api_keys.json").read_text())
-        for key in keys_to_delete:
-            id = str(key)
-            if id in data.keys():
-                del data[id]
 
         # TODO: Don't copy logic from verifyNew
         server = self.bot.get_guild(574267523869179904)
@@ -527,11 +527,7 @@ class Src(commands.Cog):
         WrRole = server.get_role(583622436378116107)
         ActiveRunnerRole = server.get_role(1271515943050412042)
 
-        for key in alts_to_remove:
-            if key in keys_to_delete:
-                # Already deleted
-                continue
-
+        for key in keys_to_delete:
             userID = int(key)
             # If fetch_user call fails, delete the key
             # If fetch_member fails, don't delete
