@@ -212,9 +212,6 @@ class Utils(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        if member.id == 640933433215811634:
-            await member.edit(nick="JoetheSheepFucker")
-
         def check(msg):
             return msg.author == member and msg.type != discord.MessageType.new_member
 
@@ -229,11 +226,6 @@ class Utils(commands.Cog):
             )
         except asyncio.TimeoutError:
             pass
-
-    @commands.Cog.listener()
-    async def on_member_update(self, before, after):
-        if after.id == 640933433215811634:
-            await after.edit(nick="JoetheSheepFucker")
 
     @commands.Cog.listener()
     async def on_message(self, message):
