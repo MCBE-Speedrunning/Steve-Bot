@@ -191,6 +191,40 @@ class Admin(commands.Cog):
             await ctx.send(
                 "{0.mention} has been unmuted by {1.mention}".format(i, ctx.author)
             )
+            
+    @commands.command()
+    @commands.check(is_mod)
+    async def kick(
+        self,
+        ctx,
+        members: commands.Greedy[discord.Member] = False,
+        *,
+        reason: str = "absolutely no reason",
+    ):
+        """Mass kick members."""
+
+        if not members:
+            await ctx.send("You need to name someone to ban")
+            return
+        elif type(members) == str:
+            members = [self.bot.get_user(int(members))]
+        for member in members:
+            if self.bot.user == member:  # what good is a kicked bot?
+                embed = discord.Embed(title="You can't kick me, I'm an almighty bot")
+                await ctx.send(embed=embed)
+                continue
+            try:
+                await member.send(
+                    f"You have been kicked from {ctx.guild.name} because: ```{reason}```"
+                )
+            except discord.Forbidden:
+                pass
+            await ctx.guild.kick(member, reason=reason)
+            await ctx.send(
+                "{0.mention} has been kicked from the server by {1.mention} for *{2}*".format(
+                    member, ctx.author, reason
+                )
+            )
 
     @commands.command()
     @commands.check(is_mod)
@@ -202,7 +236,7 @@ class Admin(commands.Cog):
         *,
         reason: str = "absolutely no reason",
     ):
-        """Mass ban members with an optional mute_minutes parameter to time it"""
+        """Mass ban members with an optional ban_minutes parameter to time it"""
 
         if not members:
             await ctx.send("You need to name someone to ban")
@@ -210,7 +244,7 @@ class Admin(commands.Cog):
         elif type(members) == str:
             members = [self.bot.get_user(int(members))]
         for member in members:
-            if self.bot.user == member:  # what good is a muted bot?
+            if self.bot.user == member:  # what good is a banned bot?
                 embed = discord.Embed(title="You can't ban me, I'm an almighty bot")
                 await ctx.send(embed=embed)
                 continue
