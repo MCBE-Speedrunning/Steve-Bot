@@ -96,6 +96,13 @@ class Utils(commands.Cog):
         self.bot = bot
         self.tries = 1
         self.pins = []
+        self.block_stats = []
+
+        with open("./required_block_states.json") as file:
+            required_block_states = json.load(file)
+            for block, states in required_block_states["minecraft"].items():
+                for s in states:
+                    self.block_stats.append(block)
 
     @commands.command(
         description="Pong!",
@@ -104,6 +111,21 @@ class Utils(commands.Cog):
     )
     async def ping(self, ctx):
         await ctx.send(f"Pong! {round(self.bot.latency*1000)}ms")
+
+    @commands.cooldown(1, 25, commands.BucketType.guild)
+    @commands.command()
+    async def findblock(self, ctx):
+        """Simulate the UGBC experience"""
+        if ctx.message.channel.id != int(
+            self.bot.config[str(ctx.message.guild.id)]["bot_channel"]
+        ):
+            await ctx.message.delete()
+            ctx.command.reset_cooldown(ctx)
+            return
+
+        await ctx.send(
+            f"{discord.utils.escape_mentions(ctx.message.author.display_name)} -> your block is a {choice(self.block_stats)}."
+        )
 
     @commands.cooldown(1, 25, commands.BucketType.guild)
     @commands.command()
