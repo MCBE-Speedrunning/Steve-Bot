@@ -112,7 +112,7 @@ class Utils(commands.Cog):
     async def ping(self, ctx):
         await ctx.send(f"Pong! {round(self.bot.latency*1000)}ms")
 
-    @commands.cooldown(1, 25, commands.BucketType.guild)
+    @commands.cooldown(1, 2, commands.BucketType.user)
     @commands.command()
     async def findblock(self, ctx):
         """Simulate the UGBC experience"""
