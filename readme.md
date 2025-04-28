@@ -43,6 +43,7 @@ podman run \
     --volume="./custom_commands.json:/app/custom_commands.json:rw" \
     --volume="./fair.json:/app/fair.json:rw" \
     --volume="./runs_blacklist.json:/app/runs_blacklist.json:rw" \
-    --volume="./required_block_states.json:/app/required_block_states.json:rw" \
+    --volume="./required_block_states.json:/app/required_block_states.json:ro" \
+    --volume="./phrases.json:/app/phrases.json:rw" \
     --name steve-bot --restart no --replace -it steve-bot:latest
 ```

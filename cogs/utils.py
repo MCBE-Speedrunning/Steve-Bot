@@ -97,12 +97,68 @@ class Utils(commands.Cog):
         self.tries = 1
         self.pins = []
         self.block_stats = []
+        self.phrases = []
 
         with open("./required_block_states.json") as file:
             required_block_states = json.load(file)
             for block, states in required_block_states["minecraft"].items():
                 for s in states:
                     self.block_stats.append(block)
+
+        with open("./phrases.json") as file:
+            self.phrases = json.load(file)
+
+    async def is_mod(ctx):
+        return ctx.author.guild_permissions.manage_channels
+
+    @commands.check(is_mod)
+    @commands.command()
+    async def phrases(self, ctx):
+        """Send all random phrases"""
+        out = ""
+        for phrase in self.phrases:
+            out += phrase + "\n"
+        await ctx.send(out)
+
+    @commands.command()
+    async def phrase(self, ctx):
+        """Send a random phrase"""
+        if ctx.message.channel.id not in self.bot.config[str(ctx.message.guild.id)]["phrases_channels"]:
+            return
+
+        await ctx.send(
+            choice(self.phrases)
+        )
+
+    @commands.command(aliases=["addphrase", "newphrase"])
+    @commands.check(is_mod)
+    async def add_phrase(self, ctx, *, phrase):
+        """Add a phrase"""
+
+        if phrase in self.phrases:
+            await ctx.send(f"Phrase already exists: {phrase}")
+            return
+
+        with open("./phrases.json", "w") as file:
+            self.phrases.append(phrase)
+            json.dump(self.phrases, file, indent=4)
+
+        await ctx.send(f"Added phrase: {phrase}")
+
+    @commands.command(aliases=["removephrase", "deletephrase"])
+    @commands.check(is_mod)
+    async def remove_phrase(self, ctx, *, phrase):
+        """Remove a phrase"""
+
+        if phrase not in self.phrases:
+            await ctx.send(f"Phrase not found: {phrase}")
+            return
+
+        with open("./phrases.json", "w") as file:
+            self.phrases.remove(phrase)
+            json.dump(self.phrases, file, indent=4)
+
+        await ctx.send(f"Removed phrase: {phrase}")
 
     @commands.command(
         description="Pong!",
