@@ -588,7 +588,7 @@ class Utils(commands.Cog):
 
         except exceptions.UnknownTimeZoneError:
             await ctx.send(
-                "That's not a valid timezone. You can look them up at https://kevinnovak.github.io/Time-Zone-Picker/"
+                "That's not a valid timezone. You can look them up at https://zones.arilyn.cc/"
             )
             return
 
