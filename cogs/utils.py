@@ -289,23 +289,6 @@ class Utils(commands.Cog):
             await channel.send(embed=embed)
 
     @commands.Cog.listener()
-    async def on_member_join(self, member):
-        def check(msg):
-            return msg.author == member and msg.type != discord.MessageType.new_member
-
-        try:
-            msg = await self.bot.wait_for("message", check=check, timeout=300)
-            await msg.channel.send("<:PeepoPog:732172337956257872>")
-            await msg.channel.send(
-                f"{member.mention}\n"
-                + "controller is allowed on mobile\n"
-                + "keyboard and mouse is allowed on console\n"
-                + "submit the run as the physical device you played on"
-            )
-        except asyncio.TimeoutError:
-            pass
-
-    @commands.Cog.listener()
     async def on_message(self, message):
         if not message.guild:
             return
